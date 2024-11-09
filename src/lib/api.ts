@@ -1,28 +1,27 @@
 import { RequestOptions } from "http";
-import { getServerSession } from "next-auth";
-import { getSession, useSession } from "next-auth/react";
-import { auth0Options } from "../app/api/auth/[...nextauth]/route";
+import { getSession, signIn } from "next-auth/react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/v1';
 
 async function handleResponse(response: any) {
-  // console.log('response', response)
   if (!response.ok) {
     const errorMessage = await response.text();
     throw new Error(errorMessage || `Error: ${response.status}`);
   }
   const contentType = response.headers.get('content-type');
   if (contentType && contentType.includes('application/json')) {
-    console.log('json response')
     return response.json();
   }
-  console.log('text response')
   return response.text();
 }
 
 const apiCall = async (url: string, options: RequestOptions & { body?: any, params?: any }) => {
   const { method, headers = {}, body = null, params = {} } = options;
   const session = await getSession()
+
+  if (!session) {
+    signIn('auth0')
+  }
 
   const queryString = new URLSearchParams(params).toString();
   const fullUrl = `${API_BASE_URL}${url}${queryString ? `?${queryString}` : ''}`;
@@ -43,7 +42,6 @@ const apiCall = async (url: string, options: RequestOptions & { body?: any, para
   }
 
   try {
-    console.log(`Fetching ${fullUrl}`)
     const response = await fetch(fullUrl, fetchOptions as RequestInit);
     return await handleResponse(response);
   } catch (error: any) {
