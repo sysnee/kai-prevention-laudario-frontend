@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "json-server": "json-server --watch db.json --port 5000"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",
@@ -15,8 +16,11 @@
     "@fontsource/inter": "^5.1.0",
     "@mui/icons-material": "^6.1.5",
     "@mui/joy": "^5.0.0-beta.48",
+    "@mui/material": "^6.1.6",
     "@mui/material-nextjs": "^6.1.5",
+    "axios": "^1.7.7",
     "cookies-next": "^4.3.0",
+    "json-server": "^1.0.0-beta.3",
     "next": "14.2.15",
     "next-auth": "^4.24.10",
     "react": "^18",

@@ -1,6 +1,7 @@
 'use client'
 import { SessionProvider } from "next-auth/react";
 import Home from "./home";
+import BaseLayout from "./components/BaseLayout";
 
 
 export default function Public({
@@ -12,7 +13,9 @@ export default function Public({
 
   return (
     <SessionProvider session={session}>
-      <Home />
+      <BaseLayout>
+        <Home />
+      </BaseLayout>
     </SessionProvider>
   );
 }
