@@ -68,12 +68,15 @@ export default function Home() {
                         marginTop: "2em",
                     }}
                 >
-                    <Pagination 
-                        count={10} 
-                        color="primary"
-                        variant="outlined"
-                        size="small"
-                    />
+                    
+                    {estudos.length > 0 && (
+                        <Pagination 
+                            count={10} 
+                            color="primary"
+                            variant="outlined"
+                            size="small"
+                        />
+                    )}
                 </Box>
             </Box>
         </>

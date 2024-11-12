@@ -75,15 +75,39 @@ export default function Estudo({estudo}: {estudo: Estudo}){
                             className="rounded-md"
                         />
                     ) : (
-                        //Colocar total de imagens restantes sobrepondo a imagem 4.
-                        <Image
-                            key={index}
-                            src={imagem}
-                            alt="raio-x"
-                            width={50}
-                            height={50}
-                            className="rounded-md"
-                        />
+                        <Box
+                            sx={{
+                                position: "relative"
+                            }}
+                        >
+                            <Image
+                                key={index}
+                                src={imagem}
+                                alt="raio-x"
+                                width={50}
+                                height={50}
+                                className="rounded-md"
+                            />
+
+                            <Box
+                                sx={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: 50,
+                                    height: 46,
+                                    backgroundColor: "rgb(0, 0, 0, 0.5)",
+                                    borderRadius: "8px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color: "#fff",
+                                    fontSize: "16px"
+                                }}
+                            >
+                                +{estudo.imagens.length - 3}
+                            </Box>
+                        </Box>
                     )
                 ))}    
             
