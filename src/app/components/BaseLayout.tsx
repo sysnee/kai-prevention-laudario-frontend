@@ -8,24 +8,21 @@ import Image from "next/image";
 import { ReactNode, useEffect, useState } from "react"
 import logo from "../assets/imagens/logo.png"
 
-type User = {
-    id: string,
-    nome: string,
-    avatar: string
-}
-
 export default function BaseLayout({children}: {children: ReactNode}){
 
     const [user, setUser] = useState<User | null>(null)
 
-    useEffect(() => {
-        async function getUser(){
+    async function getUser(){
+        try{
             const userData = await axios.get("http://localhost:5000/users/1")
             setUser(userData.data)
+        } catch(error){
+            console.log("Erro ao buscar usuario: ", error)
         }
+    }
 
+    useEffect(() => {
         getUser();
-
     }, [])
 
     return(
@@ -50,7 +47,7 @@ export default function BaseLayout({children}: {children: ReactNode}){
                                 gap: '.7em', 
                                 padding: '.6em .6em',
                                 '&:hover': {
-                                    backgroundColor: '#5d4a3e'
+                                    backgroundColor: '#5e4e46'
                                 }
                             }} 
                             size="sm" 
@@ -66,7 +63,7 @@ export default function BaseLayout({children}: {children: ReactNode}){
             </AppBar>
 
                 
-            <Box className="flex-1 overflow-y-auto">
+            <Box className="flex-1">
                 {children}
             </Box>
         </div>

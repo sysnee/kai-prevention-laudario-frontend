@@ -1,0 +1,85 @@
+{
+    "users": [
+        {
+            "id": "1",
+            "nome": "Marina Paiva",
+            "avatar": "https://static.vecteezy.com/system/resources/thumbnails/027/951/136/small/manager-woman-3d-avatar-character-illustrations-png.png"
+        }
+    ],
+    "estudos": [
+        {
+            "id": "1",
+            "nome": "Estudo 1",
+            "imagens": [
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+            ],
+            "status": "pendente",
+            "laudoId": null
+        },
+        {
+            "id": "2",
+            "nome": "Estudo 2",
+            "imagens": [
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+            ],
+            "status": "pendente",
+            "laudoId": null
+        },
+        {
+            "id": "3",
+            "nome": "Estudo 3",
+            "imagens": [
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+            ],
+            "status": "laudado",
+            "laudoId": "1"
+        },
+        {
+            "id": "4",
+            "nome": "Estudo 4",
+            "imagens": [
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
+                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+            ],
+            "status": "laudado",
+            "laudoId": "2"
+        }
+    ],
+    "laudos": [
+        {
+            "id": "1",
+            "medico": {
+                "id": "1",
+                "nome": "Carlos Maciel Arantes",
+                "avatar": "https://www.svgrepo.com/show/81103/avatar.svg"
+            }
+        },
+        {
+            "id": "2",
+            "medico": {
+                "id": "1",
+                "nome": "Carlos Maciel Arantes",
+                "avatar": "https://www.svgrepo.com/show/81103/avatar.svg"
+            }
+        }
+    ]
+}
