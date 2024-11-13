@@ -3,6 +3,7 @@
 import { Avatar, Box, Button, Grid } from "@mui/joy";
 import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Estudo({estudo}: {estudo: Estudo}){
@@ -68,7 +69,7 @@ export default function Estudo({estudo}: {estudo: Estudo}){
                     index < 3 ? (
                         <Image
                             key={index}
-                            src={imagem}
+                            src={imagem.link}
                             alt="raio-x"
                             width={50}
                             height={50}
@@ -82,7 +83,7 @@ export default function Estudo({estudo}: {estudo: Estudo}){
                         >
                             <Image
                                 key={index}
-                                src={imagem}
+                                src={imagem.link}
                                 alt="raio-x"
                                 width={50}
                                 height={50}
@@ -188,18 +189,23 @@ export default function Estudo({estudo}: {estudo: Estudo}){
                         Editar laudo
                     </Button>
                 ): (
-                    <Button
-                    sx={{
-                        width: "100%",
-                        fontSize: "12px",
-                        backgroundColor: "#584e46",
-                        "&:hover": {
-                            backgroundColor: "#4b4037"
-                        }
-                    }}
+                    <Link
+                        href={`/estudos/${estudo.id}`}
+                        className="w-full"
                     >
-                        Laudar
-                    </Button>
+                        <Button
+                            sx={{
+                                width: "100%",
+                                fontSize: "12px",
+                                backgroundColor: "#584e46",
+                                "&:hover": {
+                                    backgroundColor: "#4b4037"
+                                }
+                            }}
+                            >
+                                Laudar
+                        </Button>
+                    </Link>
                 )}
             </Grid>
         </Grid>

@@ -4,12 +4,18 @@ type User = {
     avatar: string
 }
 
+
 type Estudo = {
     id: string,
     nome: string,
-    imagens: string[],
+    imagens: Imagem[],
     status: string,
     laudoId: string | null
+}
+
+type Imagem = {
+    id: string, 
+    link: string
 }
 
 type Laudo = {

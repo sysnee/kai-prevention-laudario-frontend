@@ -11,12 +11,62 @@
             "id": "1",
             "nome": "Estudo 1",
             "imagens": [
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                {
+                    "id": "1",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "2",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "3",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "4",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "5",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "6",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "7",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "8",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "9",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "10",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "11",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "12",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "13",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "14",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                }
             ],
             "status": "pendente",
             "laudoId": null
@@ -25,12 +75,27 @@
             "id": "2",
             "nome": "Estudo 2",
             "imagens": [
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                
+                {
+                    "id": "2",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "3",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "4",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "5",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "6",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                }
             ],
             "status": "pendente",
             "laudoId": null
@@ -39,12 +104,30 @@
             "id": "3",
             "nome": "Estudo 3",
             "imagens": [
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                {
+                    "id": "1",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "2",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "3",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "4",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "5",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "6",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                }
             ],
             "status": "laudado",
             "laudoId": "1"
@@ -53,12 +136,30 @@
             "id": "4",
             "nome": "Estudo 4",
             "imagens": [
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg",
-                "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                {
+                    "id": "1",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "2",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "3",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "4",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "5",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                },
+                {
+                    "id": "6",
+                    "link": "https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg"
+                }
             ],
             "status": "laudado",
             "laudoId": "2"
