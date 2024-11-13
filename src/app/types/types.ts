@@ -1,11 +1,10 @@
-type User = {
+export type User = {
     id: string,
     nome: string,
     avatar: string
 }
 
-
-type Estudo = {
+export type Estudo = {
     id: string,
     nome: string,
     imagens: Imagem[],
@@ -13,17 +12,17 @@ type Estudo = {
     laudoId: string | null
 }
 
-type Imagem = {
+export type Imagem = {
     id: string, 
     link: string
 }
 
-type Laudo = {
+export type Laudo = {
     id: string,
     medico: Medico
 }
 
-type Medico = {
+export type Medico = {
     id: string,
     nome: string,
     avatar: string

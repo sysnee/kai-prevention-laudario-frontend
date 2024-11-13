@@ -3,16 +3,10 @@ import { SessionProvider } from "next-auth/react";
 import Home from "./home";
 import BaseLayout from "./components/BaseLayout";
 
-
-export default function Public({
-  session,
-}: {
-  children: React.ReactNode,
-  session: any
-}){
+export default function Public(){
 
   return (
-    <SessionProvider session={session}>
+    <SessionProvider>
       <BaseLayout>
         <Home />
       </BaseLayout>

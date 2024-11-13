@@ -2,6 +2,7 @@ import CheckBox from "@mui/icons-material/CheckBox";
 import { Box } from "@mui/joy";
 import Image from "next/image";
 import { useState } from "react";
+import { Imagem } from "../types/types";
 
 export default function ImageEstudo({imagem, onSelect}: {imagem: Imagem, onSelect: (imagem: Imagem, isSelected: boolean) => void}){
     const [isSelected, setIsSelected] = useState(false)

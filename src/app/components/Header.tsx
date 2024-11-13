@@ -1,5 +1,6 @@
 import { Autocomplete, Box, Button, Grid } from "@mui/joy";
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { Estudo } from "../types/types";
 
 export default function Header({estudos}: {estudos: Estudo[]}){
     return(

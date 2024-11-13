@@ -3,9 +3,6 @@ import localFont from "next/font/local";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import "./globals.css";
 import '@fontsource/inter';
-import { getServerSession } from "next-auth";
-import { auth0Options } from "./api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,7 +25,7 @@ export default async function RootLayout({
   // pageProps: { session, ...pageProps },
 }: Readonly<{
   children: React.ReactNode,
-  pageProps: any
+  // pageProps: any
 }>) {
   
   return (

@@ -3,11 +3,11 @@
 import { KeyboardArrowDown } from "@mui/icons-material"
 import { Avatar, Box, Button, Typography } from "@mui/joy"
 import { AppBar, Toolbar } from "@mui/material"
-import axios from "axios";
 import Image from "next/image";
 import { ReactNode, useEffect, useState } from "react"
 import logo from "../assets/imagens/logo.png"
 import db from '../../../db.json'
+import { User } from "../types/types";
 
 export default function BaseLayout({children}: {children: ReactNode}){
 

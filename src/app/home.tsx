@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import { Box, Skeleton } from "@mui/joy";
-import Estudo from "./components/Estudo";
+import EstudoComponent from "./components/Estudo";
 import { Pagination } from "@mui/material";
 import db from '../../db.json'
+import { Estudo } from "./types/types";
 
 export default function Home() {
     const [estudos, setEstudos] = useState<Estudo[]>([]);
@@ -54,7 +55,7 @@ export default function Home() {
                     ) : (
                         estudos.length > 0 ? (
                             estudos.map(estudo => (
-                                <Estudo key={estudo.id} estudo={estudo} />
+                                <EstudoComponent key={estudo.id} estudo={estudo} />
                             ))
                         ): (
                             <h2 className="text-black text-lg">Nenhum estudo encontrado.</h2>

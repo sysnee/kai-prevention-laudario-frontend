@@ -2,13 +2,13 @@
 
 import { Box, Button, Grid } from "@mui/joy"
 import BaseLayout from "../../components/BaseLayout"
-import { Height, KeyboardArrowLeft } from "@mui/icons-material"
+import { KeyboardArrowLeft } from "@mui/icons-material"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react";
-import axios from "axios";
 import ImageEstudo from "../../components/ImageEstudo";
 import Link from "next/link";
 import db from '../../../../db.json'
+import { Estudo, Imagem } from "../../types/types";
 
 export default function EstudoDetailPage(){
     const { id } = useParams()
@@ -106,6 +106,7 @@ export default function EstudoDetailPage(){
                             estudo.imagens.length > 0 && (
                                 estudo?.imagens.map(imagem => (
                                     <Grid
+                                        key={imagem.id}
                                         xs={3}
                                         sm={2}
                                         md={1.5}

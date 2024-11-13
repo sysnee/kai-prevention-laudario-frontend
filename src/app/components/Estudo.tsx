@@ -5,8 +5,9 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Estudo, Imagem, Laudo } from "../types/types";
 
-export default function Estudo({estudo}: {estudo: Estudo}){
+export default function EstudoComponent({ estudo }: { estudo: Estudo }){
     const [laudo, setlaudo] = useState<Laudo | null>(null)
 
     async function getLaudo(){
@@ -65,7 +66,7 @@ export default function Estudo({estudo}: {estudo: Estudo}){
                     minWidth: "260px"
                 }}
             >
-                {estudo.imagens.slice(0, 4).map((imagem, index) => (
+                {estudo.imagens.slice(0, 4).map((imagem: Imagem, index: number) => (
                     index < 3 ? (
                         <Image
                             key={index}
@@ -77,6 +78,7 @@ export default function Estudo({estudo}: {estudo: Estudo}){
                         />
                     ) : (
                         <Box
+                            key={index}
                             sx={{
                                 position: "relative"
                             }}
