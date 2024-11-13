@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ImageEstudo from "../../components/ImageEstudo";
 import Link from "next/link";
+import db from '../../../../db.json'
 
 export default function EstudoDetailPage(){
     const { id } = useParams()
@@ -15,14 +16,22 @@ export default function EstudoDetailPage(){
     const [estudo, setEstudo] = useState<Estudo | null>(null)
     const [selectedImages, setSelectedImages] = useState<Imagem[]>([])
 
-    async function getEstudo(){
-        try{
-            const estudoData = await axios.get(`http://localhost:5000/estudos/${id}`)
-            setEstudo(estudoData.data)
-        } catch(error){
+    async function getEstudo() {
+        try {
+            const estudoData = db.estudos.find(estudo => Number(estudo.id) === parseInt(String(id)))
+
+            if(!estudoData) {
+                throw new Error("Estudo não encontrado");
+            }
+
+            // Filtrando imagens do estudo
+            // const images = db.imagens.filter(imagem => imagem.estudoId === estudoData.id)
+            setEstudo(estudoData)
+        } catch(error) {
             console.log("Erro ao buscar estudo: ", error)
         }
     }
+
 
     function handleImageSelection(imagem: Imagem, isSelected: boolean){
         if(isSelected){

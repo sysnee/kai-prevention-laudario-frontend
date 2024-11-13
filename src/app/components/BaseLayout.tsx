@@ -7,6 +7,7 @@ import axios from "axios";
 import Image from "next/image";
 import { ReactNode, useEffect, useState } from "react"
 import logo from "../assets/imagens/logo.png"
+import db from '../../../db.json'
 
 export default function BaseLayout({children}: {children: ReactNode}){
 
@@ -14,8 +15,9 @@ export default function BaseLayout({children}: {children: ReactNode}){
 
     async function getUser(){
         try{
-            const userData = await axios.get("http://localhost:5000/users/1")
-            setUser(userData.data)
+            // const userData = await axios.get("http://localhost:5000/users/1")
+            const userData = db.users[0]
+            setUser(userData)
         } catch(error){
             console.log("Erro ao buscar usuario: ", error)
         }

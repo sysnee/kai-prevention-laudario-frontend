@@ -1,11 +1,11 @@
 "use client";
 
-import axios from "axios";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import { Box, Skeleton } from "@mui/joy";
 import Estudo from "./components/Estudo";
 import { Pagination } from "@mui/material";
+import db from '../../db.json'
 
 export default function Home() {
     const [estudos, setEstudos] = useState<Estudo[]>([]);
@@ -13,8 +13,9 @@ export default function Home() {
 
     async function getEstudos() {
         try {
-            const estudosData = await axios.get("http://localhost:5000/estudos");
-            setEstudos(estudosData.data);
+            // const estudosData = await axios.get("http://localhost:5000/estudos");
+            const estudosData = db.estudos
+            setEstudos(estudosData);
         } catch (error) {
             console.error("Erro ao buscar os estudos:", error);
         } finally {
@@ -53,7 +54,7 @@ export default function Home() {
                     ) : (
                         estudos.length > 0 ? (
                             estudos.map(estudo => (
-                                <Estudo estudo={estudo} />
+                                <Estudo key={estudo.id} estudo={estudo} />
                             ))
                         ): (
                             <h2 className="text-black text-lg">Nenhum estudo encontrado.</h2>
