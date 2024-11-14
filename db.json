@@ -182,5 +182,15 @@
                 "avatar": "https://www.svgrepo.com/show/81103/avatar.svg"
             }
         }
+    ],
+    "achados": [
+        {   
+            "laudoId": "1",
+            "imagemId": "1",
+            "titulo": "",
+            "sistema": "",
+            "orgao": "",
+            "patologias": []
+        }
     ]
 }

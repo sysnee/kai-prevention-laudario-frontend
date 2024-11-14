@@ -1,16 +1,17 @@
 "use client";
 
-import { Box, Button, Grid } from "@mui/joy"
+import { Avatar, Box, Button, Grid, Stack } from "@mui/joy"
 import BaseLayout from "../../components/BaseLayout"
-import { KeyboardArrowLeft } from "@mui/icons-material"
+import { KeyboardArrowLeft, RemoveRedEyeSharp } from "@mui/icons-material"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react";
-import ImageEstudo from "../../components/ImageEstudo";
 import Link from "next/link";
 import db from '../../../../db.json'
 import { Estudo, Imagem } from "../../types/types";
+import ImageEstudo from "../../components/ImageEstudo";
+import Image from "next/image";
 
-export default function EstudoDetailPage(){
+export default function EstudoResumoPage() {
     const { id } = useParams()
 
     const [estudo, setEstudo] = useState<Estudo | null>(null)
@@ -20,24 +21,13 @@ export default function EstudoDetailPage(){
         try {
             const estudoData = db.estudos.find(estudo => Number(estudo.id) === parseInt(String(id)))
 
-            if(!estudoData) {
+            if (!estudoData) {
                 throw new Error("Estudo não encontrado");
             }
 
-            // Filtrando imagens do estudo
-            // const images = db.imagens.filter(imagem => imagem.estudoId === estudoData.id)
             setEstudo(estudoData)
-        } catch(error) {
+        } catch (error) {
             console.log("Erro ao buscar estudo: ", error)
-        }
-    }
-
-
-    function handleImageSelection(imagem: Imagem, isSelected: boolean){
-        if(isSelected){
-            setSelectedImages(prev => [...prev, imagem])
-        }else{
-            setSelectedImages(prev => prev.filter(img => img.id !== imagem.id)); 
         }
     }
 
@@ -45,7 +35,7 @@ export default function EstudoDetailPage(){
         getEstudo();
     }, [])
 
-    return(
+    return (
         <BaseLayout>
             <Box
                 sx={{
@@ -59,7 +49,7 @@ export default function EstudoDetailPage(){
                         alignItems: "center",
                         gap: "1.5em"
                     }}
-                >   
+                >
                     <Link
                         href={`/`}
                     >
@@ -80,21 +70,14 @@ export default function EstudoDetailPage(){
                         </Button>
                     </Link>
 
-                    <h2 className="text-2xl text-black">Estudo: ID: {id}</h2>
+                    <h2 className="text-2xl text-black">Resumo</h2>
                 </Box>
-                
+
                 <Box
                     sx={{
                         marginTop: "3em"
                     }}
                 >
-                    {estudo && (
-                        estudo.imagens.length > 0 ? (
-                            <h2 className="text-black">Escolha as imagens para adcionar seus achados</h2>
-                        ): (
-                            <h2 className="text-black">Nenhuma imagem encontrada.</h2>
-                        )
-                    )}
                     <Grid
                         container
                         spacing={1.5}
@@ -102,67 +85,238 @@ export default function EstudoDetailPage(){
                         marginTop={1}
                         wrap="wrap"
                     >
-                        {estudo && (
-                            estudo.imagens.length > 0 && (
-                                estudo?.imagens.map(imagem => (
-                                    <Grid
-                                        key={imagem.id}
-                                        xs={3}
-                                        sm={2}
-                                        md={1.5}
-                                        lg={1}
+                        <Grid xs={8}>
+                            <Stack spacing={5}>
+                            <Stack spacing={3} direction={'row'}>
+                                <Box>
+                                    <Image
+                                        src={'https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg'}
+                                        alt="raio-x"
+                                        width={250}
+                                        height={250}
+                                        className="rounded-lg cursor-pointer border-2"
+                                    />
+                                </Box>
+                                <Box width={'80%'}>
+                                    <Box
+                                        sx={{
+                                            backgroundColor: "#fff",
+                                            padding: "2em",
+                                            display: "flex",
+                                            justifyContent: "start",
+                                            gap: "1em",
+                                            borderRadius: "10px",
+                                            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)",
+                                            height: '225px',
+                                        }}
                                     >
-                                        <ImageEstudo 
-                                            imagem={imagem}
-                                            onSelect={handleImageSelection}
-                                        />
-                                    </Grid>
-                                ))
-                            )
-                        )}
+                                        <Stack width={'100%'}>
+                                            <h1 className="text-2xl font-bold text-black">Achado 1</h1>
+                                            <Grid container marginY={1} spacing={4}>
+                                                <Grid xs={3}>
+                                                    <Stack>
+                                                        <h1 className="text-md font-bold text-black">Sistema</h1>
+                                                        <h1 className="text-md text-black">Sistema Cardiovascular</h1>
+                                                    </Stack>
+                                                </Grid>
+                                                <Grid xs={3}>
+                                                    <Stack>
+                                                        <h1 className="text-md font-bold text-black">Orgão</h1>
+                                                        <h1 className="text-md text-black">Coração</h1>
+                                                    </Stack>
+                                                </Grid>
+                                                <Grid xs={5}>
+                                                    <Stack>
+                                                        <h1 className="text-md font-bold text-black">Patologias</h1>
+                                                        <h1 className="text-md text-black">Miocardiopatia Dilatada, valvopatia</h1>
+                                                    </Stack>
+                                                </Grid>
+                                            </Grid>
+                                            <Stack direction={'row'} justifyContent={'space-between'}>
+                                                <Stack direction={'row'} spacing={1}>
+                                                    <Avatar></Avatar>
+                                                    <Stack>
+                                                        <p className="text-sm font-bold text-black">Laudado por</p>
+                                                        <p className="text-sm text-black">Nome</p>
+                                                    </Stack>
+                                                </Stack>
+                                                <Button
+                                                    sx={{
+                                                        backgroundColor: "#584e46",
+                                                        color: "#ffb492",
+                                                        fontWeight: "lighter",
+                                                        fontSize: "14px",
+                                                        "&:hover": {
+                                                            backgroundColor: "#4b4037"
+                                                        },
+                                                        width: '150px',
+                                                        alignSelf: 'end',
+                                                    }}
+                                                    endDecorator={<RemoveRedEyeSharp sx={{ fontSize: "20px" }} />}
+                                                >
+
+                                                    Ver detalhes
+                                                </Button>
+                                            </Stack>
+
+                                        </Stack>
+                                    </Box>
+                                </Box>
+                            </Stack>
+
+                            <Stack spacing={3} direction={'row'}>
+                                <Box>
+                                    <Image
+                                        src={'https://clinicatemplum.com.br/wp-content/uploads/2021/09/raio-x-templum.jpg'}
+                                        alt="raio-x"
+                                        width={250}
+                                        height={250}
+                                        className="rounded-lg cursor-pointer border-2"
+                                    />
+                                </Box>
+                                <Box width={'80%'}>
+                                    <Box
+                                        sx={{
+                                            backgroundColor: "#fff",
+                                            padding: "2em",
+                                            display: "flex",
+                                            justifyContent: "start",
+                                            gap: "1em",
+                                            borderRadius: "10px",
+                                            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)",
+                                            height: '225px',
+                                        }}
+                                    >
+                                        <Stack width={'100%'}>
+                                            <h1 className="text-2xl font-bold text-black">Achado 2</h1>
+                                            <Grid container marginY={1} spacing={4}>
+                                                <Grid xs={3}>
+                                                    <Stack>
+                                                        <h1 className="text-md font-bold text-black">Sistema</h1>
+                                                        <h1 className="text-md text-black">Sistema Cardiovascular</h1>
+                                                    </Stack>
+                                                </Grid>
+                                                <Grid xs={3}>
+                                                    <Stack>
+                                                        <h1 className="text-md font-bold text-black">Orgão</h1>
+                                                        <h1 className="text-md text-black">Coração</h1>
+                                                    </Stack>
+                                                </Grid>
+                                                <Grid xs={5}>
+                                                    <Stack>
+                                                        <h1 className="text-md font-bold text-black">Patologias</h1>
+                                                        <h1 className="text-md text-black">Miocardiopatia Dilatada, valvopatia</h1>
+                                                    </Stack>
+                                                </Grid>
+                                            </Grid>
+                                            <Stack direction={'row'} justifyContent={'space-between'}>
+                                                <Stack direction={'row'} spacing={1}>
+                                                    <Avatar></Avatar>
+                                                    <Stack>
+                                                        <p className="text-sm font-bold text-black">Laudado por</p>
+                                                        <p className="text-sm text-black">Nome</p>
+                                                    </Stack>
+                                                </Stack>
+                                                <Button
+                                                    sx={{
+                                                        backgroundColor: "#584e46",
+                                                        color: "#ffb492",
+                                                        fontWeight: "lighter",
+                                                        fontSize: "14px",
+                                                        "&:hover": {
+                                                            backgroundColor: "#4b4037"
+                                                        },
+                                                        width: '150px',
+                                                        alignSelf: 'end',
+                                                    }}
+                                                    endDecorator={<RemoveRedEyeSharp sx={{ fontSize: "20px" }} />}
+                                                >
+
+                                                    Ver detalhes
+                                                </Button>
+                                            </Stack>
+
+                                        </Stack>
+                                    </Box>
+                                </Box>
+                            </Stack>
+                            </Stack>
+                        </Grid>
+                        <Grid xs={4}>
+                            <Box sx={{
+                                width: '100%',
+                                backgroundColor: '#B8B1AB',
+                                borderRadius: '20px',
+                                padding: 3
+                            }}>
+                                <h2 className="text-3xl font-extralight text-black">Resumo do laudo</h2>
+                                <Box
+                                    sx={{
+                                        backgroundColor: '#fff',
+                                        borderRadius: '5px',
+                                        padding: 1,
+                                        marginY: 2
+                                    }}
+                                >
+                                    <p className="text-sm text-black">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+                                        molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
+                                        numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
+                                        optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
+                                        obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam
+                                        nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit,
+                                        tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
+                                        quia. Quo neque error repudiandae fuga? Ipsa laudantium molestias eos
+                                        sapiente officiis modi at sunt excepturi expedita sint? Sed quibusdam
+                                        recusandae alias error harum maxime adipisci amet laborum. Perspiciatis
+                                        minima nesciunt dolorem! Officiis iure rerum voluptates a cumque velit
+                                        quibusdam sed amet tempora. Sit laborum ab, eius fugit doloribus tenetur
+                                        fugiat, temporibus enim commodi iusto libero magni deleniti quod quam
+                                        consequuntur! Commodi minima excepturi repudiandae velit hic maxime
+                                        doloremque. Quaerat provident commodi consectetur veniam similique ad
+                                        earum omnis ipsum saepe, voluptas, hic voluptates pariatur est explicabo
+                                        fugiat, dolorum eligendi quam cupiditate excepturi mollitia maiores labore
+                                        suscipit quas? Nulla, placeat. Voluptatem quaerat non architecto ab laudantium
+                                        modi minima sunt esse temporibus sint culpa, recusandae aliquam numquam
+                                        totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam
+                                        quasi aliquam eligendi, placeat qui corporis. lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+                                        molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
+                                        numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
+                                        optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
+                                        obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam
+                                        nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit,
+                                        tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
+                                        quia. Quo neque error repudiandae fuga? Ipsa laudantium molestias eos
+                                        sapiente officiis modi at sunt excepturi expedita sint? Sed quibusdam
+                                        recusandae alias error harum maxime adipisci amet laborum. Perspiciatis
+                                        minima nesciunt dolorem! Officiis iure rerum voluptates a cumque velit
+                                        quibusdam sed amet tempora. Sit laborum ab, eius fugit doloribus tenetur
+                                        fugiat, temporibus enim commodi iusto libero magni deleniti quod quam
+                                        consequuntur! Commodi minima excepturi repudiandae velit hic maxime
+                                        doloremque. Quaerat provident commodi consectetur veniam similique ad
+                                        earum omnis ipsum saepe, voluptas, hic voluptates pariatur est explicabo
+                                        fugiat, dolorum eligendi quam cupiditate excepturi mollitia maiores labore
+                                        suscipit quas? Nulla, placeat. Voluptatem quaerat non architecto ab laudantium
+                                        modi minima sunt esse temporibus sint culpa, recusandae aliquam numquam
+                                        totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam
+                                        quasi aliquam eligendi, placeat qui corporis!</p>
+                                </Box>
+                                <Button
+                                    sx={{
+                                        width: "100%",
+                                        fontSize: "12px",
+                                        backgroundColor: "#584e46",
+                                        "&:hover": {
+                                            backgroundColor: "#4b4037"
+                                        }
+                                    }}
+                                >
+                                    Assinar e salvar laudo
+                                </Button>
+                            </Box>
+                        </Grid>
+
                     </Grid>
                 </Box>
-
-                {selectedImages.length > 0 && (
-                    <Box
-                        sx={{
-                            marginTop: "3em",
-                            backgroundColor: "#fff",
-                            padding: "2em",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "start",
-                            gap: "1em",
-                            borderRadius: "10px",
-                            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)"
-                        }}
-                    >
-                        <Button
-                            sx={{
-                                backgroundColor: "#fff",
-                                color: "#584e46",
-                                border: "1px solid #584e46",
-                                fontSize: "13px",
-                                "&:hover": {
-                                    backgroundColor: "#f2f2f2"
-                                } 
-                            }}
-                        >
-                            Cancelar
-                        </Button>
-                        <Button
-                            sx={{
-                                backgroundColor: "#584e46",
-                                "&:hover": {
-                                    backgroundColor: "#4b4037"
-                                },
-                                fontSize: "13px" 
-                            }}
-                        >
-                            Salvar e avançar
-                            </Button>
-                    </Box>
-                )}
             </Box>
         </BaseLayout>
     )

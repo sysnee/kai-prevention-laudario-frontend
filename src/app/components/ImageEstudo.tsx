@@ -4,13 +4,15 @@ import Image from "next/image";
 import { useState } from "react";
 import { Imagem } from "../types/types";
 
-export default function ImageEstudo({imagem, onSelect}: {imagem: Imagem, onSelect: (imagem: Imagem, isSelected: boolean) => void}){
+export default function ImageEstudo({imagem, onSelect, width = 90, height = 90}: {imagem: Imagem, onSelect?: (imagem: Imagem, isSelected: boolean) => void, width?: number, height?: number}){
     const [isSelected, setIsSelected] = useState(false)
 
     function toggleSelection(){
         const newSelectionState = !isSelected
         setIsSelected(newSelectionState)
-        onSelect(imagem, newSelectionState)
+        if (onSelect) {
+            onSelect(imagem, newSelectionState)
+        }
     }
 
     return(
@@ -36,8 +38,8 @@ export default function ImageEstudo({imagem, onSelect}: {imagem: Imagem, onSelec
                         onClick={toggleSelection}
                         src={imagem.link}
                         alt="raio-x"
-                        width={90}
-                        height={90}
+                        width={width}
+                        height={height}
                         className="rounded-md cursor-pointer border-2 border-green-500"
                     />
 
@@ -63,8 +65,8 @@ export default function ImageEstudo({imagem, onSelect}: {imagem: Imagem, onSelec
                         onClick={toggleSelection}
                         src={imagem.link}
                         alt="raio-x"
-                        width={90}
-                        height={90}
+                        width={width}
+                        height={height}
                         className="rounded-md cursor-pointer"
                     />
                 </Box>
