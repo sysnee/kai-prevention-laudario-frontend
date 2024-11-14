@@ -3,38 +3,10 @@
 import { Avatar, Box, Button, Grid, Stack } from "@mui/joy"
 import BaseLayout from "../../components/BaseLayout"
 import { KeyboardArrowLeft, RemoveRedEyeSharp } from "@mui/icons-material"
-import { useParams } from "next/navigation"
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import db from '../../../../db.json'
-import { Estudo, Imagem } from "../../types/types";
-import ImageEstudo from "../../components/ImageEstudo";
 import Image from "next/image";
 
 export default function EstudoResumoPage() {
-    const { id } = useParams()
-
-    const [estudo, setEstudo] = useState<Estudo | null>(null)
-    const [selectedImages, setSelectedImages] = useState<Imagem[]>([])
-
-    async function getEstudo() {
-        try {
-            const estudoData = db.estudos.find(estudo => Number(estudo.id) === parseInt(String(id)))
-
-            if (!estudoData) {
-                throw new Error("Estudo não encontrado");
-            }
-
-            setEstudo(estudoData)
-        } catch (error) {
-            console.log("Erro ao buscar estudo: ", error)
-        }
-    }
-
-    useEffect(() => {
-        getEstudo();
-    }, [])
-
     return (
         <BaseLayout>
             <Box
