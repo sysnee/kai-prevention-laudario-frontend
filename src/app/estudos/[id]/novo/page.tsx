@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Grid } from "@mui/joy"
+import { Box, Button, Grid2 as Grid } from "@mui/material"
 import BaseLayout from "../../../components/BaseLayout"
 import { KeyboardArrowLeft } from "@mui/icons-material"
 import { useParams } from "next/navigation"
@@ -10,7 +10,7 @@ import Link from "next/link";
 import db from '../../../../../db.json'
 import { Estudo, Imagem } from "../../../types/types";
 
-export default function EstudoDetailPage(){
+export default function EstudoDetailPage() {
     const { id } = useParams()
 
     const [estudo, setEstudo] = useState<Estudo | null>(null)
@@ -20,24 +20,24 @@ export default function EstudoDetailPage(){
         try {
             const estudoData = db.estudos.find(estudo => Number(estudo.id) === parseInt(String(id)))
 
-            if(!estudoData) {
+            if (!estudoData) {
                 throw new Error("Estudo não encontrado");
             }
 
             // Filtrando imagens do estudo
             // const images = db.imagens.filter(imagem => imagem.estudoId === estudoData.id)
             setEstudo(estudoData)
-        } catch(error) {
+        } catch (error) {
             console.log("Erro ao buscar estudo: ", error)
         }
     }
 
 
-    function handleImageSelection(imagem: Imagem, isSelected: boolean){
-        if(isSelected){
+    function handleImageSelection(imagem: Imagem, isSelected: boolean) {
+        if (isSelected) {
             setSelectedImages(prev => [...prev, imagem])
-        }else{
-            setSelectedImages(prev => prev.filter(img => img.id !== imagem.id)); 
+        } else {
+            setSelectedImages(prev => prev.filter(img => img.id !== imagem.id));
         }
     }
 
@@ -45,127 +45,126 @@ export default function EstudoDetailPage(){
         getEstudo();
     }, [])
 
-    return(
-        <BaseLayout>
+    return (
+        <Box
+            sx={{
+                padding: "1.8em",
+                height: "100vh",
+            }}
+        >
             <Box
                 sx={{
-                    padding: "1.8em",
-                    height: "100vh",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1.5em"
                 }}
             >
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "1.5em"
-                    }}
-                >   
-                    <Link
-                        href={`/`}
-                    >
-                        <Button
-                            size="sm"
-                            sx={{
-                                backgroundColor: "#584e46",
-                                "&:hover": {
-                                    backgroundColor: "#4b4037"
-                                }
-                            }}
-                        >
-                            <KeyboardArrowLeft
-                                sx={{
-                                    color: "#ff8046",
-                                }}
-                            />
-                        </Button>
-                    </Link>
-
-                    <h2 className="text-2xl text-black">Estudo: ID: {id}</h2>
-                </Box>
-                
-                <Box
-                    sx={{
-                        marginTop: "3em"
-                    }}
+                <Link
+                    href={`/`}
                 >
-                    {estudo && (
-                        estudo.imagens.length > 0 ? (
-                            <h2 className="text-black">Escolha as imagens para adcionar seus achados</h2>
-                        ): (
-                            <h2 className="text-black">Nenhuma imagem encontrada.</h2>
-                        )
-                    )}
-                    <Grid
-                        container
-                        spacing={1.5}
-                        justifyContent="start"
-                        marginTop={1}
-                        wrap="wrap"
-                    >
-                        {estudo && (
-                            estudo.imagens.length > 0 && (
-                                estudo?.imagens.map(imagem => (
-                                    <Grid
-                                        key={imagem.id}
-                                        xs={3}
-                                        sm={2}
-                                        md={1.5}
-                                        lg={1}
-                                    >
-                                        <ImageEstudo 
-                                            imagem={imagem}
-                                            onSelect={handleImageSelection}
-                                            width={400}
-                                            height={450}
-                                        />
-                                    </Grid>
-                                ))
-                            )
-                        )}
-                    </Grid>
-                </Box>
-
-                {selectedImages.length > 0 && (
-                    <Box
+                    <Button
+                        // size="sm"
                         sx={{
-                            marginTop: "3em",
-                            backgroundColor: "#fff",
-                            padding: "2em",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "start",
-                            gap: "1em",
-                            borderRadius: "10px",
-                            boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)"
+                            backgroundColor: "#584e46",
+                            "&:hover": {
+                                backgroundColor: "#4b4037"
+                            }
                         }}
                     >
-                        <Button
+                        <KeyboardArrowLeft
                             sx={{
-                                backgroundColor: "#fff",
-                                color: "#584e46",
-                                border: "1px solid #584e46",
-                                fontSize: "13px",
-                                "&:hover": {
-                                    backgroundColor: "#f2f2f2"
-                                } 
+                                color: "#ff8046",
                             }}
-                        >
-                            Cancelar
-                        </Button>
-                        <Button
-                            sx={{
-                                backgroundColor: "#584e46",
-                                "&:hover": {
-                                    backgroundColor: "#4b4037"
-                                },
-                                fontSize: "13px" 
-                            }}
-                        >
-                            Salvar e avançar
-                            </Button>
-                    </Box>
-                )}
+                        />
+                    </Button>
+                </Link>
+
+                <h2 className="text-2xl text-black">Estudo: ID: {id}</h2>
             </Box>
-        </BaseLayout>
+
+            <Box
+                sx={{
+                    marginTop: "3em"
+                }}
+            >
+                {estudo && (
+                    estudo.imagens.length > 0 ? (
+                        <h2 className="text-black">Escolha as imagens para adcionar seus achados</h2>
+                    ) : (
+                        <h2 className="text-black">Nenhuma imagem encontrada.</h2>
+                    )
+                )}
+                <Grid
+                    container
+                    spacing={1.5}
+                    justifyContent="start"
+                    marginTop={1}
+                    wrap="wrap"
+                >
+                    {estudo && (
+                        estudo.imagens.length > 0 && (
+                            estudo?.imagens.map(imagem => (
+                                <Grid
+                                    key={imagem.id}
+                                    size={{ xs: 3, sm: 2, md: 1.5, lg: 1 }}
+                                // xs={3}
+                                // sm={2}
+                                // md={1.5}
+                                // lg={1}
+                                >
+                                    <ImageEstudo
+                                        imagem={imagem}
+                                        onSelect={handleImageSelection}
+                                        width={400}
+                                        height={450}
+                                    />
+                                </Grid>
+                            ))
+                        )
+                    )}
+                </Grid>
+            </Box>
+
+            {selectedImages.length > 0 && (
+                <Box
+                    sx={{
+                        marginTop: "3em",
+                        backgroundColor: "#fff",
+                        padding: "2em",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "start",
+                        gap: "1em",
+                        borderRadius: "10px",
+                        boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)"
+                    }}
+                >
+                    <Button
+                        sx={{
+                            backgroundColor: "#fff",
+                            color: "#584e46",
+                            border: "1px solid #584e46",
+                            fontSize: "13px",
+                            "&:hover": {
+                                backgroundColor: "#f2f2f2"
+                            }
+                        }}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button
+                        sx={{
+                            backgroundColor: "#584e46",
+                            "&:hover": {
+                                backgroundColor: "#4b4037"
+                            },
+                            fontSize: "13px"
+                        }}
+                    >
+                        Salvar e avançar
+                    </Button>
+                </Box>
+            )}
+        </Box>
     )
 }

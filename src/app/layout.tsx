@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+import { StyledEngineProvider } from '@mui/material/styles';
 import "./globals.css";
 import '@fontsource/inter';
+import BaseLayout from "./components/BaseLayout";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,16 +29,20 @@ export default async function RootLayout({
   children: React.ReactNode,
   // pageProps: any
 }>) {
-  
+
   return (
     // <SessionProvider session={session}>
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      <AppRouterCacheProvider>
-        {children}
-      </AppRouterCacheProvider>
+        <AppRouterCacheProvider>
+          <StyledEngineProvider injectFirst>
+            <BaseLayout>
+              {children}
+            </BaseLayout>
+          </StyledEngineProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
     // </SessionProvider>

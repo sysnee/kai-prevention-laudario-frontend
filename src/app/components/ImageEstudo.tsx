@@ -1,5 +1,5 @@
 import CheckBox from "@mui/icons-material/CheckBox";
-import { Box } from "@mui/joy";
+import { Box } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 import { Imagem } from "../types/types";

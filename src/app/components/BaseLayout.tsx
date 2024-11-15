@@ -1,24 +1,42 @@
 "use client";
 
-import { KeyboardArrowDown } from "@mui/icons-material"
-import { Avatar, Box, Button, Typography } from "@mui/joy"
-import { AppBar, Toolbar } from "@mui/material"
-import Image from "next/image";
 import { ReactNode, useEffect, useState } from "react"
-import logo from "../assets/imagens/logo.png"
+import CssBaseline from '@mui/material/CssBaseline';
+import SideMenu from './SideMenu';
+import AppNavbar from './AppNavbar';
+import { alpha, Theme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Grid from '@mui/material/Grid2';
+import Header from './Header';
 import db from '../../../db.json'
 import { User } from "../types/types";
 
-export default function BaseLayout({children}: {children: ReactNode}){
+import AppTheme from '../theme/AppTheme';
+import {
+    chartsCustomizations,
+    dataGridCustomizations,
+    datePickersCustomizations,
+    treeViewCustomizations,
+} from '../theme/customizations';
+
+const xThemeComponents = {
+    ...chartsCustomizations,
+    ...dataGridCustomizations,
+    ...datePickersCustomizations,
+    ...treeViewCustomizations,
+};
+
+export default function BaseLayout({ children }: { children: ReactNode }) {
 
     const [user, setUser] = useState<User | null>(null)
 
-    async function getUser(){
-        try{
+    async function getUser() {
+        try {
             // const userData = await axios.get("http://localhost:5000/users/1")
             const userData = db.users[0]
             setUser(userData)
-        } catch(error){
+        } catch (error) {
             console.log("Erro ao buscar usuario: ", error)
         }
     }
@@ -27,47 +45,43 @@ export default function BaseLayout({children}: {children: ReactNode}){
         getUser();
     }, [])
 
-    return(
-        <div className="flex flex-col min-h-screen m-0 p-0">
-            <AppBar 
-                position="sticky" 
-                elevation={0}
-            >
-                <Toolbar className="flex justify-between items-center bg-nav">
-                    <Typography component="div">
-                        <Image 
-                            src={logo}
-                            alt="Logo KAI"
-                            width={55}
-                        />
-                    </Typography>
-                    
-                    <Box>
-                        <Button 
-                            sx={{
-                                backgroundColor: '#71655c', 
-                                gap: '.7em', 
-                                padding: '.6em .6em',
-                                '&:hover': {
-                                    backgroundColor: '#5e4e46'
-                                }
-                            }} 
-                            size="sm" 
-                            endDecorator={<KeyboardArrowDown sx={{color: '#ff8046'}} />}>
-                                <Avatar 
-                                    size="sm" 
-                                    src={user?.avatar} 
-                                />
-                                <p className="text-xs">{user?.nome}</p>
-                        </Button>
-                    </Box>
-                </Toolbar>
-            </AppBar>
+    return (
+        <AppTheme themeComponents={xThemeComponents}>
+            <CssBaseline enableColorScheme />
+            <Grid container>
+                <Grid size={{ xs: 0, lg: 3 }}>
+                    <SideMenu />
+                </Grid>
 
-                
-            <Box className="flex-1">
-                {children}
-            </Box>
-        </div>
+                <Grid size={{ xs: 12, lg: 9 }}>
+                    <Box>
+                        <AppNavbar />
+                        <Box
+                            component="main"
+                            sx={(theme: Theme) => ({
+                                flexGrow: 1,
+                                backgroundColor: theme.cssVariables
+                                    ? `rgba(${theme.palette.background.default} / 1)`
+                                    : alpha(theme.palette.background.default, 1),
+                                overflow: 'auto',
+                            })}
+                        >
+                            <Stack
+                                spacing={2}
+                                sx={{
+                                    alignItems: 'center',
+                                    mx: 3,
+                                    pb: 5,
+                                    mt: { xs: 8, md: 0 },
+                                }}
+                            >
+                                <Header />
+                                {children}
+                            </Stack>
+                        </Box>
+                    </Box>
+                </Grid>
+            </Grid>
+        </AppTheme>
     )
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Box, Button, Grid } from "@mui/joy";
+import { Avatar, Box, Button, Grid2 as Grid } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -42,7 +42,8 @@ export default function EstudoComponent({ estudo }: { estudo: Estudo }) {
             }}
         >
             <Grid
-                xs={2}
+                // item
+                size={2}
                 sx={{
                     display: "flex",
                     justifyContent: "center",
@@ -55,7 +56,7 @@ export default function EstudoComponent({ estudo }: { estudo: Estudo }) {
             </Grid>
 
             <Grid
-                xs={6}
+                size={6}
                 sx={{
                     display: "flex",
                     alignItems: "center",
@@ -117,7 +118,7 @@ export default function EstudoComponent({ estudo }: { estudo: Estudo }) {
             </Grid>
 
             <Grid
-                xs={2}
+                size={2}
                 sx={{
                     display: "flex",
                     justifyContent: "start",
@@ -143,7 +144,7 @@ export default function EstudoComponent({ estudo }: { estudo: Estudo }) {
 
                     <Avatar
                         src={laudo?.medico.avatar}
-                        size="sm"
+                        // size="sm"
                     />
                     <Box
                         sx={{
@@ -168,7 +169,7 @@ export default function EstudoComponent({ estudo }: { estudo: Estudo }) {
             </Grid>
 
             <Grid
-                xs={2}
+                size={2}
                 sx={{
                     display: "flex",
                     alignItems: "center",

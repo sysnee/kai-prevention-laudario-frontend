@@ -1,15 +1,12 @@
 'use client'
 import { SessionProvider } from "next-auth/react";
-import Home from "./home";
-import BaseLayout from "./components/BaseLayout";
+import Dashboard from "./dashboard/page";
 
 export default function Public(){
-
+  
   return (
     <SessionProvider>
-      <BaseLayout>
-        <Home />
-      </BaseLayout>
+        <Dashboard />
     </SessionProvider>
   );
 }
