@@ -102,7 +102,7 @@ interface CustomLabelProps {
   expandable?: boolean;
 }
 
-function CustomLabel({ color, expandable, children, ...other }: CustomLabelProps) {
+function CustomLabel({ color, children, ...other }: CustomLabelProps) {
   const theme = useTheme();
   const colors = {
     blue: (theme.cssVariables || theme).palette.primary.main,
@@ -126,7 +126,7 @@ function CustomLabel({ color, expandable, children, ...other }: CustomLabelProps
 
 interface CustomTreeItemProps
   extends Omit<UseTreeItem2Parameters, 'rootRef'>,
-    Omit<React.HTMLAttributes<HTMLLIElement>, 'onFocus'> {}
+  Omit<React.HTMLAttributes<HTMLLIElement>, 'onFocus'> { }
 
 const CustomTreeItem = React.forwardRef(function CustomTreeItem(
   props: CustomTreeItemProps,

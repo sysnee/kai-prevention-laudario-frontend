@@ -29,7 +29,7 @@ const xThemeComponents = {
 
 export default function BaseLayout({ children }: { children: ReactNode }) {
 
-    const [user, setUser] = useState<User | null>(null)
+    const [, setUser] = useState<User | null>(null)
 
     async function getUser() {
         try {

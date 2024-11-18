@@ -9,8 +9,6 @@ import MenuContent from '../dashboard/components/MenuContent';
 import CardAlert from '../dashboard/components/CardAlert';
 import OptionsMenu from '../dashboard/components/OptionsMenu';
 
-const drawerWidth = 240;
-
 // const Drawer = styled(MuiDrawer)({
 //   width: drawerWidth,
 //   flexShrink: 0,
