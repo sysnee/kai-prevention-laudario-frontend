@@ -7,7 +7,7 @@ import type { } from '@mui/x-data-grid/themeAugmentation';
 import type { } from '@mui/x-tree-view/themeAugmentation';
 import MainGrid from './components/MainGrid';
 
-export default function Dashboard(props: { disableCustomTheme?: boolean }) {
+export default function Dashboard() {
   return (
     <MainGrid />
   );

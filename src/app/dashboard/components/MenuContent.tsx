@@ -94,7 +94,7 @@ export default function MenuContent() {
               <Collapse in={open[index]} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding sx={{ mb: 1 }}>
                   {item.subItems.map((subItem, subIndex) => (
-                    <Link href={subItem.path}>
+                    <Link key={subIndex} href={subItem.path}>
                       <ListItem key={subIndex} sx={{ pl: 2, py: 0 }}>
                         <ListItemButton>
                           <ListItemText primary={subItem.text} />

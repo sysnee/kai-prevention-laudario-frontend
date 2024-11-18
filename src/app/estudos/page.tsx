@@ -53,7 +53,7 @@ export default function Laudario() {
                             estudos.map(estudo => (
                                 <EstudoComponent key={estudo.id} estudo={estudo} />
                             ))
-                        ): (
+                        ) : (
                             <h2 className="text-black text-lg">Nenhum estudo encontrado.</h2>
                         )
                     )}
@@ -66,10 +66,9 @@ export default function Laudario() {
                         marginTop: "2em",
                     }}
                 >
-                    
                     {estudos.length > 0 && (
-                        <Pagination 
-                            count={10} 
+                        <Pagination
+                            count={10}
                             color="primary"
                             // variant="outlined"
                             size="small"

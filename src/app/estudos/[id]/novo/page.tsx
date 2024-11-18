@@ -1,7 +1,6 @@
 "use client";
 
 import { Box, Button, Grid2 as Grid } from "@mui/material"
-import BaseLayout from "../../../components/BaseLayout"
 import { KeyboardArrowLeft } from "@mui/icons-material"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react";
