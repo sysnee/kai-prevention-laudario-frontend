@@ -19,6 +19,7 @@ export default function EstudoComponent({ estudo }: { estudo: Estudo }) {
         }
     }
 
+
     useEffect(() => {
         getLaudo();
     }, [])
@@ -144,7 +145,7 @@ export default function EstudoComponent({ estudo }: { estudo: Estudo }) {
 
                     <Avatar
                         src={laudo?.medico.avatar}
-                        // size="sm"
+                    // size="sm"
                     />
                     <Box
                         sx={{
