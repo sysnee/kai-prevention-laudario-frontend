@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Header from "./components/Header";
-import { Box, Skeleton } from "@mui/joy";
+import { Box, Skeleton } from "@mui/material";
 import EstudoComponent from "./components/Estudo";
 import { Pagination } from "@mui/material";
 import db from '../../db.json'
@@ -30,8 +29,6 @@ export default function Home() {
 
     return (
         <>
-            <Header estudos={estudos} />
-
             <Box
                 sx={{
                     padding: "1.8em",

@@ -59,27 +59,32 @@ export default function EstudoDetailPage() {
                     gap: "1.5em"
                 }}
             >
-                <Link
-                    href={`/`}
-                >
+                <Link href={`/`}>
                     <Button
-                        // size="sm"
                         sx={{
-                            backgroundColor: "#584e46",
+                            backgroundColor: "#584e46", 
                             "&:hover": {
-                                backgroundColor: "#4b4037"
-                            }
+                                backgroundColor: "#3e3228", 
+                            },
                         }}
                     >
                         <KeyboardArrowLeft
                             sx={{
-                                color: "#ff8046",
+                                color: "#ff8046"
                             }}
                         />
                     </Button>
                 </Link>
 
-                <h2 className="text-2xl text-black">Estudo: ID: {id}</h2>
+                <Box
+                    component="h2"
+                    sx={(theme) => ({
+                        fontSize: '26px',
+                        color: theme.palette.text.primary,
+                    })}
+                    >
+                    Estudo: ID: {id}
+                </Box>
             </Box>
 
             <Box
@@ -89,9 +94,25 @@ export default function EstudoDetailPage() {
             >
                 {estudo && (
                     estudo.imagens.length > 0 ? (
-                        <h2 className="text-black">Escolha as imagens para adcionar seus achados</h2>
+                        <Box
+                            component="h2"
+                            sx={(theme) => ({
+                                fontSize: "16px",
+                                color: theme.palette.text.primary
+                            })}
+                        >
+                            Escolha as imagens para adicionar seus achados
+                        </Box>
                     ) : (
-                        <h2 className="text-black">Nenhuma imagem encontrada.</h2>
+                        <Box
+                            component="h2"
+                            sx={(theme) => ({
+                                fontSize: "16px",
+                                color: theme.palette.text.primary
+                            })}
+                        >
+                            Nenhuma imagem encontrada.
+                        </Box>
                     )
                 )}
                 <Grid
@@ -129,36 +150,35 @@ export default function EstudoDetailPage() {
                 <Box
                     sx={{
                         marginTop: "3em",
-                        backgroundColor: "#fff",
+                        backgroundColor: "#f0f0f0",
                         padding: "2em",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "start",
                         gap: "1em",
                         borderRadius: "10px",
-                        boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)"
                     }}
                 >
                     <Button
                         sx={{
-                            backgroundColor: "#fff",
-                            color: "#584e46",
+                            backgroundColor: "transparent",
                             border: "1px solid #584e46",
-                            fontSize: "13px",
+                            color: "#584e46 !important",
                             "&:hover": {
-                                backgroundColor: "#f2f2f2"
-                            }
+                                backgroundColor: "#d3d3d3",
+                            },
                         }}
-                    >
+                        >
                         Cancelar
                     </Button>
+                    
                     <Button
                         sx={{
                             backgroundColor: "#584e46",
+                            color: "#fff",
                             "&:hover": {
-                                backgroundColor: "#4b4037"
+                                backgroundColor: "#3e3228",
                             },
-                            fontSize: "13px"
                         }}
                     >
                         Salvar e avançar
