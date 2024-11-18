@@ -24,7 +24,15 @@ export default function ImageEstudo({imagem, onSelect, width = 90, height = 90}:
                 gap: ".3em"
             }}
         >
-            <span className="text-black text-xs">img {imagem.id}</span>
+            <Box
+                component="span"
+                sx={(theme) => ({
+                    fontSize: '12px',
+                    color: theme.palette.text.primary,
+                })}
+                >
+                img {imagem.id}
+            </Box>
             {isSelected ? (
                 <Box
                     sx={{
@@ -67,7 +75,7 @@ export default function ImageEstudo({imagem, onSelect, width = 90, height = 90}:
                         alt="raio-x"
                         width={width}
                         height={height}
-                        className="rounded-md cursor-pointer"
+                        className="rounded-md border border-gray-200 cursor-pointer"
                     />
                 </Box>
             )}
