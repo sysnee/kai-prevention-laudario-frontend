@@ -60,17 +60,15 @@ export default function EstudoDetailPage() {
             >
                 <Link href={`/`}>
                     <Button
-                        sx={{
-                            backgroundColor: "#584e46", 
-                            "&:hover": {
-                                backgroundColor: "#3e3228", 
-                            },
-                        }}
+                        sx={(theme) => ({
+                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14", 
+                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d", 
+                        })}
                     >
                         <KeyboardArrowLeft
-                            sx={{
-                                color: "#ff8046"
-                            }}
+                            sx={(theme) => ({
+                                color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
+                            })}
                         />
                     </Button>
                 </Link>
@@ -147,38 +145,34 @@ export default function EstudoDetailPage() {
 
             {selectedImages.length > 0 && (
                 <Box
-                    sx={{
+                    sx={(theme) => ({
                         marginTop: "3em",
-                        backgroundColor: "#f0f0f0",
+                        backgroundColor: theme.palette.mode === 'light' ? "#f5f6fa" : "#0c1017",
                         padding: "2em",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "start",
                         gap: "1em",
                         borderRadius: "10px",
-                    }}
+                        boxShadow: "2px 2px 4px rgb(0, 0, 0, 0.1)"
+                    })}
                 >
                     <Button
-                        sx={{
+                        sx={(theme) => ({
                             backgroundColor: "transparent",
-                            border: "1px solid #584e46",
-                            color: "#584e46 !important",
-                            "&:hover": {
-                                backgroundColor: "#d3d3d3",
-                            },
-                        }}
+                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d", 
+                            color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
+                        })}
                         >
                         Cancelar
                     </Button>
                     
                     <Button
-                        sx={{
-                            backgroundColor: "#584e46",
-                            color: "#fff",
-                            "&:hover": {
-                                backgroundColor: "#3e3228",
-                            },
-                        }}
+                        sx={(theme) => ({
+                            backgroundColor: "transparent",
+                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d", 
+                            color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
+                        })}
                     >
                         Salvar e avançar
                     </Button>

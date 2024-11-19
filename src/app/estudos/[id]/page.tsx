@@ -20,27 +20,30 @@ export default function EstudoResumoPage() {
                     gap: "1.5em"
                 }}
             >
-                <Link
-                    href={`/`}
-                >
+                <Link href={`/`}>
                     <Button
-                        // size="sm"
-                        sx={{
-                            backgroundColor: "#584e46",
-                            "&:hover": {
-                                backgroundColor: "#4b4037"
-                            }
-                        }}
+                        sx={(theme) => ({
+                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14", 
+                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d", 
+                        })}
                     >
                         <KeyboardArrowLeft
-                            sx={{
-                                color: "#ff8046",
-                            }}
+                            sx={(theme) => ({
+                                color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
+                            })}
                         />
                     </Button>
                 </Link>
 
-                <h2 className="text-2xl text-black">Resumo</h2>
+                <Box
+                    component="h2"
+                    sx={(theme) => ({
+                        fontSize: '24px',
+                        color: theme.palette.text.primary,
+                    })}
+                >
+                    Resumo
+                </Box>
             </Box>
 
             <Box
@@ -64,13 +67,14 @@ export default function EstudoResumoPage() {
                                         alt="raio-x"
                                         width={250}
                                         height={250}
-                                        className="rounded-lg cursor-pointer border-2"
+                                        className="rounded-lg cursor-pointer border"
                                     />
                                 </Box>
                                 <Box width={'80%'}>
                                     <Box
-                                        sx={{
-                                            backgroundColor: "#fff",
+                                        sx={(theme) => ({
+                                            backgroundColor: "transparent",
+                                            border: theme.palette.mode === 'light' ? "none" : "1px solid #333b4d", 
                                             padding: "2em",
                                             display: "flex",
                                             justifyContent: "start",
@@ -78,27 +82,87 @@ export default function EstudoResumoPage() {
                                             borderRadius: "10px",
                                             boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)",
                                             height: '225px',
-                                        }}
+                                        })}
                                     >
                                         <Stack width={'100%'}>
-                                            <h1 className="text-2xl font-bold text-black">Achado 1</h1>
+                                            <Box
+                                                component="h1"
+                                                sx={(theme) => ({
+                                                    color: theme.palette.text.primary,
+                                                    fontWeight: "bold",
+                                                    fontSize: "22px"
+                                                })}
+                                            >
+                                                Achado 1
+                                            </Box>
                                             <Grid container marginY={1} spacing={4}>
                                                 <Grid size={3}>
                                                     <Stack>
-                                                        <h1 className="text-md font-bold text-black">Sistema</h1>
-                                                        <h1 className="text-md text-black">Sistema Cardiovascular</h1>
+                                                        <Box
+                                                            component="h1"
+                                                            sx={(theme) => ({
+                                                                color: theme.palette.text.primary,
+                                                                fontWeight: "bold",
+                                                                fontSize: "14px"
+                                                            })}
+                                                        >
+                                                            Sistema
+                                                        </Box>
+                                                        <Box
+                                                            component="h1"
+                                                            sx={(theme) => ({
+                                                                color: theme.palette.text.primary,
+                                                                fontSize: "14px"
+                                                            })}
+                                                        >
+                                                            Sistema Cardiovascular
+                                                        </Box>
                                                     </Stack>
                                                 </Grid>
                                                 <Grid size={3}>
                                                     <Stack>
-                                                        <h1 className="text-md font-bold text-black">Orgão</h1>
-                                                        <h1 className="text-md text-black">Coração</h1>
+                                                        <Box
+                                                            component="h1"
+                                                            sx={(theme) => ({
+                                                                color: theme.palette.text.primary,
+                                                                fontWeight: "bold",
+                                                                fontSize: "14px"
+                                                            })}
+                                                        >
+                                                            Orgão
+                                                        </Box>
+                                                        <Box
+                                                            component="h1"
+                                                            sx={(theme) => ({
+                                                                color: theme.palette.text.primary,
+                                                                fontSize: "14px"
+                                                            })}
+                                                        >
+                                                            Coração
+                                                        </Box>
                                                     </Stack>
                                                 </Grid>
                                                 <Grid size={5}>
                                                     <Stack>
-                                                        <h1 className="text-md font-bold text-black">Patologias</h1>
-                                                        <h1 className="text-md text-black">Miocardiopatia Dilatada, valvopatia</h1>
+                                                        <Box
+                                                            component="h1"
+                                                            sx={(theme) => ({
+                                                                color: theme.palette.text.primary,
+                                                                fontWeight: "bold",
+                                                                fontSize: "14px"
+                                                            })}
+                                                        >
+                                                            Patologias
+                                                        </Box>
+                                                        <Box
+                                                            component="h1"
+                                                            sx={(theme) => ({
+                                                                color: theme.palette.text.primary,
+                                                                fontSize: "14px"
+                                                            })}
+                                                        >
+                                                            Miocardiopatia Dilatada, valvopatia
+                                                        </Box>
                                                     </Stack>
                                                 </Grid>
                                             </Grid>
@@ -106,22 +170,36 @@ export default function EstudoResumoPage() {
                                                 <Stack direction={'row'} spacing={1}>
                                                     <Avatar></Avatar>
                                                     <Stack>
-                                                        <p className="text-sm font-bold text-black">Laudado por</p>
-                                                        <p className="text-sm text-black">Nome</p>
+                                                        <Box
+                                                            component="h1"
+                                                            sx={(theme) => ({
+                                                                color: theme.palette.text.primary,
+                                                                fontWeight: "bold",
+                                                                fontSize: "14px"
+                                                            })}
+                                                        >
+                                                            Laudado por
+                                                        </Box>
+                                                        <Box
+                                                            component="h1"
+                                                            sx={(theme) => ({
+                                                                color: theme.palette.text.primary,
+                                                                fontSize: "14px"
+                                                            })}
+                                                        >
+                                                            Nome
+                                                        </Box>
                                                     </Stack>
                                                 </Stack>
                                                 <Button
-                                                    sx={{
-                                                        backgroundColor: "#584e46",
-                                                        color: "#ffb492",
+                                                    sx={(theme) => ({
+                                                        backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14", 
+                                                        border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d", 
                                                         fontWeight: "lighter",
                                                         fontSize: "14px",
-                                                        "&:hover": {
-                                                            backgroundColor: "#4b4037"
-                                                        },
                                                         width: '150px',
                                                         alignSelf: 'end',
-                                                    }}
+                                                    })}
                                                 >
 
                                                     Ver detalhes
@@ -137,22 +215,38 @@ export default function EstudoResumoPage() {
                         </Stack>
                     </Grid>
                     <Grid size={4}>
-                        <Box sx={{
+                        <Box sx={(theme) => ({
                             width: '100%',
-                            backgroundColor: '#B8B1AB',
+                            backgroundColor: 'transparent',
+                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d", 
                             borderRadius: '20px',
                             padding: 3
-                        }}>
-                            <h2 className="text-3xl font-extralight text-black">Resumo do laudo</h2>
+                        })}>
                             <Box
-                                sx={{
-                                    backgroundColor: '#fff',
+                                component="h2"
+                                sx={(theme) => ({
+                                    color: theme.palette.text.primary,
+                                    fontWeight: "bold",
+                                    fontSize: "24px"
+                                })}
+                            >
+                                Resumo do laudo
+                            </Box>
+                            <Box
+                                sx={(theme) => ({
+                                    backgroundColor: theme.palette.mode === 'light' ? "#f5f6fa" : "#0c1017",
                                     borderRadius: '5px',
                                     padding: 1,
                                     marginY: 2
-                                }}
+                                })}
                             >
-                                <p className="text-sm text-black">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+                                <Box
+                                    component="p"
+                                    sx={(theme) => ({
+                                        color: theme.palette.text.primary
+                                    })}
+                                >
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
                                     molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
                                     numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
                                     optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
@@ -192,17 +286,17 @@ export default function EstudoResumoPage() {
                                     suscipit quas? Nulla, placeat. Voluptatem quaerat non architecto ab laudantium
                                     modi minima sunt esse temporibus sint culpa, recusandae aliquam numquam
                                     totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam
-                                    quasi aliquam eligendi, placeat qui corporis!</p>
+                                    quasi aliquam eligendi, placeat qui corporis!
+                                </Box>
                             </Box>
                             <Button
-                                sx={{
+                                sx={(theme) => ({
                                     width: "100%",
                                     fontSize: "12px",
-                                    backgroundColor: "#584e46",
-                                    "&:hover": {
-                                        backgroundColor: "#4b4037"
-                                    }
-                                }}
+                                    backgroundColor: "transparent",
+                                    border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d", 
+                                    color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
+                                })}
                             >
                                 Assinar e salvar laudo
                             </Button>
