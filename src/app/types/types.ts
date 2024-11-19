@@ -27,4 +27,3 @@ export type Medico = {
     nome: string,
     avatar: string
 }
-
