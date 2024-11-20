@@ -185,12 +185,18 @@
     ],
     "achados": [
         {   
+            "id": "1",
             "laudoId": "1",
             "imagemId": "1",
-            "titulo": "",
-            "sistema": "",
-            "orgao": "",
-            "patologias": []
+            "titulo": "Achado 1",
+            "orgao": "Coração",
+            "sistema": "Cardiovascular",
+            "patologias": [
+                "Miocardiopatia dilatada",
+                "Valvopatia"
+            ],
+            "severidade": "grave",
+            "observacoes": "Laudo concluído."
         }
     ]
 }
