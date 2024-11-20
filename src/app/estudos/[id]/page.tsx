@@ -191,19 +191,22 @@ export default function EstudoResumoPage() {
                                                         </Box>
                                                     </Stack>
                                                 </Stack>
-                                                <Button
-                                                    sx={(theme) => ({
-                                                        backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14", 
-                                                        border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d", 
-                                                        fontWeight: "lighter",
-                                                        fontSize: "14px",
-                                                        width: '150px',
-                                                        alignSelf: 'end',
-                                                    })}
-                                                >
 
-                                                    Ver detalhes
-                                                </Button>
+                                                <Link href="/estudos/1/achados">
+                                                    <Button
+                                                        sx={(theme) => ({
+                                                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14", 
+                                                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d", 
+                                                            fontWeight: "lighter",
+                                                            fontSize: "14px",
+                                                            width: '150px',
+                                                            alignSelf: 'end',
+                                                        })}
+                                                    >
+
+                                                        Ver detalhes
+                                                    </Button>
+                                                </Link>
                                             </Stack>
 
                                         </Stack>

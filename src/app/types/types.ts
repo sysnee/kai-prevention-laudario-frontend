@@ -27,3 +27,15 @@ export type Medico = {
     nome: string,
     avatar: string
 }
+
+export type Achado = {
+    id: string,
+    laudoId: string,
+    imagemId: string,
+    titulo: string,
+    orgao: string,
+    sistema: string,
+    patologias: string[],
+    severidade: string,
+    observacoes: string
+}
