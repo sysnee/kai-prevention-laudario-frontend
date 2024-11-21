@@ -12,7 +12,7 @@ export default function Laudario() {
 
     async function getEstudos() {
         try {
-            // const estudosData = await axios.get("http://localhost:5000/estudos");
+            // const estudosData = await axios.get("http://localhost:5000/dashboard/estudos");
             const estudosData = db.estudos
             setEstudos(estudosData);
         } catch (error) {

@@ -23,8 +23,8 @@ export default function EstudoResumoPage() {
                 <Link href={`/`}>
                     <Button
                         sx={(theme) => ({
-                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14", 
-                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d", 
+                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14",
+                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d",
                         })}
                     >
                         <KeyboardArrowLeft
@@ -74,7 +74,7 @@ export default function EstudoResumoPage() {
                                     <Box
                                         sx={(theme) => ({
                                             backgroundColor: "transparent",
-                                            border: theme.palette.mode === 'light' ? "none" : "1px solid #333b4d", 
+                                            border: theme.palette.mode === 'light' ? "none" : "1px solid #333b4d",
                                             padding: "2em",
                                             display: "flex",
                                             justifyContent: "start",
@@ -192,11 +192,11 @@ export default function EstudoResumoPage() {
                                                     </Stack>
                                                 </Stack>
 
-                                                <Link href="/estudos/1/achados">
+                                                <Link href="/dashboard/estudos/1/achados">
                                                     <Button
                                                         sx={(theme) => ({
-                                                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14", 
-                                                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d", 
+                                                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14",
+                                                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d",
                                                             fontWeight: "lighter",
                                                             fontSize: "14px",
                                                             width: '150px',
@@ -214,14 +214,14 @@ export default function EstudoResumoPage() {
                                 </Box>
                             </Stack>
 
-                            
+
                         </Stack>
                     </Grid>
                     <Grid size={4}>
                         <Box sx={(theme) => ({
                             width: '100%',
                             backgroundColor: 'transparent',
-                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d", 
+                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d",
                             borderRadius: '20px',
                             padding: 3
                         })}>
@@ -297,7 +297,7 @@ export default function EstudoResumoPage() {
                                     width: "100%",
                                     fontSize: "12px",
                                     backgroundColor: "transparent",
-                                    border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d", 
+                                    border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d",
                                     color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
                                 })}
                             >

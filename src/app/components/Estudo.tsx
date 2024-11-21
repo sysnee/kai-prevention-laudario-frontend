@@ -181,7 +181,7 @@ export default function EstudoComponent({ estudo }: { estudo: Estudo }) {
             >
                 {estudo.laudoId ? (
                     <Link
-                        href={`/estudos/${estudo.id}`}
+                        href={`/dashboard/estudos/${estudo.id}`}
                         className="w-full"
                     >
                         <Button
@@ -199,7 +199,7 @@ export default function EstudoComponent({ estudo }: { estudo: Estudo }) {
                     </Link>
                 ) : (
                     <Link
-                        href={`/estudos/${estudo.id}/novo`}
+                        href={`/dashboard/estudos/${estudo.id}/novo`}
                         className="w-full"
                     >
                         <Button
