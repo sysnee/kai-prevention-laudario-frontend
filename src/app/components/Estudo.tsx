@@ -179,6 +179,7 @@ export default function EstudoComponent({ estudo }: { estudo: Estudo }) {
                     padding: "0 1.2em"
                 }}
             >
+
                 {estudo.laudoId ? (
                     <Link
                         href={`/dashboard/estudos/${estudo.id}`}
