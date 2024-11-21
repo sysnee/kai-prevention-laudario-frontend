@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react"
-import db from "../../../../../db.json"
+import db from "../../../../../../db.json"
 import { Box, Button, Checkbox, FormControlLabel, Grid2 as Grid, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import { Check, KeyboardArrowLeft } from "@mui/icons-material";
@@ -11,13 +11,13 @@ import AchadoForm from "@/src/app/components/AchadoForm";
 import { Achado } from "@/src/app/types/types";
 
 
-export default function AchadosPage(){
+export default function AchadosPage() {
 
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [isExamNormalChecked, setIsExamNormalChecked] = useState(false)
     const [achados, setAchados] = useState<Achado[]>([]);
 
-    function handleAddAchado(achado: Omit<Achado, "id" | "titulo" | "laudoId" | "imageId">){
+    function handleAddAchado(achado: Omit<Achado, "id" | "titulo" | "laudoId" | "imageId">) {
         const novoAchado = {
             ...achado,
             id: "1",
@@ -30,7 +30,7 @@ export default function AchadosPage(){
         setIsFormVisible(false);
     };
 
-    return(
+    return (
         <Box
             sx={{
                 padding: "1.8em",
@@ -48,8 +48,8 @@ export default function AchadosPage(){
                 <Link href={`/`}>
                     <Button
                         sx={(theme) => ({
-                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14", 
-                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d", 
+                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14",
+                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d",
                         })}
                     >
                         <KeyboardArrowLeft
@@ -84,7 +84,7 @@ export default function AchadosPage(){
                     alignItems="flex-start"
                 >
                     <Grid
-                        size={{xs: 12, md: 5}}
+                        size={{ xs: 12, md: 5 }}
                     >
                         <Box>
                             <Box
@@ -101,13 +101,13 @@ export default function AchadosPage(){
                     </Grid>
 
                     <Grid
-                        size={{xs: 12, md: 7}}
+                        size={{ xs: 12, md: 7 }}
                         padding={2}
                         sx={(theme) => ({
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
-                            backgroundColor: theme.palette.mode === 'light' ? "#f5f6fa": "transparent",
+                            backgroundColor: theme.palette.mode === 'light' ? "#f5f6fa" : "transparent",
                             borderRadius: "5px",
                             border: theme.palette.mode === 'light' ? "none" : "1px solid grey"
                         })}
@@ -127,12 +127,12 @@ export default function AchadosPage(){
                                     justifyContent: "start"
                                 })}
                                 control={
-                                    <Checkbox 
+                                    <Checkbox
                                         size="small"
                                         checked={isExamNormalChecked}
                                         onChange={() => {
                                             setIsExamNormalChecked(!isExamNormalChecked)
-                                            if(!isExamNormalChecked){
+                                            if (!isExamNormalChecked) {
                                                 setAchados([])
                                                 setIsFormVisible(false)
                                             }
@@ -151,19 +151,19 @@ export default function AchadosPage(){
                                 }
                             />
 
-                            
+
                             {isExamNormalChecked ? (
-                                <Button 
+                                <Button
                                     sx={(theme) => ({
                                         color: theme.palette.text.primary,
                                         fontSize: "12px",
                                         border: "1px solid #333b4d"
                                     })}
                                 >
-                                    <Check sx={{fontSize: "17px", marginRight: ".2em"}} />
+                                    <Check sx={{ fontSize: "17px", marginRight: ".2em" }} />
                                     Concluir
                                 </Button>
-                            ): (
+                            ) : (
                                 <Button
                                     onClick={() => setIsFormVisible(true)}
                                     sx={(theme) => ({
@@ -171,13 +171,13 @@ export default function AchadosPage(){
                                         fontSize: "12px",
                                         border: "1px solid #333b4d"
                                     })}
-                                >   
-                                    <AddIcon sx={{fontSize: "18px"}}/>
+                                >
+                                    <AddIcon sx={{ fontSize: "18px" }} />
                                     Adicionar achado
                                 </Button>
                             )}
                         </Box>
-                        
+
                         <Box
                             sx={{
                                 width: "100%"
@@ -189,7 +189,7 @@ export default function AchadosPage(){
                             >
                                 {achados.length > 0 ? (achados.map(achado => (
                                     <AchadoCard achado={achado} />
-                                ))): (
+                                ))) : (
                                     <Typography
                                         sx={{
                                             fontSize: "13px"

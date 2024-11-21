@@ -4,7 +4,6 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { StyledEngineProvider } from '@mui/material/styles';
 import "./globals.css";
 import '@fontsource/inter';
-import BaseLayout from "./components/BaseLayout";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,9 +37,7 @@ export default async function RootLayout({
       >
         <AppRouterCacheProvider>
           <StyledEngineProvider injectFirst>
-            <BaseLayout>
-              {children}
-            </BaseLayout>
+            {children}
           </StyledEngineProvider>
         </AppRouterCacheProvider>
       </body>
