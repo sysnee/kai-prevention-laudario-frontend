@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Card, CardContent, Stack, Typography } from "@mui/
 import EditIcon from '@mui/icons-material/Edit';
 import { Achado } from "../types/types";
 
-export default function AchadoCard({achado}: {achado: Achado}){
+export default function AchadoCard({achado, onEdit}: {achado: Achado, onEdit: () => void}){
     return(
         <Card
             sx={(theme) => ({
@@ -125,6 +125,7 @@ export default function AchadoCard({achado}: {achado: Achado}){
                 </Box>
 
                 <Button
+                    onClick={onEdit}
                     sx={(theme) => ({
                         color: theme.palette.text.primary,
                         fontSize: "12px",

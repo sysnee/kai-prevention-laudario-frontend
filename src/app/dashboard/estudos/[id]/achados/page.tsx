@@ -15,13 +15,17 @@ export default function AchadosPage() {
 
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [isExamNormalChecked, setIsExamNormalChecked] = useState(false)
+    const [editAchado, setEditAchado] = useState<Achado | null>(null);
     const [achados, setAchados] = useState<Achado[]>([]);
 
-    function handleAddAchado(achado: Omit<Achado, "id" | "titulo" | "laudoId" | "imageId">) {
+    function handleAddAchado(achado: Achado) {
+        const ultimoAchado = achados[achados.length - 1]; 
+        const novoId = ultimoAchado ? parseInt(ultimoAchado.id) + 1 : 1;
+
         const novoAchado = {
             ...achado,
-            id: "1",
-            titulo: "Achado 1",
+            id: novoId.toString(), 
+            titulo: `Achado ${novoId}`,
             laudoId: "1",
             imageId: "1",
         }
@@ -29,6 +33,15 @@ export default function AchadosPage() {
         setAchados([...achados, novoAchado]);
         setIsFormVisible(false);
     };
+
+    function handleEditAchado(updatedAchado: Achado) {
+        const updatedAchados = achados.map(achado =>
+            achado.id === updatedAchado.id ? updatedAchado : achado
+        );
+        setAchados(updatedAchados);
+        setEditAchado(null); 
+        setIsFormVisible(false);
+    }
 
     return (
         <Box
@@ -178,6 +191,24 @@ export default function AchadosPage() {
                             )}
                         </Box>
 
+                        {isFormVisible && (
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    marginTop: "2em"
+                                }}
+                            >
+                                <AchadoForm
+                                    achadoToEdit={editAchado}
+                                    onCancel={() => {
+                                        setIsFormVisible(false)
+                                        setEditAchado(null)
+                                    }}
+                                    onSubmit={editAchado ? handleEditAchado : handleAddAchado}
+                                />
+                            </Box>
+                        )}
+
                         <Box
                             sx={{
                                 width: "100%"
@@ -188,7 +219,14 @@ export default function AchadosPage() {
                                 marginTop={2}
                             >
                                 {achados.length > 0 ? (achados.map(achado => (
-                                    <AchadoCard achado={achado} />
+                                    <AchadoCard 
+                                        key={achado.id}
+                                        achado={achado}
+                                        onEdit={() => {
+                                            setEditAchado(achado)
+                                            setIsFormVisible(true)
+                                        }}
+                                    />
                                 ))) : (
                                     <Typography
                                         sx={{
@@ -200,20 +238,6 @@ export default function AchadosPage() {
                                 )}
                             </Stack>
                         </Box>
-
-                        {isFormVisible && (
-                            <Box
-                                sx={{
-                                    width: "100%",
-                                    marginTop: "2em"
-                                }}
-                            >
-                                <AchadoForm
-                                    onCancel={() => setIsFormVisible(false)}
-                                    onSubmit={handleAddAchado}
-                                />
-                            </Box>
-                        )}
                     </Grid>
                 </Grid>
             </Box>
