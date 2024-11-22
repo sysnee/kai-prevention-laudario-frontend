@@ -70,6 +70,7 @@ export default function BaseLayout({ children }: { children: ReactNode }) {
                                 spacing={2}
                                 sx={{
                                     alignItems: 'center',
+                                    height: '100vh',
                                     mx: 3,
                                     pb: 5,
                                     mt: { xs: 8, md: 0 },
