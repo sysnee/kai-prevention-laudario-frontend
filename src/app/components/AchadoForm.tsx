@@ -13,24 +13,46 @@ import {
     TextareaAutosize, 
     Typography 
   } from "@mui/material";
-  import { Box } from "@mui/system";
-  import { useState } from "react";
+import { Box } from "@mui/system";
+import { useEffect, useState } from "react";
   
   export default function AchadoForm({
     onCancel,
     onSubmit,
+    achadoToEdit
   }: {
-    onCancel: () => void;
-    onSubmit: (formData: any) => void;
+    onCancel: () => void,
+    onSubmit: (formData: any) => void,
+    achadoToEdit?: any
   }) {
 
     const [formData, setFormData] = useState({
+        id: "",
+        titulo: "",
+        laudoId: "",
+        imageId: "",
         sistema: "",
         orgao: "",
         patologias: [],
         severidade: "",
         observacoes: "",
     });
+
+    useEffect(() => {
+        if (achadoToEdit) {
+          setFormData({
+            id: achadoToEdit.id,
+            titulo: achadoToEdit.titulo,
+            laudoId: achadoToEdit.laudoId,
+            imageId: achadoToEdit.imageId,
+            sistema: achadoToEdit.sistema || "",
+            orgao: achadoToEdit.orgao || "",
+            patologias: achadoToEdit.patologias || [],
+            severidade: achadoToEdit.severidade || "",
+            observacoes: achadoToEdit.observacoes || "",
+          });
+        }
+    }, [achadoToEdit]);
 
     //Validações
 
@@ -60,7 +82,7 @@ import {
             marginBottom: "16px",
           }}
         >
-          Novo Achado
+          {achadoToEdit ? achadoToEdit.titulo  : "Novo achado"}
         </Typography>
   
         <Stack spacing={3}>
@@ -92,7 +114,7 @@ import {
                     }}
                 >
                     <MenuItem value="Coração">Coração</MenuItem>
-                    <MenuItem value="Cérebro">Fígado</MenuItem>
+                    <MenuItem value="Fígado">Fígado</MenuItem>
                 </Select>
           </FormControl>
   
@@ -174,7 +196,7 @@ import {
                     })}
                 >
                     <Check sx={{fontSize: "17px", marginRight: ".2em"}} />
-                    Salvar Achado
+                    {achadoToEdit ? "Salvar alterações" : "Salvar achado"}
                 </Button>
           </Stack>
         </Stack>
