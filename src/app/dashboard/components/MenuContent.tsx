@@ -40,7 +40,8 @@ const mainListItems = [
   },
   {
     text: 'Fluxo de trabalho',
-    icon: <MonitorHeart />
+    icon: <MonitorHeart />,
+    path: 'dashboard/workflow'
   },
   {
     text: 'Pacientes',
