@@ -32,7 +32,7 @@ export const columns: GridColDef[] = [
     flex: 2,
     minWidth: 200,
     renderCell: (params) => (
-      <Box sx={{ display: "flex", gap: "0.2em", marginLeft: 2, marginTop: 0.3}}>
+      <Box sx={{ display: "flex", gap: "0.2em", marginLeft: 2, marginTop: 0.3 }}>
         {params.value.slice(0, 4).map((imagem: any, index: number) =>
           index < 3 ? (
             <Image
@@ -144,8 +144,8 @@ export const generateRows = (estudos: any[]): GridRowsProp => {
     acao: {
       label: estudo.laudoId ? "Editar laudo" : "Laudar",
       url: estudo.laudoId
-        ? `/estudos/${estudo.id}`
-        : `/estudos/${estudo.id}/novo`,
+        ? `/dashboard/estudos/${estudo.id}`
+        : `/dashboard/estudos/${estudo.id}/novo`,
     },
   }));
 };

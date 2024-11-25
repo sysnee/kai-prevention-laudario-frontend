@@ -1,12 +1,8 @@
 'use client'
-import { SessionProvider } from "next-auth/react";
-import Dashboard from "./dashboard/page";
+
+import { redirect } from "next/navigation";
 
 export default function Public() {
 
-  return (
-    <SessionProvider>
-      <Dashboard />
-    </SessionProvider>
-  );
+  return redirect('/dashboard')
 }

@@ -3,8 +3,8 @@
 import * as React from "react";
 import { DataGrid, GridRowsProp } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
-import { columns, generateRows } from "../internals/data/estudoGridData";
-import db from "../../../db.json";
+import { columns, generateRows } from "../../internals/data/estudoGridData";
+import db from "../../../../db.json";
 
 export default function LaudarioGrid() {
     const [rows, setRows] = React.useState<GridRowsProp>([]);

@@ -19,12 +19,12 @@ export default function AchadosPage() {
     const [achados, setAchados] = useState<Achado[]>([]);
 
     function handleAddAchado(achado: Achado) {
-        const ultimoAchado = achados[achados.length - 1]; 
+        const ultimoAchado = achados[achados.length - 1];
         const novoId = ultimoAchado ? parseInt(ultimoAchado.id) + 1 : 1;
 
         const novoAchado = {
             ...achado,
-            id: novoId.toString(), 
+            id: novoId.toString(),
             titulo: `Achado ${novoId}`,
             laudoId: "1",
             imageId: "1",
@@ -39,7 +39,7 @@ export default function AchadosPage() {
             achado.id === updatedAchado.id ? updatedAchado : achado
         );
         setAchados(updatedAchados);
-        setEditAchado(null); 
+        setEditAchado(null);
         setIsFormVisible(false);
     }
 
@@ -219,7 +219,7 @@ export default function AchadosPage() {
                                 marginTop={2}
                             >
                                 {achados.length > 0 ? (achados.map(achado => (
-                                    <AchadoCard 
+                                    <AchadoCard
                                         key={achado.id}
                                         achado={achado}
                                         onEdit={() => {
