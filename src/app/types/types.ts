@@ -39,3 +39,4 @@ export type Achado = {
     severidade: string,
     observacoes: string
 }
+  

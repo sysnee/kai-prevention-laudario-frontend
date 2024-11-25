@@ -14,6 +14,7 @@
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fontsource/inter": "^5.1.0",
+    "@hello-pangea/dnd": "^17.0.0",
     "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.7",
     "@mui/material-nextjs": "^6.1.5",
@@ -29,11 +30,14 @@
     "axios": "^1.7.7",
     "cookies-next": "^4.3.0",
     "json-server": "^1.0.0-beta.3",
+    "lucide-react": "^0.460.0",
     "next": "14.2.15",
     "next-auth": "^4.24.10",
     "react": "^18",
     "react-dom": "^18",
-    "survey-react-ui": "^1.12.11"
+    "react-hot-toast": "^2.4.1",
+    "survey-react-ui": "^1.12.11",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",
