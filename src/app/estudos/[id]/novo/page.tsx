@@ -4,10 +4,10 @@ import { Box, Button, Grid2 as Grid } from "@mui/material"
 import { KeyboardArrowLeft } from "@mui/icons-material"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react";
-import ImageEstudo from "../../../../components/ImageEstudo";
+import ImageEstudo from "../../../components/ImageEstudo";
 import Link from "next/link";
-import db from '../../../../../../db.json'
-import { Estudo, Imagem } from "../../../../types/types";
+import db from '../../../../../db.json'
+import { Estudo, Imagem } from "../../../types/types";
 
 export default function EstudoDetailPage() {
     const { id } = useParams()

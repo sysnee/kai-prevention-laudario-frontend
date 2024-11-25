@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import EstudoComponent from "../../components/Estudo";
+import EstudoComponent from "../components/Estudo";
 import { Pagination, Box, Skeleton } from "@mui/material";
-import db from '../../../../db.json'
-import { Estudo } from "../../types/types";
+import db from '../../../db.json'
+import { Estudo } from "../types/types";
 
 export default function Laudario() {
     const [estudos, setEstudos] = useState<Estudo[]>([]);
