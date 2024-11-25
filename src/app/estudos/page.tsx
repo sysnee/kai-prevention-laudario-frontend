@@ -17,7 +17,7 @@ export default function LaudarioGrid() {
 
     // async function getEstudos() {
     //     try {
-    //         // const estudosData = await axios.get("http://localhost:5000/dashboard/estudos");
+    //         // const estudosData = await axios.get("http://localhost:5000/estudos");
     //         const estudosData = db.estudos
     //         setEstudos(estudosData);
     //     } catch (error) {

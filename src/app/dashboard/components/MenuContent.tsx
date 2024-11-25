@@ -36,7 +36,7 @@ const mainListItems = [
   {
     text: 'Laudário',
     icon: <DocumentScannerRounded />,
-    path: '/dashboard/estudos'
+    path: '/estudos'
   },
   {
     text: 'Fluxo de trabalho',
