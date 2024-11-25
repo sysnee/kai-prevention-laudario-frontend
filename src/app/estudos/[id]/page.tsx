@@ -192,7 +192,7 @@ export default function EstudoResumoPage() {
                                                     </Stack>
                                                 </Stack>
 
-                                                <Link href="/dashboard/estudos/1/achados">
+                                                <Link href="/estudos/1/achados">
                                                     <Button
                                                         sx={(theme) => ({
                                                             backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14",

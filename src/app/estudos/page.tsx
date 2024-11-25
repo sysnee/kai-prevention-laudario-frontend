@@ -1,81 +1,60 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import EstudoComponent from "../components/Estudo";
-import { Pagination, Box, Skeleton } from "@mui/material";
-import db from '../../../db.json'
-import { Estudo } from "../types/types";
+import * as React from "react";
+import { DataGrid, GridRowsProp } from "@mui/x-data-grid";
+import { Box } from "@mui/material";
+import { columns, generateRows } from "../internals/data/estudoGridData";
+import db from "../../../db.json";
 
-export default function Laudario() {
-    const [estudos, setEstudos] = useState<Estudo[]>([]);
-    const [loading, setLoading] = useState(true);
+export default function LaudarioGrid() {
+    const [rows, setRows] = React.useState<GridRowsProp>([]);
 
-    async function getEstudos() {
-        try {
-            // const estudosData = await axios.get("http://localhost:5000/dashboard/estudos");
-            const estudosData = db.estudos
-            setEstudos(estudosData);
-        } catch (error) {
-            console.error("Erro ao buscar os estudos:", error);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        getEstudos();
+    React.useEffect(() => {
+        const estudos = generateRows(db.estudos);
+        setRows(estudos);
     }, []);
 
-    return (
-        <>
-            <Box
-                sx={{
-                    padding: "1.8em",
-                }}
-            >
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "1em",
-                    }}
-                >
-                    {loading ? (
-                        Array.from({ length: 4 }).map((_, index) => (
-                            <Skeleton
-                                key={index}
-                                variant="rectangular"
-                                sx={{ height: 100, borderRadius: "8px" }}
-                            />
-                        ))
-                    ) : (
-                        estudos.length > 0 ? (
-                            estudos.map(estudo => (
-                                <EstudoComponent key={estudo.id} estudo={estudo} />
-                            ))
-                        ) : (
-                            <h2 className="text-black text-lg">Nenhum estudo encontrado.</h2>
-                        )
-                    )}
-                </Box>
 
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginTop: "2em",
-                    }}
-                >
-                    {estudos.length > 0 && (
-                        <Pagination
-                            count={10}
-                            color="primary"
-                            // variant="outlined"
-                            size="small"
-                        />
-                    )}
-                </Box>
-            </Box>
-        </>
+    // async function getEstudos() {
+    //     try {
+    //         // const estudosData = await axios.get("http://localhost:5000/estudos");
+    //         const estudosData = db.estudos
+    //         setEstudos(estudosData);
+    //     } catch (error) {
+    //         console.error("Erro ao buscar os estudos:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
+
+    const labelDisplayedRows = ({ from, to, count }: any) => {
+        return `${from}–${to} de ${count !== -1 ? count : `mais que ${to}`}`;
+    };
+
+    return (
+        <Box sx={{ height: "100%", width: "100%" }}>
+            <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSizeOptions={[5, 10, 20]}
+                initialState={{
+                    pagination: { paginationModel: { pageSize: 5 } },
+                }}
+                disableRowSelectionOnClick
+                slotProps={{
+                    cell: {
+                        style: {
+                            padding: 0,
+                        },
+                    },
+                }}
+                localeText={{
+                    MuiTablePagination: {
+                        labelDisplayedRows,
+                        labelRowsPerPage: "Linhas por página",
+                    },
+                }}
+            />
+        </Box>
     );
 }
