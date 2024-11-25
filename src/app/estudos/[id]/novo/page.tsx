@@ -61,8 +61,8 @@ export default function EstudoDetailPage() {
                 <Link href={`/`}>
                     <Button
                         sx={(theme) => ({
-                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14", 
-                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d", 
+                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14",
+                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d",
                         })}
                     >
                         <KeyboardArrowLeft
@@ -79,7 +79,7 @@ export default function EstudoDetailPage() {
                         fontSize: '26px',
                         color: theme.palette.text.primary,
                     })}
-                    >
+                >
                     Estudo: ID: {id}
                 </Box>
             </Box>
@@ -160,17 +160,17 @@ export default function EstudoDetailPage() {
                     <Button
                         sx={(theme) => ({
                             backgroundColor: "transparent",
-                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d", 
+                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d",
                             color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
                         })}
-                        >
+                    >
                         Cancelar
                     </Button>
-                    
+
                     <Button
                         sx={(theme) => ({
                             backgroundColor: "transparent",
-                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d", 
+                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d",
                             color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
                         })}
                     >
