@@ -77,9 +77,16 @@ export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
               Exames
             </span>
           </div>
-          <div className="mt-2 flex items-center text-xs text-kai-text-secondary">
+          <div 
+            className="mt-2 flex items-center text-xs"
+            style={{
+              color: theme.palette.mode === 'dark' ? "#9CA3AF" : theme.palette.text.primary
+            }}
+          >
             <TrendingUp className="w-4 h-4 mr-1 text-kai-success" />
-            <span>+12% em relação à média</span>
+            <span>
+              +12% em relação à média
+            </span>
           </div>
         </div>
 
@@ -139,7 +146,12 @@ export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
               Por Exame
             </span>
           </div>
-          <div className="mt-2 flex items-center text-xs text-kai-text-secondary">
+          <div 
+            className="mt-2 flex items-center text-xs text-kai-text-secondary"
+            style={{
+              color: theme.palette.mode === 'dark' ? "#9CA3AF" : theme.palette.text.primary
+            }}
+          >
             <Clock className="w-4 h-4 mr-1" />
             <span>Espera média: {metrics.patientWaitTime}</span>
           </div>

@@ -10,7 +10,6 @@ import AchadoCard from "@/src/app/components/AchadoCard";
 import AchadoForm from "@/src/app/components/AchadoForm";
 import { Achado } from "@/src/app/types/types";
 
-
 export default function AchadosPage() {
 
     const [isFormVisible, setIsFormVisible] = useState(false)
@@ -122,7 +121,7 @@ export default function AchadosPage() {
                             alignItems: "center",
                             backgroundColor: theme.palette.mode === 'light' ? "#f5f6fa" : "transparent",
                             borderRadius: "5px",
-                            border: theme.palette.mode === 'light' ? "none" : "1px solid grey"
+                            border: theme.palette.mode === 'light' ? "none" : "1px solid hsla(220, 20%, 25%, 0.6)"
                         })}
                     >
                         <Box
