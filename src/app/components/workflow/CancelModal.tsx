@@ -61,7 +61,7 @@ export function CancelModal({ isOpen, onClose, onConfirm }: CancelModalProps) {
             />
           </div>
 
-          <div className="flex justify-center space-x-3">
+          <div className="flex justify-end space-x-3">
             <button
               type="button"
               onClick={onClose}

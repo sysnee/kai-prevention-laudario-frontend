@@ -23,6 +23,7 @@ import { CancelModal } from './CancelModal';
 import { MedicalPrescriptionModal } from './MedicalPrescriptionModal';
 import toast from 'react-hot-toast';
 import { useTheme } from '@mui/material/styles';
+import { borderBottom } from '@mui/system';
 
 interface WorkflowCardModalProps {
   exam: any;
@@ -142,7 +143,12 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-6 border-b border-gray-200">
+        <div 
+          className="p-6"
+          style={{
+            borderBottom: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+          }}
+        >
           <div className="flex justify-between items-start">
             <div>
               <h2 className="text-xl font-semibold">{exam.patientName}</h2>
@@ -150,7 +156,7 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-full"
+              className="p-2 hover:border rounded-full"
             >
               <X className="w-5 h-5" />
             </button>
@@ -177,10 +183,18 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
             </div>
 
             {/* Documents */}
-            <div className="flex space-x-4 border p-4 rounded-lg">
+            <div 
+              className="flex space-x-4 p-4 rounded-lg"
+              style={{
+                border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+              }}
+            >
               <button
                 onClick={() => setShowMedicalPrescriptionModal(true)}
-                className="flex-1 p-4 rounded-lg transition-colors border border-gray-200"
+                className="flex-1 p-4 rounded-lg transition-colors"
+                style={{
+                  border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+                }}
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium">Pedido Médico</span>
@@ -191,7 +205,10 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
 
               <button
                 onClick={() => toast('Link do questionário será implementado em breve', { icon: '📋' })}
-                className="flex-1 p-4 rounded-lg transition-colors border border-gray-200"
+                className="flex-1 p-4 rounded-lg transition-colors"
+                style={{
+                  border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+                }}
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium">Questionário</span>
@@ -202,7 +219,10 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
 
               <button
                 onClick={() => toast('Link do termo de consentimento será implementado em breve', { icon: '📄' })}
-                className="flex-1 p-4 rounded-lg transition-colors border border-gray-200"
+                className="flex-1 p-4 rounded-lg transition-colors"
+                style={{
+                  border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+                }}
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium">Termo de Consentimento</span>
@@ -219,7 +239,10 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
                 {exam.exams.map((ex: any) => (
                   <div 
                     key={ex.id}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-kai-primary/30 transition-all"
+                    className="flex items-center justify-between p-4 rounded-lg hover:border-kai-primary/30 transition-all"
+                    style={{
+                      border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+                    }}
                   >
                     <div>
                       <h4 className="font-medium">{ex.name}</h4>
@@ -241,7 +264,13 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
             <div>
               <h3 className="text-lg font-medium mb-4">Linha do Tempo</h3>
               <div className="relative">
-                <div className="absolute top-4 left-0 w-full h-0.5 bg-gray-200"></div>
+                <div 
+                  className="absolute top-4 left-0 w-full h-0.5"
+                  style={{
+                    backgroundColor: theme.palette.mode === 'dark' ? 'grey' : '#E5E7EB'
+                  }}
+                >
+                </div>
                 <div className="relative flex justify-between">
                   {[
                     { id: 'planned', label: 'Planejado', time: '30min' },
@@ -260,7 +289,8 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
                     return (
                       <div key={stage.id} className="flex flex-col items-center">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                          isActive ? 'bg-blue-400 text-white' : 'bg-gray-300 text-white'
+                          isActive ? 'bg-blue-400 text-white' : theme.palette.mode === 'dark' ? 
+                          'bg-gray-500 text-white' : 'bg-gray-300 text-white'
                         }`}>
                           <Clock className="w-4 h-4" />
                         </div>
@@ -318,12 +348,15 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
                     value={newNote}
                     onChange={(e) => setNewNote(e.target.value)}
                     placeholder="Digite sua anotação..."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    style={{
+                      border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+                    }}
                     rows={2}
                   />
                   <button
                     onClick={handleAddNote}
-                    className="absolute bottom-2 right-2 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+                    className="absolute bottom-4 right-3 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
                   >
                     <Send className="w-4 h-4" />
                   </button>
@@ -331,7 +364,12 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
 
                 <div className="space-y-4 max-h-48 overflow-y-auto">
                   {exam.workflowNotes?.map((note: any, index: number) => (
-                    <div key={index} className="border rounded-lg p-4">
+                    <div key={index} 
+                      className="rounded-lg p-4"
+                      style={{
+                        border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+                      }}
+                    >
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium">{note.createdBy.name}</span>
                         <span className="text-sm">

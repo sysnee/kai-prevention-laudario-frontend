@@ -51,7 +51,7 @@ export function RescheduleModal({ isOpen, onClose, onConfirm }: RescheduleModalP
           <h3 className="text-lg font-semibold">Reagendar Exame</h3>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full"
+            className="p-2 hover:border rounded-full"
           >
             <X className="w-5 h-5" />
           </button>
