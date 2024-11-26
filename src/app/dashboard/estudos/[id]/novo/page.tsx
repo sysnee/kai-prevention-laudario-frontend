@@ -167,15 +167,17 @@ export default function EstudoDetailPage() {
                         Cancelar
                     </Button>
 
-                    <Button
-                        sx={(theme) => ({
-                            backgroundColor: "transparent",
-                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d",
-                            color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
-                        })}
-                    >
-                        Salvar e avançar
-                    </Button>
+                    <Link href={`/dashboard/estudos/${id}/achados`}>
+                        <Button
+                            sx={(theme) => ({
+                                backgroundColor: "transparent",
+                                border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d",
+                                color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
+                            })}
+                        >
+                            Salvar e avançar
+                        </Button>
+                    </Link>
                 </Box>
             )}
         </Box>
