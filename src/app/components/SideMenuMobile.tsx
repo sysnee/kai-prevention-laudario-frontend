@@ -11,8 +11,7 @@ import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import MenuButton from './MenuButton';
 import MenuContent from '../dashboard/components/MenuContent';
 import CardAlert from '../dashboard/components/CardAlert';
-import { User } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 interface SideMenuMobileProps {
   open: boolean | undefined;
@@ -20,7 +19,6 @@ interface SideMenuMobileProps {
 }
 
 export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobileProps) {
-  const { data } = useSession()
   return (
     <Drawer
       anchor="right"
@@ -66,7 +64,7 @@ export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobilePro
         </Stack>
         <CardAlert />
         <Stack sx={{ p: 2 }}>
-          <Button variant="outlined" fullWidth startIcon={<LogoutRoundedIcon />}>
+          <Button onClick={() => signOut()} variant="outlined" fullWidth startIcon={<LogoutRoundedIcon />}>
             Logout
           </Button>
         </Stack>

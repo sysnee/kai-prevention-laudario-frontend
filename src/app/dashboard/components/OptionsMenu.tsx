@@ -9,6 +9,7 @@ import ListItemIcon, { listItemIconClasses } from '@mui/material/ListItemIcon';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MenuButton from '../../components/MenuButton';
+import { signOut } from 'next-auth/react';
 
 // const MenuItem = styled(MuiMenuItem)({
 //   margin: '2px 0',
@@ -59,7 +60,7 @@ export default function OptionsMenu() {
         <MenuItem sx={{ margin: '2px 0' }} onClick={handleClose}>Settings</MenuItem>
         <Divider />
         <MenuItem
-          onClick={handleClose}
+          onClick={() => signOut()}
           sx={{
             [`& .${listItemIconClasses.root}`]: {
               ml: 'auto',
