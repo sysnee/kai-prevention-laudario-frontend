@@ -18,7 +18,9 @@ export const auth0Options = {
     session: {
         strategy: "jwt" as SessionStrategy,
     },
-
+    jwt: {
+        secret: 'secret',
+    },
     callbacks: {
         async jwt({ token, account }: any) {
             if (account) {
