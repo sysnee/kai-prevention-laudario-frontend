@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import "../globals.css";
 import '@fontsource/inter';
@@ -10,19 +11,13 @@ export const metadata: Metadata = {
 
 export default async function DashboardLayout({
   children,
-  // pageProps: { session, ...pageProps },
 }: Readonly<{
   children: React.ReactNode,
-  // pageProps: any
 }>) {
 
   return (
-    // <SessionProvider session={session}>
-
     <BaseLayout>
       {children}
     </BaseLayout>
-
-    // </SessionProvider>
   );
 }

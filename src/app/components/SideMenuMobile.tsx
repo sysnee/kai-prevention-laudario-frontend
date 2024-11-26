@@ -11,6 +11,8 @@ import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import MenuButton from './MenuButton';
 import MenuContent from '../dashboard/components/MenuContent';
 import CardAlert from '../dashboard/components/CardAlert';
+import { User } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 interface SideMenuMobileProps {
   open: boolean | undefined;
@@ -18,6 +20,7 @@ interface SideMenuMobileProps {
 }
 
 export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobileProps) {
+  const { data } = useSession()
   return (
     <Drawer
       anchor="right"
@@ -44,12 +47,12 @@ export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobilePro
           >
             <Avatar
               sizes="small"
-              alt="Riley Carter"
+              // alt={data?.user.name}
               src="/static/images/avatar/7.jpg"
               sx={{ width: 24, height: 24 }}
             />
             <Typography component="p" variant="h6">
-              Riley Carter
+              {/* {data?.user.name} */}
             </Typography>
           </Stack>
           <MenuButton showBadge>

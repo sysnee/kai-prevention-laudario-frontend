@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import MenuContent from '../dashboard/components/MenuContent';
 import CardAlert from '../dashboard/components/CardAlert';
 import OptionsMenu from '../dashboard/components/OptionsMenu';
+import { useSession } from 'next-auth/react';
 
 // const Drawer = styled(MuiDrawer)({
 //   width: drawerWidth,
@@ -21,6 +22,7 @@ import OptionsMenu from '../dashboard/components/OptionsMenu';
 // });
 
 export default function SideMenu() {
+  const { data } = useSession()
   return (
     <Drawer
       variant="permanent"
@@ -59,16 +61,16 @@ export default function SideMenu() {
       >
         <Avatar
           sizes="small"
-          alt="Riley Carter"
+          alt={data?.user?.name as string}
           src="/static/images/avatar/7.jpg"
           sx={{ width: 36, height: 36 }}
         />
         <Box sx={{ mr: 'auto' }}>
           <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
-            Riley Carter
+            {data?.user?.name as string}
           </Typography>
           <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-            riley@email.com
+            {data?.user?.email as string}
           </Typography>
         </Box>
         <OptionsMenu />
