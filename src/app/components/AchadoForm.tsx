@@ -11,7 +11,8 @@ import {
     SelectChangeEvent, 
     Stack, 
     TextareaAutosize, 
-    Typography 
+    Typography, 
+    useTheme
   } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
@@ -26,6 +27,7 @@ import { useEffect, useState } from "react";
     achadoToEdit?: any
   }) {
 
+    const theme = useTheme();
     const [formData, setFormData] = useState({
         id: "",
         titulo: "",
@@ -69,7 +71,7 @@ import { useEffect, useState } from "react";
       <Box
         sx={(theme) => ({
           padding: "1.2em",
-          border: theme.palette.mode === 'light' ? "none" : "1px solid #333b4d",
+          border: theme.palette.mode === 'light' ? "none" : "1px solid hsla(220, 20%, 25%, 0.6)",
           borderRadius: "8px",
           boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
           backgroundColor: theme.palette.mode === 'light' ? "#fff" : "transparent",
@@ -167,10 +169,10 @@ import { useEffect, useState } from "react";
                     style={{
                         width: "100%",
                         padding: ".5em",
-                        borderRadius: "4px",
-                        border: "1px solid #333b4d",
+                        borderRadius: "10px",
                         fontSize: "14px",
-                        backgroundColor: "transparent"
+                        border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
+                        backgroundColor: theme.palette.background.default
                     }}
                 />
           </FormControl>
