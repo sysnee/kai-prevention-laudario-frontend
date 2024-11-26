@@ -14,6 +14,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Draggable } from '@hello-pangea/dnd';
 import toast from 'react-hot-toast';
+import { useTheme } from '@mui/material';
 
 interface WorkflowCardProps {
   exam: any;
@@ -24,6 +25,7 @@ export function WorkflowCard({ exam, index }: WorkflowCardProps) {
   const [showModal, setShowModal] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const { moveExam, cancelExam } = useWorkflowStore();
+  const theme = useTheme();
 
   const handleActionClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -65,33 +67,44 @@ export function WorkflowCard({ exam, index }: WorkflowCardProps) {
           className="mb-3 last:mb-0 group cursor-pointer"
           onClick={() => setShowModal(true)}
         >
-          <div className={`
-            rounded-lg border border-gray-200 p-4
-            hover:shadow-md hover:border-kai-primary/30 transition-all
-            ${snapshot.isDragging ? 'shadow-lg' : ''}
-          `}>
+          <div 
+            className={`
+              rounded-lg p-4 hover:shadow-md hover:border-kai-primary/30 transition-all
+              ${snapshot.isDragging ? 'shadow-lg' : ''}
+            `}
+            style={{
+              border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
+              color: theme.palette.text.primary
+            }}
+          >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center">
-                <User className="w-8 h-8 text-gray-400" />
+                <User className="w-8 h-8" />
                 <div className="ml-3">
-                  <h4 className="font-medium text-primary">{exam.patientName}</h4>
-                  <p className="text-sm text-gray-500">ID: {exam.patientId}</p>
+                  <h4 className="font-medium">{exam.patientName}</h4>
+                  <p className="text-sm text-gray-400">ID: {exam.patientId}</p>
                 </div>
               </div>
               <div className="relative">
                 <button
                   onClick={handleActionClick}
-                  className="p-2 text-gray-400 hover:text-kai-primary rounded-lg hover:bg-gray-50"
+                  className="p-2 text-gray-400 hover:text-kai-primary rounded-lg hover:border"
                 >
                   <MoreVertical className="w-5 h-5" />
                 </button>
                 {showActions && (
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-10">
+                  <div 
+                    className="absolute right-0 top-full mt-1 w-48 rounded-lg shadow-lg z-10"
+                    style={{
+                      backgroundColor: theme.palette.background.default,
+                      border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
+                    }}
+                  >
                     {exam.stage === 'planned' && (
                       <>
                         <button
                           onClick={() => handleAction('proceed')}
-                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center"
+                          className="w-full px-4 py-2 text-left text-sm flex items-center"
                         >
                           <PlayCircle className="w-4 h-4 mr-2 text-green-500" />
                           Confirmar Chegada
@@ -102,7 +115,7 @@ export function WorkflowCard({ exam, index }: WorkflowCardProps) {
                       <>
                         <button
                           onClick={() => handleAction('proceed')}
-                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center"
+                          className="w-full px-4 py-2 text-left text-sm flex items-center"
                         >
                           <PlayCircle className="w-4 h-4 mr-2 text-green-500" />
                           Iniciar Exame
@@ -113,7 +126,7 @@ export function WorkflowCard({ exam, index }: WorkflowCardProps) {
                       <>
                         <button
                           onClick={() => handleAction('hold')}
-                          className="w-full px-4 py-2 text-left text-sm text-orange-600 hover:bg-orange-50 flex items-center"
+                          className="w-full px-4 py-2 text-left text-sm text-orange-600 flex items-center"
                         >
                           <AlertCircle className="w-4 h-4 mr-2" />
                           Pausar

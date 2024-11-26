@@ -1,5 +1,7 @@
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
+import { useTheme } from '@mui/material';
+import { borderBottom } from '@mui/system';
 
 interface WorkflowColumnProps {
   title: string;
@@ -11,9 +13,21 @@ interface WorkflowColumnProps {
 }
 
 export function WorkflowColumn({ title, icon: Icon, color, description, children, count }: WorkflowColumnProps) {
+  const theme = useTheme();
+
   return (
-    <div className="bg-gradient-to-b from-pure-white to-frost-white rounded-xl border border-kai-border shadow-lg h-full">
-      <div className="p-4 border-b border-kai-border bg-gradient-to-r from-pure-white to-ice-white">
+    <div 
+      className="bg-gradient-to-b from-pure-white to-frost-white rounded-xl shadow-lg h-full"
+      style={{
+        border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
+      }}
+    >
+      <div 
+        className="p-4 bg-gradient-to-r from-pure-white to-ice-white"
+        style={{
+          borderBottom: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
+        }}
+      >
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center">
             <div className={`p-2.5 bg-kai-primary/10 rounded-lg mr-3 transition-transform hover:scale-105`}>

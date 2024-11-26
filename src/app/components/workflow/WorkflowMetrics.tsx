@@ -9,12 +9,14 @@ import {
   Calendar,
   Timer
 } from 'lucide-react';
+import { useTheme } from '@mui/material';
 
 interface WorkflowMetricsProps {
   date: Date;
 }
 
 export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
+  const theme = useTheme();
   // Mock data - replace with actual API integration
   const metrics = {
     totalExams: 24,
@@ -28,7 +30,12 @@ export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
   };
 
   return (
-    <div className="bg-gradient-to-r from-pure-white to-frost-white rounded-xl border border-kai-border shadow-lg p-6">
+    <div 
+      className="bg-gradient-to-r from-pure-white to-frost-white rounded-xl shadow-lg p-6"
+      style={{
+        border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+      }}
+    >
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-kai-text-primary">
           Métricas do Fluxo
@@ -48,7 +55,12 @@ export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total de Exames */}
-        <div className="bg-gradient-to-br border from-kai-primary/5 to-kai-primary/10 rounded-lg p-4">
+        <div 
+          className="bg-gradient-to-br from-kai-primary/5 to-kai-primary/10 rounded-lg p-4"
+          style={{
+            border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+          }}
+        >
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 bg-kai-primary/10 rounded-lg">
               <ClipboardList className="w-5 h-5 text-kai-primary" />
@@ -72,7 +84,12 @@ export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
         </div>
 
         {/* Taxa de Ocupação */}
-        <div className="bg-gradient-to-br border from-kai-secondary/5 to-kai-secondary/10 rounded-lg p-4">
+        <div 
+          className="bg-gradient-to-br from-kai-secondary/5 to-kai-secondary/10 rounded-lg p-4"
+          style={{
+            border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+          }}
+        >
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 bg-kai-secondary/10 rounded-lg">
               <Users className="w-5 h-5 text-kai-secondary" />
@@ -100,7 +117,12 @@ export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
         </div>
 
         {/* Tempo Médio */}
-        <div className="bg-gradient-to-br border from-kai-accent/5 to-kai-accent/10 rounded-lg p-4">
+        <div 
+          className="bg-gradient-to-br from-kai-accent/5 to-kai-accent/10 rounded-lg p-4"
+          style={{
+            border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+          }}
+        >
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 bg-kai-accent rounded-lg">
               <Timer className="w-5 h-5 text-kai-primary" />
@@ -124,7 +146,12 @@ export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
         </div>
 
         {/* Status */}
-        <div className="bg-gradient-to-br border from-kai-surface/50 to-kai-surface rounded-lg p-4">
+        <div 
+          className="bg-gradient-to-br from-kai-surface/50 to-kai-surface rounded-lg p-4"
+          style={{
+            border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+          }}
+        >
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 rounded-lg">
               <CheckCircle2 className="w-5 h-5 text-kai-success" />
