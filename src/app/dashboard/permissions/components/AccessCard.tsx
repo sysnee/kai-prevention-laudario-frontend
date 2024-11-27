@@ -1,11 +1,22 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, Chip, IconButton, Tooltip, Typography, Divider } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Chip,
+  IconButton,
+  Tooltip,
+  Typography,
+  Divider,
+} from "@mui/material";
 import { Eye, PenLine, Trash2 } from "lucide-react";
-import { RolePermissions, AccessLevel } from "../../../types/pemissions/permissions";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import {
+  AccessLevel,
+  RolePermissions,
+} from "../../../types/pemissions/permissions";
 import { useTheme } from "@mui/material/styles";
+import { Box } from "@mui/system";
 
 interface AccessCardProps {
   role: RolePermissions;
@@ -13,6 +24,32 @@ interface AccessCardProps {
   onEdit: (role: RolePermissions) => void;
   onDelete: (role: RolePermissions) => void;
 }
+
+const TRANSLATIONS = {
+  stages: {
+    Planned: "Planejado",
+    Waiting: "Aguardando",
+    Started: "Iniciado",
+    Completed: "Concluído",
+    Reported: "Laudado",
+  },
+  roles: {
+    Receptionist: "Recepcionista",
+    Nurse: "Enfermeiro",
+    Biomedical: "Biomédico",
+    Radiologist: "Radiologista",
+    HeadDoctor: "Head Doctor",
+    Master: "Mestre",
+  },
+} as const;
+
+type StageKey = keyof typeof TRANSLATIONS.stages;
+
+const translateStage = (stage: StageKey): string =>
+  TRANSLATIONS.stages[stage] || stage;
+
+const translateRole = (role: string): string =>
+  TRANSLATIONS.roles[role as keyof typeof TRANSLATIONS.roles] || role;
 
 const AccessChip = ({ access }: { access: AccessLevel }) => {
   const colors: Record<AccessLevel, string> = {
@@ -23,15 +60,18 @@ const AccessChip = ({ access }: { access: AccessLevel }) => {
   };
 
   return (
-    <Chip
-      label={access.charAt(0).toUpperCase() + access.slice(1)}
-      color={colors[access] as any}
-      size="small"
-    />
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Chip label={access} color={colors[access] as any} size="small" />
+    </Box>
   );
 };
 
-export default function AccessCard({ role, onView, onEdit, onDelete }: AccessCardProps) {
+export default function AccessCard({
+  role,
+  onView,
+  onEdit,
+  onDelete,
+}: AccessCardProps) {
   const theme = useTheme();
 
   return (
@@ -56,7 +96,7 @@ export default function AccessCard({ role, onView, onEdit, onDelete }: AccessCar
           component="h3"
           sx={{ fontWeight: 600, color: theme.palette.text.primary }}
         >
-          {role.role}
+          {translateRole(role.name!)}
         </Typography>
         <Chip
           label={role.isActive ? "Ativo" : "Inativo"}
@@ -80,25 +120,46 @@ export default function AccessCard({ role, onView, onEdit, onDelete }: AccessCar
         <div style={{ marginBottom: theme.spacing(2) }}>
           <Typography
             variant="subtitle2"
-            sx={{ color: theme.palette.text.primary, fontWeight: 600, marginBottom: theme.spacing(1) }}
+            sx={{
+              color: theme.palette.text.primary,
+              fontWeight: 600,
+              marginBottom: theme.spacing(1),
+            }}
           >
             Módulo de Pacientes
           </Typography>
           <AccessChip
-            access={role.permissions.find((p) => p.module === "Patient")?.access || "none"}
+            access={
+              role.permissions.find((p) => p.module === "Patient")?.access ||
+              "none"
+            }
           />
         </div>
 
         <div>
           <Typography
             variant="subtitle2"
-            sx={{ color: theme.palette.text.primary, fontWeight: 600, marginBottom: theme.spacing(1) }}
+            sx={{
+              color: theme.palette.text.primary,
+              fontWeight: 600,
+              marginBottom: theme.spacing(1),
+            }}
           >
             Etapas do Exame
           </Typography>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: theme.spacing(1) }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: theme.spacing(1),
+            }}
+          >
             {role.examStages.map((stage) => (
-              <Tooltip key={stage.stage} title={`${stage.stage}: ${stage.access}`} arrow>
+              <Tooltip
+                key={stage.stage}
+                title={`${translateStage(stage.stage)}: ${stage.access}`}
+                arrow
+              >
                 <div
                   style={{
                     display: "flex",
@@ -113,7 +174,7 @@ export default function AccessCard({ role, onView, onEdit, onDelete }: AccessCar
                     variant="body2"
                     sx={{ color: theme.palette.text.secondary }}
                   >
-                    {stage.stage}
+                    {translateStage(stage.stage)}
                   </Typography>
                   <AccessChip access={stage.access} />
                 </div>
@@ -124,7 +185,9 @@ export default function AccessCard({ role, onView, onEdit, onDelete }: AccessCar
       </CardContent>
 
       {/* Divisória */}
-      <Divider sx={{ marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }} />
+      <Divider
+        sx={{ marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }}
+      />
 
       {/* Footer */}
       <div

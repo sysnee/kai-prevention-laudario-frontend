@@ -25,19 +25,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-
-const FEATURE_ICONS = {
-  patientData: Users,
-  technicalData: Settings,
-  financialData: DollarSign,
-  audit: FileText,
-  settings: Settings,
-};
+import { RoleModal } from "./components/RoleModal";
 
 const initialRoles: RolePermissions[] = [
   {
     id: "1",
-    role: "Receptionist",
+    name: "Receptionist",
     isActive: true,
     permissions: [
       { module: "Patient", access: "write" },
@@ -53,7 +46,7 @@ const initialRoles: RolePermissions[] = [
   },
   {
     id: "2",
-    role: "Nurse",
+    name: "Nurse",
     isActive: true,
     permissions: [
       { module: "Patient", access: "write" },
@@ -69,7 +62,7 @@ const initialRoles: RolePermissions[] = [
   },
   {
     id: "3",
-    role: "Biomedical",
+    name: "Biomedical",
     isActive: true,
     permissions: [
       { module: "Patient", access: "read" },
@@ -85,7 +78,7 @@ const initialRoles: RolePermissions[] = [
   },
   {
     id: "4",
-    role: "Radiologist",
+    name: "Radiologist",
     isActive: true,
     permissions: [
       { module: "Patient", access: "read" },
@@ -101,7 +94,7 @@ const initialRoles: RolePermissions[] = [
   },
   {
     id: "5",
-    role: "HeadDoctor",
+    name: "HeadDoctor",
     isActive: true,
     permissions: [
       { module: "Patient", access: "write" },
@@ -117,7 +110,7 @@ const initialRoles: RolePermissions[] = [
   },
   {
     id: "6",
-    role: "Master",
+    name: "Master",
     isActive: true,
     permissions: [
       { module: "Patient", access: "full" },
@@ -136,17 +129,64 @@ const initialRoles: RolePermissions[] = [
 export default function PermissionsManagement() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
+  const [rolesPermissions, setRolesPermissions] =
+    useState<RolePermissions[]>(initialRoles);
+  const [selectedRolePermissions, setSelectedRolePermissions] =
+    useState<RolePermissions | null>(null);
+  const [modalMode, setModalMode] = useState<"create" | "edit" | "view" | null>(
+    null
+  );
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [rolePermissionToDelete, setRoleToDelete] =
+    useState<RolePermissions | null>(null);
 
-  const filteredRoles = initialRoles.filter((role) =>
-    role.role.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredRolesPermissions = initialRoles.filter((role) =>
+    role.name!.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleViewModeChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    mode: "grid" | "list"
-  ) => {
-    if (mode) setViewMode(mode);
+  const handleSave = (updatedRolePermission: RolePermissions) => {
+    if (modalMode === "create") {
+      setRolesPermissions((prev) => [
+        ...prev,
+        { ...updatedRolePermission, id: crypto.randomUUID() },
+      ]);
+    } else {
+      setRolesPermissions((prev) =>
+        prev.map((rolePermission) =>
+          rolePermission.id === updatedRolePermission.id
+            ? updatedRolePermission
+            : rolePermission
+        )
+      );
+    }
+    setModalMode(null);
+    setSelectedRolePermissions(null);
   };
+
+  const handleDeleteClick = (rolePermission: RolePermissions) => {
+    setRoleToDelete(rolePermission);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (rolePermissionToDelete) {
+      setRolesPermissions(
+        rolesPermissions.filter(
+          (rolesPermissions) =>
+            rolesPermissions.id !== rolePermissionToDelete.id
+        )
+      );
+      setDeleteModalOpen(false);
+      setRoleToDelete(null);
+    }
+  };
+
+  // const handleViewModeChange = (
+  //   _event: React.MouseEvent<HTMLElement>,
+  //   mode: "grid" | "list"
+  // ) => {
+  //   if (mode) setViewMode(mode);
+  // };
 
   return (
     <Box sx={{ padding: 3, width: "100%", boxSizing: "border-box" }}>
@@ -181,7 +221,15 @@ export default function PermissionsManagement() {
           }}
         />
         {/* Botão Novo Perfil */}
-        <Button variant="contained" color="primary" startIcon={<PlusIcon />}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            setSelectedRolePermissions(null);
+            setModalMode("create");
+          }}
+          startIcon={<PlusIcon />}
+        >
           Novo Perfil
         </Button>
       </Box>
@@ -193,16 +241,43 @@ export default function PermissionsManagement() {
           width: "100%",
         }}
       >
-        {filteredRoles.map((role) => (
+        {filteredRolesPermissions.map((role) => (
           <AccessCard
             key={role.id}
             role={role}
-            onView={() => console.log("Ver perfil")}
-            onEdit={() => console.log("Editar perfil")}
-            onDelete={() => console.log("Excluir perfil")}
+            onView={() => {
+              setSelectedRolePermissions(role);
+              setModalMode("view");
+            }}
+            onEdit={() => {
+              setSelectedRolePermissions(role);
+              setModalMode("edit");
+            }}
+            onDelete={() => handleDeleteClick(role)}
           />
         ))}
       </Box>
+      {modalMode && (
+        <RoleModal
+          role={selectedRolePermissions}
+          onSave={handleSave}
+          onClose={() => {
+            setModalMode(null);
+            setSelectedRolePermissions(null);
+          }}
+          mode={modalMode}
+        />
+      )}
+
+      <DeleteConfirmationModal
+        isOpen={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setRoleToDelete(null);
+        }}
+        onConfirm={handleDeleteConfirm}
+        roleName={rolePermissionToDelete?.name || ""}
+      />
     </Box>
   );
 }
