@@ -29,8 +29,9 @@ export interface Permission {
 
 export interface RolePermissions {
   id: string;
-  role: Role;
+  name: Role | undefined;
   isActive: boolean;
   permissions: Permission[];
   examStages: ExamStageAccess[];
 }
+
