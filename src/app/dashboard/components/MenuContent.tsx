@@ -93,7 +93,7 @@ export default function MenuContent() {
                 <List component="div" disablePadding sx={{ mb: 1 }}>
                   {item.subItems.map((subItem, subIndex) => (
                     <Link key={subIndex} href={subItem.path} passHref>
-                      <ListItem key={subIndex} sx={{ pl: 4 }}>
+                      <ListItem key={subIndex} sx={{ pl: 2, py: 0, margin: 0 }}>
                         <ListItemButton>
                           <ListItemText primary={subItem.text} />
                         </ListItemButton>
