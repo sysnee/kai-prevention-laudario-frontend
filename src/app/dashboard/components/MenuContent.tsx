@@ -20,37 +20,32 @@ import { User2Icon } from 'lucide-react';
 
 const mainListItems = [
   {
-    text: 'Início',
+    text: "Início",
     icon: <HomeRoundedIcon />,
-    path: '/'
+    path: "/",
   },
   {
-    text: 'Agendamento',
+    text: "Agendamento",
     icon: <CalendarIcon />,
     subItems: [
-      { text: 'Consultar todos', path: '/agenda' },
-      { text: 'Criar novo', path: '/agenda/novo' },
+      { text: "Consultar todos", path: "/agenda" },
+      { text: "Criar novo", path: "/agenda/novo" },
     ],
   },
   {
-    text: 'Laudário',
+    text: "Laudário",
     icon: <DocumentScannerRounded />,
-    path: '/dashboard/estudos'
+    path: "/dashboard/estudos",
   },
   {
-    text: 'Fluxo de trabalho',
+    text: "Fluxo de trabalho",
     icon: <MonitorHeart />,
-    path: '/dashboard/workflow'
+    path: "/dashboard/workflow",
   },
   {
-    text: 'Pacientes',
+    text: "Pacientes",
     icon: <PeopleRoundedIcon />,
-    path: '/dashboard/pacientes'
-  },
-  {
-    text: 'Médicos',
-    icon: <PeopleRoundedIcon />,
-    path: '/dashboard/medicos'
+    path: "/pacientes",
   },
 ];
 
@@ -60,10 +55,10 @@ const secondaryListItems = [
 ];
 
 export default function MenuContent() {
-  const [open, setOpen] = React.useState<any>({});
+  const [open, setOpen] = React.useState<{ [key: number]: boolean }>({});
 
   const handleClick = (index: number) => {
-    setOpen((prevOpen: any) => ({
+    setOpen((prevOpen) => ({
       ...prevOpen,
       [index]: !prevOpen[index],
     }));
@@ -74,33 +69,31 @@ export default function MenuContent() {
       <List dense>
         {mainListItems.map((item, index) => (
           <React.Fragment key={index}>
-            <ListItem disablePadding sx={{ display: 'block' }}>
-              {
-                item.subItems
-                  ? <>
-                    <ListItemButton onClick={() => handleClick(index)}>
-                      <ListItemIcon>{item.icon}</ListItemIcon>
-                      <ListItemText primary={item.text} />
-                      {item.subItems ? (open[index] ? <ExpandLess /> : <ExpandMore />) : null}
-                    </ListItemButton>
-                  </>
-                  : <>
-                    <Link href={item.path || '/'}>
-                      <ListItemButton>
-                        <ListItemIcon>{item.icon}</ListItemIcon>
-                        <ListItemText primary={item.text} />
-                      </ListItemButton>
-                    </Link>
-                  </>
-              }
+            <ListItem disablePadding sx={{ display: "block" }}>
+              {item.subItems ? (
+                <>
+                  <ListItemButton onClick={() => handleClick(index)}>
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                    {open[index] ? <ExpandLess /> : <ExpandMore />}
+                  </ListItemButton>
+                </>
+              ) : (
+                <Link href={item.path || "/"} passHref>
+                  <ListItemButton>
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItemButton>
+                </Link>
+              )}
             </ListItem>
 
             {item.subItems && (
               <Collapse in={open[index]} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding sx={{ mb: 1 }}>
                   {item.subItems.map((subItem, subIndex) => (
-                    <Link key={subIndex} href={subItem.path}>
-                      <ListItem key={subIndex} sx={{ pl: 2, py: 0 }}>
+                    <Link key={subIndex} href={subItem.path} passHref>
+                      <ListItem key={subIndex} sx={{ pl: 4 }}>
                         <ListItemButton>
                           <ListItemText primary={subItem.text} />
                         </ListItemButton>
