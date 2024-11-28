@@ -1,24 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Users,
-  Settings,
-  DollarSign,
-  FileText,
-  SearchIcon,
-  ListIcon,
-  GridIcon,
-  PlusIcon,
-  Search,
-} from "lucide-react";
+import { ListIcon, PlusIcon, Search, Grid } from "lucide-react";
 import { DeleteConfirmationModal } from "./components/DeleteConfirmationModal";
 import { Role, RolePermissions } from "../../types/pemissions/permissions";
 // import { RoleModal } from "./components/RoleModal";
 import AccessCard from "./components/AccessCard";
 import {
   Button,
-  Divider,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -26,6 +15,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { RoleModal } from "./components/RoleModal";
+import PermissionsList from "./components/PermissionsList";
 
 const initialRoles: RolePermissions[] = [
   {
@@ -140,7 +130,7 @@ export default function PermissionsManagement() {
   const [rolePermissionToDelete, setRoleToDelete] =
     useState<RolePermissions | null>(null);
 
-  const filteredRolesPermissions = initialRoles.filter((role) =>
+  const filteredRolesPermissions = rolesPermissions.filter((role) =>
     role.name!.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -163,11 +153,6 @@ export default function PermissionsManagement() {
     setSelectedRolePermissions(null);
   };
 
-  const handleDeleteClick = (rolePermission: RolePermissions) => {
-    setRoleToDelete(rolePermission);
-    setDeleteModalOpen(true);
-  };
-
   const handleDeleteConfirm = () => {
     if (rolePermissionToDelete) {
       setRolesPermissions(
@@ -181,12 +166,27 @@ export default function PermissionsManagement() {
     }
   };
 
-  // const handleViewModeChange = (
-  //   _event: React.MouseEvent<HTMLElement>,
-  //   mode: "grid" | "list"
-  // ) => {
-  //   if (mode) setViewMode(mode);
-  // };
+  const handleViewModeChange = (
+    _event: React.MouseEvent<HTMLElement>,
+    mode: "grid" | "list"
+  ) => {
+    if (mode) setViewMode(mode);
+  };
+
+  const handleView = (role: RolePermissions) => {
+    setSelectedRolePermissions(role);
+    setModalMode("view");
+  };
+
+  const handleEdit = (role: RolePermissions) => {
+    setSelectedRolePermissions(role);
+    setModalMode("edit");
+  };
+
+  const handleDeleteClick = (rolePermission: RolePermissions) => {
+    setRoleToDelete(rolePermission);
+    setDeleteModalOpen(true);
+  };
 
   return (
     <Box sx={{ padding: 3, width: "100%", boxSizing: "border-box" }}>
@@ -207,7 +207,6 @@ export default function PermissionsManagement() {
           flexWrap: "wrap",
         }}
       >
-        {/* Campo de Busca */}
         <TextField
           variant="outlined"
           placeholder="Buscar perfis..."
@@ -220,43 +219,81 @@ export default function PermissionsManagement() {
             },
           }}
         />
-        {/* Botão Novo Perfil */}
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            setSelectedRolePermissions(null);
-            setModalMode("create");
-          }}
-          startIcon={<PlusIcon />}
-        >
-          Novo Perfil
-        </Button>
-      </Box>
-      <Box
+        <Box
         sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 3,
-          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          flexWrap: "wrap",
         }}
-      >
-        {filteredRolesPermissions.map((role) => (
-          <AccessCard
-            key={role.id}
-            role={role}
-            onView={() => {
-              setSelectedRolePermissions(role);
-              setModalMode("view");
+        >
+          <ToggleButtonGroup
+            value={viewMode}
+            exclusive
+            onChange={handleViewModeChange}
+            size="small"
+          >
+            <ToggleButton value="list">
+              <ListIcon size={20} />
+            </ToggleButton>
+            <ToggleButton value="grid">
+              <Grid size={20} />
+            </ToggleButton>
+          </ToggleButtonGroup>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setSelectedRolePermissions(null);
+              setModalMode("create");
             }}
-            onEdit={() => {
-              setSelectedRolePermissions(role);
-              setModalMode("edit");
-            }}
-            onDelete={() => handleDeleteClick(role)}
-          />
-        ))}
+            startIcon={<PlusIcon />}
+          >
+            Novo Perfil
+          </Button>
+        </Box>
       </Box>
+
+      {viewMode == "grid" ? (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: 3,
+            width: "100%",
+          }}
+        >
+          {filteredRolesPermissions.map((role) => (
+            <AccessCard
+              key={role.id}
+              rolePermission={role}
+              onEdit={() => {
+                handleEdit(role);
+              }}
+              onView={() => {
+                handleView(role);
+              }}
+              onDelete={() => handleDeleteClick(role)}
+            />
+          ))}
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <PermissionsList
+            rolesPermissions={filteredRolesPermissions}
+            onView={handleView}
+            onEdit={handleEdit}
+            onDelete={handleDeleteClick}
+          />
+        </Box>
+      )}
+
       {modalMode && (
         <RoleModal
           role={selectedRolePermissions}

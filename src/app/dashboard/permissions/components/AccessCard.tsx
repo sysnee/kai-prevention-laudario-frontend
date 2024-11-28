@@ -17,9 +17,11 @@ import {
 } from "../../../types/pemissions/permissions";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
+import AccessChip from "./AccessChip";
+import ActionButtons from "./ActionButtons";
 
 interface AccessCardProps {
-  role: RolePermissions;
+  rolePermission: RolePermissions;
   onView: (role: RolePermissions) => void;
   onEdit: (role: RolePermissions) => void;
   onDelete: (role: RolePermissions) => void;
@@ -51,23 +53,8 @@ const translateStage = (stage: StageKey): string =>
 const translateRole = (role: string): string =>
   TRANSLATIONS.roles[role as keyof typeof TRANSLATIONS.roles] || role;
 
-const AccessChip = ({ access }: { access: AccessLevel }) => {
-  const colors: Record<AccessLevel, string> = {
-    none: "default",
-    read: "info",
-    write: "success",
-    full: "error",
-  };
-
-  return (
-    <Box sx={{ display: "flex", alignItems: "center" }}>
-      <Chip label={access} color={colors[access] as any} size="small" />
-    </Box>
-  );
-};
-
 export default function AccessCard({
-  role,
+  rolePermission: role,
   onView,
   onEdit,
   onDelete,
@@ -197,39 +184,12 @@ export default function AccessCard({
           gap: theme.spacing(1),
         }}
       >
-        <Tooltip title="Visualizar" arrow>
-          <IconButton
-            onClick={() => onView(role)}
-            sx={{
-              color: theme.palette.action.active,
-              "&:hover": { color: theme.palette.primary.main },
-            }}
-          >
-            <Eye />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Editar" arrow>
-          <IconButton
-            onClick={() => onEdit(role)}
-            sx={{
-              color: theme.palette.action.active,
-              "&:hover": { color: theme.palette.success.main },
-            }}
-          >
-            <PenLine />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Excluir" arrow>
-          <IconButton
-            onClick={() => onDelete(role)}
-            sx={{
-              color: theme.palette.action.active,
-              "&:hover": { color: theme.palette.error.main },
-            }}
-          >
-            <Trash2 />
-          </IconButton>
-        </Tooltip>
+        <ActionButtons
+          onView={() => onView(role)}
+          onEdit={() => onEdit(role)}
+          onDelete={() => onDelete(role)}
+          size="medium"
+        />
       </div>
     </Card>
   );
