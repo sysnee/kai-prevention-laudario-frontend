@@ -64,11 +64,12 @@ export function MedicalPrescriptionModal({ isOpen, onClose, onSave }: MedicalPre
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-semibold">Pedido Médico</h3>
           <button
-            onClick={onClose}
-            className="p-2 hover:border rounded-full"
-          >
-            <X className="w-5 h-5" />
-          </button>
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              title="Fechar"
+            >
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
