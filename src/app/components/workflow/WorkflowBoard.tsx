@@ -60,7 +60,7 @@ export const WORKFLOW_STAGES = [
     description: 'Em transcrição'
   },
   {
-    id: 'quality_control',
+    id: 'quality',
     title: 'Controle de Qualidade',
     icon: ShieldCheck,
     color: 'text-indigo-500',
