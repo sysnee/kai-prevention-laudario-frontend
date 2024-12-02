@@ -9,9 +9,7 @@ import {
   Typography,
   Divider,
 } from "@mui/material";
-import {
-  RolePermissions,
-} from "../../../types/pemissions/permissions";
+import { RolePermissions } from "../../../types/pemissions/permissions";
 import { useTheme } from "@mui/material/styles";
 import AccessChip from "./AccessChip";
 import ActionButtons from "./ActionButtons";
@@ -33,13 +31,23 @@ const TRANSLATIONS = {
     transcription: "Transcrição",
     revision: "Revisão",
     signed: "Assinado",
-  }
+  },
+  accessLevels: {
+    none: "Nulo",
+    read: "Visualizar",
+    write: "Editar",
+    full: "Total",
+  },
 } as const;
 
 type StageKey = keyof typeof TRANSLATIONS.stages;
+type AccessLevelKey = keyof typeof TRANSLATIONS.accessLevels;
 
 const translateStage = (stage: StageKey): string =>
   TRANSLATIONS.stages[stage] || stage;
+
+const translateAccess = (access: AccessLevelKey): string =>
+  TRANSLATIONS.accessLevels[access] || access;
 
 export default function AccessCard({
   rolePermission: role,
@@ -103,12 +111,41 @@ export default function AccessCard({
           >
             Módulo de Pacientes
           </Typography>
-          <AccessChip
-            access={
-              role.permissions.find((p) => p.module === "patient")?.access ||
-              "none"
-            }
-          />
+          <Tooltip
+            title={`Módulo de Pacientes: ${translateAccess(
+              role.permissions.find((p) => p.module === "patient")
+                ?.access as AccessLevelKey || "none"
+            )}`}
+            arrow
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: theme.spacing(1),
+                border: `1px solid ${theme.palette.divider}`,
+                borderRadius: theme.shape.borderRadius,
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{ color: theme.palette.text.secondary }}
+              >
+                Pacientes
+              </Typography>
+              <AccessChip
+                access={
+                  role.permissions.find((p) => p.module === "patient")?.access ||
+                  "none"
+                }
+                description={translateAccess(
+                  role.permissions.find((p) => p.module === "patient")
+                    ?.access as AccessLevelKey || "none"
+                )}
+              />
+            </div>
+          </Tooltip>
         </div>
 
         <div>
@@ -132,7 +169,9 @@ export default function AccessCard({
             {role.examStages.map((stage) => (
               <Tooltip
                 key={stage.stage}
-                title={`${translateStage(stage.stage)}: ${stage.access}`}
+                title={`${translateStage(stage.stage)}: ${translateAccess(
+                  stage.access as AccessLevelKey
+                )}`}
                 arrow
               >
                 <div
@@ -151,7 +190,10 @@ export default function AccessCard({
                   >
                     {translateStage(stage.stage)}
                   </Typography>
-                  <AccessChip access={stage.access} />
+                  <AccessChip
+                    access={stage.access}
+                    description={translateAccess(stage.access as AccessLevelKey)}
+                  />
                 </div>
               </Tooltip>
             ))}
