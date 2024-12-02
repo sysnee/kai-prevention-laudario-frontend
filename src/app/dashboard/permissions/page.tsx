@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import { ListIcon, PlusIcon, Search, Grid } from "lucide-react";
 import { DeleteConfirmationModal } from "./components/DeleteConfirmationModal";
-import { Role, RolePermissions } from "../../types/pemissions/permissions";
-// import { RoleModal } from "./components/RoleModal";
+import { RolePermissions } from "../../types/pemissions/permissions";
 import AccessCard from "./components/AccessCard";
 import {
   Button,
@@ -16,111 +15,13 @@ import {
 import { Box } from "@mui/system";
 import { RoleModal } from "./components/RoleModal";
 import PermissionsList from "./components/PermissionsList";
-
-const initialRoles: RolePermissions[] = [
-  {
-    id: "1",
-    name: "Receptionist",
-    isActive: true,
-    permissions: [
-      { module: "Patient", access: "write" },
-      { module: "Exam", access: "read" },
-    ],
-    examStages: [
-      { stage: "Planned", access: "write" },
-      { stage: "Waiting", access: "read" },
-      { stage: "Started", access: "none" },
-      { stage: "Completed", access: "none" },
-      { stage: "Reported", access: "read" },
-    ],
-  },
-  {
-    id: "2",
-    name: "Nurse",
-    isActive: true,
-    permissions: [
-      { module: "Patient", access: "write" },
-      { module: "Exam", access: "write" },
-    ],
-    examStages: [
-      { stage: "Planned", access: "read" },
-      { stage: "Waiting", access: "write" },
-      { stage: "Started", access: "write" },
-      { stage: "Completed", access: "read" },
-      { stage: "Reported", access: "read" },
-    ],
-  },
-  {
-    id: "3",
-    name: "Biomedical",
-    isActive: true,
-    permissions: [
-      { module: "Patient", access: "read" },
-      { module: "Exam", access: "write" },
-    ],
-    examStages: [
-      { stage: "Planned", access: "read" },
-      { stage: "Waiting", access: "read" },
-      { stage: "Started", access: "write" },
-      { stage: "Completed", access: "write" },
-      { stage: "Reported", access: "read" },
-    ],
-  },
-  {
-    id: "4",
-    name: "Radiologist",
-    isActive: true,
-    permissions: [
-      { module: "Patient", access: "read" },
-      { module: "Exam", access: "write" },
-    ],
-    examStages: [
-      { stage: "Planned", access: "read" },
-      { stage: "Waiting", access: "read" },
-      { stage: "Started", access: "read" },
-      { stage: "Completed", access: "write" },
-      { stage: "Reported", access: "write" },
-    ],
-  },
-  {
-    id: "5",
-    name: "HeadDoctor",
-    isActive: true,
-    permissions: [
-      { module: "Patient", access: "write" },
-      { module: "Exam", access: "write" },
-    ],
-    examStages: [
-      { stage: "Planned", access: "write" },
-      { stage: "Waiting", access: "write" },
-      { stage: "Started", access: "write" },
-      { stage: "Completed", access: "write" },
-      { stage: "Reported", access: "write" },
-    ],
-  },
-  {
-    id: "6",
-    name: "Master",
-    isActive: true,
-    permissions: [
-      { module: "Patient", access: "full" },
-      { module: "Exam", access: "full" },
-    ],
-    examStages: [
-      { stage: "Planned", access: "full" },
-      { stage: "Waiting", access: "full" },
-      { stage: "Started", access: "full" },
-      { stage: "Completed", access: "full" },
-      { stage: "Reported", access: "full" },
-    ],
-  },
-];
+import { mockRolePermissions } from "../../stores/permissionsStore";
 
 export default function PermissionsManagement() {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [searchQuery, setSearchQuery] = useState("");
   const [rolesPermissions, setRolesPermissions] =
-    useState<RolePermissions[]>(initialRoles);
+    useState<RolePermissions[]>(mockRolePermissions);
   const [selectedRolePermissions, setSelectedRolePermissions] =
     useState<RolePermissions | null>(null);
   const [modalMode, setModalMode] = useState<"create" | "edit" | "view" | null>(
@@ -254,14 +155,29 @@ export default function PermissionsManagement() {
         </Box>
       </Box>
 
-      {viewMode == "grid" ? (
+      {viewMode == "list" ? (
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <PermissionsList
+            rolesPermissions={filteredRolesPermissions}
+            onView={handleView}
+            onEdit={handleEdit}
+            onDelete={handleDeleteClick}
+          />
+        </Box>
+      ) : (
         <Box
           sx={{
             display: "grid",
             gridTemplateColumns: {
-              xs: "1fr", 
-              sm: "repeat(2, 1fr)", 
-              md: "repeat(3, 1fr)", 
+              xs: "1fr",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(3, 1fr)",
             },
             gap: 3,
             width: "100%",
@@ -280,21 +196,6 @@ export default function PermissionsManagement() {
               onDelete={() => handleDeleteClick(role)}
             />
           ))}
-        </Box>
-      ) : (
-        <Box
-          sx={{
-            width: "100%",
-            maxWidth: "100%",
-            boxSizing: "border-box",
-          }}
-        >
-          <PermissionsList
-            rolesPermissions={filteredRolesPermissions}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDelete={handleDeleteClick}
-          />
         </Box>
       )}
 

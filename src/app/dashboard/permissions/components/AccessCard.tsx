@@ -5,18 +5,14 @@ import {
   Card,
   CardContent,
   Chip,
-  IconButton,
   Tooltip,
   Typography,
   Divider,
 } from "@mui/material";
-import { Eye, PenLine, Trash2 } from "lucide-react";
 import {
-  AccessLevel,
   RolePermissions,
 } from "../../../types/pemissions/permissions";
 import { useTheme } from "@mui/material/styles";
-import { Box } from "@mui/system";
 import AccessChip from "./AccessChip";
 import ActionButtons from "./ActionButtons";
 
@@ -29,29 +25,21 @@ interface AccessCardProps {
 
 const TRANSLATIONS = {
   stages: {
-    Planned: "Planejado",
-    Waiting: "Aguardando",
-    Started: "Iniciado",
-    Completed: "Concluído",
-    Reported: "Laudado",
-  },
-  roles: {
-    Receptionist: "Recepcionista",
-    Nurse: "Enfermeiro",
-    Biomedical: "Biomédico",
-    Radiologist: "Radiologista",
-    HeadDoctor: "Head Doctor",
-    Master: "Mestre",
-  },
+    planned: "Planejado",
+    waiting: "Aguardando",
+    started: "Iniciado",
+    onhold: "Em espera",
+    completed: "Concluído",
+    transcription: "Transcrição",
+    revision: "Revisão",
+    signed: "Assinado",
+  }
 } as const;
 
 type StageKey = keyof typeof TRANSLATIONS.stages;
 
 const translateStage = (stage: StageKey): string =>
   TRANSLATIONS.stages[stage] || stage;
-
-const translateRole = (role: string): string =>
-  TRANSLATIONS.roles[role as keyof typeof TRANSLATIONS.roles] || role;
 
 export default function AccessCard({
   rolePermission: role,
@@ -83,7 +71,7 @@ export default function AccessCard({
           component="h3"
           sx={{ fontWeight: 600, color: theme.palette.text.primary }}
         >
-          {translateRole(role.name!)}
+          {role.name}
         </Typography>
         <Chip
           label={role.isActive ? "Ativo" : "Inativo"}
@@ -117,7 +105,7 @@ export default function AccessCard({
           </Typography>
           <AccessChip
             access={
-              role.permissions.find((p) => p.module === "Patient")?.access ||
+              role.permissions.find((p) => p.module === "patient")?.access ||
               "none"
             }
           />

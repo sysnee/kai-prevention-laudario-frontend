@@ -1,7 +1,10 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
-import { ExamStageAccess } from "../../../types/pemissions/permissions";
+import { Box, Typography, useTheme } from "@mui/material";
+import {
+  ExamStageAccess,
+  ExamStatusEnum,
+} from "../../../types/pemissions/permissions";
 import AccessChip from "./AccessChip";
 
 interface StagePermissionsProps {
@@ -9,21 +12,61 @@ interface StagePermissionsProps {
 }
 
 export default function StagePermissions({ stages }: StagePermissionsProps) {
+  const theme = useTheme();
+
   return (
     <Box>
-      <Typography variant="subtitle2" className="text-gray-900 mb-2">
-        Exam Stage Permissions
+      <Typography
+        variant="subtitle2"
+        sx={{
+          fontWeight: "bold",
+          color: theme.palette.mode === "dark"
+            ? theme.palette.text.primary
+            : "rgba(0, 0, 0, 0.87)",
+          marginBottom: 2,
+        }}
+      >
+        Permissões por fase do exame
       </Typography>
-      <Box className="grid grid-cols-2 gap-3">
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: 1.5,
+        }}
+      >
         {stages.map((stage) => (
           <Box
             key={stage.stage}
-            className="flex items-center justify-between p-2 bg-white rounded-md shadow-sm"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "8px 12px",
+              backgroundColor: "white",
+              borderRadius: "8px",
+              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+              border: "1px solid rgba(0, 0, 0, 0.12)",
+            }}
           >
-            <Typography component="span" className="text-sm text-gray-600">
-              {stage.stage}
+            <Typography
+              component="span"
+              sx={{
+                fontSize: "0.875rem",
+                color: "rgba(0, 0, 0, 0.87)",
+                textTransform: "capitalize",
+              }}
+            >
+              {
+                ExamStatusEnum[
+                  stage.stage.toUpperCase() as keyof typeof ExamStatusEnum
+                ]
+              }
             </Typography>
-            <AccessChip access={stage.access} />
+            <AccessChip
+              access={stage.access}
+              description={stage.description}
+            />
           </Box>
         ))}
       </Box>

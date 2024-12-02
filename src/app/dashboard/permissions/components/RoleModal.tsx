@@ -18,8 +18,6 @@ import {
 import {
   RolePermissions,
   AccessLevel,
-  Permission,
-  ExamStageAccess,
   Module,
   ExamStatus,
 } from "../../../types/pemissions/permissions";
@@ -32,14 +30,33 @@ const PERMISSION_LEVELS: Record<AccessLevel, string> = {
   full: "Completo",
 };
 
-const MODULES: Module[] = ["Patient", "Exam"];
+const MODULES: Module[] = ["patient", "exam"];
 const STAGES: ExamStatus[] = [
-  "Planned",
-  "Waiting",
-  "Started",
-  "Completed",
-  "Reported",
+  "planned",
+  "waiting",
+  "started",
+  "onhold",
+  "completed",
+  "transcription",
+  "revision",
+  "signed",
 ];
+
+// Função para fornecer descrições padrão para os stages
+const getDefaultStageDescription = (access: AccessLevel): string => {
+  switch (access) {
+    case "none":
+      return "Acesso não autorizado";
+    case "read":
+      return "Visualizar / Consultar";
+    case "write":
+      return "Modificar / Consultar"; // Pode ser ajustado conforme necessário
+    case "full":
+      return "Acesso completo";
+    default:
+      return "";
+  }
+};
 
 export function RoleModal({
   role,
@@ -60,7 +77,12 @@ export function RoleModal({
       role?.permissions ||
       MODULES.map((module) => ({ module, access: "none" })),
     examStages:
-      role?.examStages || STAGES.map((stage) => ({ stage, access: "none" })),
+      role?.examStages ||
+      STAGES.map((stage) => ({
+        stage,
+        access: "none",
+        description: getDefaultStageDescription("none"),
+      })),
   });
 
   const isViewMode = mode === "view";
@@ -85,7 +107,9 @@ export function RoleModal({
     setFormData((prev) => ({
       ...prev,
       examStages: prev.examStages.map((examStage) =>
-        examStage.stage === stage ? { ...examStage, access } : examStage
+        examStage.stage === stage
+          ? { ...examStage, access, description: getDefaultStageDescription(access) }
+          : examStage
       ),
     }));
   };

@@ -9,7 +9,7 @@ interface StatusChipProps {
 export default function StatusChip({ isActive }: StatusChipProps) {
   return (
     <Chip
-      label={isActive ? 'Active' : 'Inactive'}
+      label={isActive ? 'Ativo' : 'Inativo'}
       color={isActive ? 'success' : 'default'}
       size="small"
     />
