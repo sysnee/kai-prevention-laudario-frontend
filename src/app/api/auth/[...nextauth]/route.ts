@@ -10,7 +10,8 @@ export const auth0Options = {
             authorization: {
                 params: {
                     prompt: 'login',
-                    //audience: process.env.NEXT_PUBLIC_API_URL,
+                    // audience: process.env.NEXT_PUBLIC_API_URL,
+                    // scope: 'email',
                 }
             },
         })
