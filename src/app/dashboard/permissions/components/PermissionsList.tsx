@@ -12,12 +12,15 @@ import {
 } from "@mui/material";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { RolePermissions } from "../../../types/pemissions/permissions";
+import {
+  RolePermissions,
+} from "../../../types/pemissions/permissions";
 import AccessChip from "./AccessChip";
 import StagePermissions from "./StagePermissions";
 import ActionButtons from "./ActionButtons";
 import StatusChip from "./StatusChip";
 import { useTheme } from "@mui/system";
+import { getPatientAccessDescription } from "../utils/permissionUtils";
 
 interface PermissionsListProps {
   rolesPermissions: RolePermissions[];
@@ -43,21 +46,33 @@ export default function PermissionsList({
     );
   };
 
+  const isDarkMode = theme.palette.mode === "dark";
+
   return (
     <List
       sx={{
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
-        background: "white",
+        backgroundColor: isDarkMode
+          ? theme.palette.background.default
+          : "white",
         borderRadius: "8px",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+        boxShadow: isDarkMode
+          ? "0 2px 8px rgba(0,0,0,0.5)"
+          : "0 2px 8px rgba(0,0,0,0.1)",
       }}
     >
       {rolesPermissions.map((role, index) => (
         <div key={role.name}>
           <ListItem
-            className="hover:bg-gray-50"
+            sx={{
+              "&:hover": {
+                backgroundColor: isDarkMode
+                  ? theme.palette.action.hover
+                  : "rgba(0, 0, 0, 0.04)",
+              },
+            }}
             secondaryAction={
               <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                 <ActionButtons
@@ -82,8 +97,14 @@ export default function PermissionsList({
             <ListItemText
               primary={
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                  <Typography component="span" sx={{ fontWeight: "bold" }}>
-                    {role.name!}
+                  <Typography
+                    component="span" // Mudança aqui: evita o problema do <p>
+                    sx={{
+                      fontWeight: "bold",
+                      color: theme.palette.text.primary,
+                    }}
+                  >
+                    {role.name}
                   </Typography>
                   <StatusChip isActive={role.isActive} />
                 </Box>
@@ -98,21 +119,26 @@ export default function PermissionsList({
                   }}
                 >
                   <Typography
-                    component="span"
+                    component="span" // Mudança aqui também
                     sx={{
                       fontSize: "0.875rem",
-                      color: "rgba(0,0,0,0.6)",
+                      color: theme.palette.text.secondary,
                       fontWeight: 500,
                     }}
                   >
-                    Patient Access:
+                    Módulo de pacientes:
                   </Typography>
                   <Box>
                     <AccessChip
                       access={
-                        role.permissions.find((p) => p.module === "Patient")
+                        role.permissions.find((p) => p.module === "patient")
                           ?.access || "none"
                       }
+                      description={getPatientAccessDescription(
+                        role.permissions.find((p) => p.module === "patient")
+                          ?.access || "none",
+                        role.name!
+                      )}
                     />
                   </Box>
                 </Box>
@@ -127,7 +153,9 @@ export default function PermissionsList({
             <Box
               sx={{
                 padding: "16px",
-                backgroundColor: theme.palette.background.paper,
+                backgroundColor: isDarkMode
+                  ? theme.palette.background.paper
+                  : "rgba(0,0,0,0.02)",
                 borderRadius: "8px",
                 margin: "8px 16px",
               }}
@@ -135,7 +163,15 @@ export default function PermissionsList({
               <StagePermissions stages={role.examStages} />
             </Box>
           </Collapse>
-          {index < rolesPermissions.length - 1 && <Divider />}
+          {index < rolesPermissions.length - 1 && (
+            <Divider
+              sx={{
+                backgroundColor: isDarkMode
+                  ? theme.palette.divider
+                  : "rgba(0, 0, 0, 0.1)",
+              }}
+            />
+          )}
         </div>
       ))}
     </List>

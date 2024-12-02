@@ -6,9 +6,10 @@ import { Box } from "@mui/system";
 
 interface AccessChipProps {
   access: AccessLevel;
+  description?: string;
 }
 
-export default function AccessChip({ access }: AccessChipProps) {
+export default function AccessChip({ access, description }: AccessChipProps) {
   const colors: Record<AccessLevel, string> = {
     none: "default",
     read: "info",
@@ -18,7 +19,7 @@ export default function AccessChip({ access }: AccessChipProps) {
 
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      <Chip label={access} color={colors[access] as any} size="small" />
+      <Chip label={description ? description : access} color={colors[access] as any} size="small" />
     </Box>
   );
 }

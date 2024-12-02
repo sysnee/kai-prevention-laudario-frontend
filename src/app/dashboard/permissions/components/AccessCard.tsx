@@ -5,18 +5,12 @@ import {
   Card,
   CardContent,
   Chip,
-  IconButton,
   Tooltip,
   Typography,
   Divider,
 } from "@mui/material";
-import { Eye, PenLine, Trash2 } from "lucide-react";
-import {
-  AccessLevel,
-  RolePermissions,
-} from "../../../types/pemissions/permissions";
+import { RolePermissions } from "../../../types/pemissions/permissions";
 import { useTheme } from "@mui/material/styles";
-import { Box } from "@mui/system";
 import AccessChip from "./AccessChip";
 import ActionButtons from "./ActionButtons";
 
@@ -29,29 +23,31 @@ interface AccessCardProps {
 
 const TRANSLATIONS = {
   stages: {
-    Planned: "Planejado",
-    Waiting: "Aguardando",
-    Started: "Iniciado",
-    Completed: "Concluído",
-    Reported: "Laudado",
+    planned: "Planejado",
+    waiting: "Aguardando",
+    started: "Iniciado",
+    onhold: "Em espera",
+    completed: "Concluído",
+    transcription: "Transcrição",
+    revision: "Revisão",
+    signed: "Assinado",
   },
-  roles: {
-    Receptionist: "Recepcionista",
-    Nurse: "Enfermeiro",
-    Biomedical: "Biomédico",
-    Radiologist: "Radiologista",
-    HeadDoctor: "Head Doctor",
-    Master: "Mestre",
+  accessLevels: {
+    none: "Nulo",
+    read: "Visualizar",
+    write: "Editar",
+    full: "Total",
   },
 } as const;
 
 type StageKey = keyof typeof TRANSLATIONS.stages;
+type AccessLevelKey = keyof typeof TRANSLATIONS.accessLevels;
 
 const translateStage = (stage: StageKey): string =>
   TRANSLATIONS.stages[stage] || stage;
 
-const translateRole = (role: string): string =>
-  TRANSLATIONS.roles[role as keyof typeof TRANSLATIONS.roles] || role;
+const translateAccess = (access: AccessLevelKey): string =>
+  TRANSLATIONS.accessLevels[access] || access;
 
 export default function AccessCard({
   rolePermission: role,
@@ -83,7 +79,7 @@ export default function AccessCard({
           component="h3"
           sx={{ fontWeight: 600, color: theme.palette.text.primary }}
         >
-          {translateRole(role.name!)}
+          {role.name}
         </Typography>
         <Chip
           label={role.isActive ? "Ativo" : "Inativo"}
@@ -115,12 +111,41 @@ export default function AccessCard({
           >
             Módulo de Pacientes
           </Typography>
-          <AccessChip
-            access={
-              role.permissions.find((p) => p.module === "Patient")?.access ||
-              "none"
-            }
-          />
+          <Tooltip
+            title={`Módulo de Pacientes: ${translateAccess(
+              role.permissions.find((p) => p.module === "patient")
+                ?.access as AccessLevelKey || "none"
+            )}`}
+            arrow
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: theme.spacing(1),
+                border: `1px solid ${theme.palette.divider}`,
+                borderRadius: theme.shape.borderRadius,
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{ color: theme.palette.text.secondary }}
+              >
+                Pacientes
+              </Typography>
+              <AccessChip
+                access={
+                  role.permissions.find((p) => p.module === "patient")?.access ||
+                  "none"
+                }
+                description={translateAccess(
+                  role.permissions.find((p) => p.module === "patient")
+                    ?.access as AccessLevelKey || "none"
+                )}
+              />
+            </div>
+          </Tooltip>
         </div>
 
         <div>
@@ -144,7 +169,9 @@ export default function AccessCard({
             {role.examStages.map((stage) => (
               <Tooltip
                 key={stage.stage}
-                title={`${translateStage(stage.stage)}: ${stage.access}`}
+                title={`${translateStage(stage.stage)}: ${translateAccess(
+                  stage.access as AccessLevelKey
+                )}`}
                 arrow
               >
                 <div
@@ -163,7 +190,10 @@ export default function AccessCard({
                   >
                     {translateStage(stage.stage)}
                   </Typography>
-                  <AccessChip access={stage.access} />
+                  <AccessChip
+                    access={stage.access}
+                    description={translateAccess(stage.access as AccessLevelKey)}
+                  />
                 </div>
               </Tooltip>
             ))}

@@ -1,25 +1,40 @@
 export type AccessLevel = "none" | "read" | "write" | "full";
 
 export type Role =
-  | "Receptionist"
-  | "Nurse"
-  | "Biomedical"
-  | "Radiologist"
+  | "Recepcionista"
+  | "Enfermeiro"
+  | "Biomedico"
+  | "Radiologista"
   | "HeadDoctor"
   | "Master";
 
-export type Module = "Patient" | "Exam";
+export type Module = "patient" | "exam";
 
 export type ExamStatus =
-  | "Planned"
-  | "Waiting"
-  | "Started"
-  | "Completed"
-  | "Reported";
+  | "planned"
+  | "waiting"
+  | "started"
+  | "onhold"
+  | "completed"
+  | "transcription"
+  | "revision"
+  | "signed";
+
+export enum ExamStatusEnum {
+  PLANNED = "Planejado",
+  WAITING = "Aguardando",
+  STARTED = "Iniciado",
+  ONHOLD = "Em espera",
+  COMPLETED = "Concluído",
+  TRANSCRIPTION = "Transcrição",
+  REVISION = "Revisão",
+  SIGNED = "Assinado",
+}
 
 export interface ExamStageAccess {
   stage: ExamStatus;
   access: AccessLevel;
+  description: string;
 }
 
 export interface Permission {
@@ -34,4 +49,3 @@ export interface RolePermissions {
   permissions: Permission[];
   examStages: ExamStageAccess[];
 }
-
