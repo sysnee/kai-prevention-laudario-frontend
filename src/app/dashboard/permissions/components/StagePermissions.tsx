@@ -13,6 +13,7 @@ interface StagePermissionsProps {
 
 export default function StagePermissions({ stages }: StagePermissionsProps) {
   const theme = useTheme();
+  const isDarkMode = theme.palette.mode === "dark";
 
   return (
     <Box>
@@ -20,9 +21,7 @@ export default function StagePermissions({ stages }: StagePermissionsProps) {
         variant="subtitle2"
         sx={{
           fontWeight: "bold",
-          color: theme.palette.mode === "dark"
-            ? theme.palette.text.primary
-            : "rgba(0, 0, 0, 0.87)",
+          color: theme.palette.text.primary,
           marginBottom: 2,
         }}
       >
@@ -43,17 +42,25 @@ export default function StagePermissions({ stages }: StagePermissionsProps) {
               alignItems: "center",
               justifyContent: "space-between",
               padding: "8px 12px",
-              backgroundColor: "white",
+              backgroundColor: isDarkMode
+                ? theme.palette.background.paper
+                : "white",
               borderRadius: "8px",
-              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-              border: "1px solid rgba(0, 0, 0, 0.12)",
+              boxShadow: isDarkMode
+                ? "0 1px 3px rgba(255, 255, 255, 0.1)"
+                : "0 1px 3px rgba(0, 0, 0, 0.1)",
+              border: `1px solid ${
+                isDarkMode ? "rgba(255, 255, 255, 0.12)" : "rgba(0, 0, 0, 0.12)"
+              }`,
             }}
           >
             <Typography
               component="span"
               sx={{
                 fontSize: "0.875rem",
-                color: "rgba(0, 0, 0, 0.87)",
+                color: isDarkMode
+                  ? theme.palette.text.secondary
+                  : "rgba(0, 0, 0, 0.87)",
                 textTransform: "capitalize",
               }}
             >
@@ -63,10 +70,7 @@ export default function StagePermissions({ stages }: StagePermissionsProps) {
                 ]
               }
             </Typography>
-            <AccessChip
-              access={stage.access}
-              description={stage.description}
-            />
+            <AccessChip access={stage.access} description={stage.description} />
           </Box>
         ))}
       </Box>
