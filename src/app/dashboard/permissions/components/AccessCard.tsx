@@ -109,7 +109,7 @@ export default function AccessCard({
               marginBottom: theme.spacing(1),
             }}
           >
-            Módulo de Pacientes
+            Módulo de Clientes
           </Typography>
           <Tooltip
             title={`Módulo de Pacientes: ${translateAccess(

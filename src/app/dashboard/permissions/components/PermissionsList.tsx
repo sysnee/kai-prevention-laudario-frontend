@@ -126,7 +126,7 @@ export default function PermissionsList({
                       fontWeight: 500,
                     }}
                   >
-                    Módulo de pacientes:
+                    Módulo de Clientes:
                   </Typography>
                   <Box>
                     <AccessChip
