@@ -35,7 +35,7 @@ export default function ExamStagePermissions({
       case "started":
         return "Iniciado";
       case "onhold":
-        return "Em espera";
+        return "Pausado";
       case "completed":
         return "Concluído";
       case "transcription":
@@ -70,8 +70,8 @@ export default function ExamStagePermissions({
               disabled={disabled}
             >
               <MenuItem value="none">Nenhum</MenuItem>
-              <MenuItem value="read">Leitura</MenuItem>
-              <MenuItem value="write">Escrita</MenuItem>
+              <MenuItem value="read">Visualizar</MenuItem>
+              <MenuItem value="write">Modificar</MenuItem>
               <MenuItem value="full">Completo</MenuItem>
             </Select>
           </FormControl>

@@ -83,9 +83,7 @@ export default function RolePermissionForm({
     setFormData((prev) => ({
       ...prev,
       permissions: prev.permissions.map((permission) =>
-        permission.module === "patient"
-          ? { ...permission, access }
-          : permission
+        permission.module === "patient" ? { ...permission, access } : permission
       ),
     }));
   };
@@ -131,7 +129,10 @@ export default function RolePermissionForm({
                 fullWidth
                 value={formData.name}
                 onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, name: e.target.value as Role }))
+                  setFormData((prev) => ({
+                    ...prev,
+                    name: e.target.value as Role,
+                  }))
                 }
                 disabled={isViewMode}
               />
@@ -157,8 +158,8 @@ export default function RolePermissionForm({
                   disabled={isViewMode}
                 >
                   <MenuItem value="none">Nenhum</MenuItem>
-                  <MenuItem value="read">Leitura</MenuItem>
-                  <MenuItem value="write">Escrita</MenuItem>
+                  <MenuItem value="read">Visualizar</MenuItem>
+                  <MenuItem value="write">Modificar</MenuItem>
                   <MenuItem value="full">Completo</MenuItem>
                 </Select>
               </FormControl>
@@ -182,7 +183,9 @@ export default function RolePermissionForm({
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={onClose}>{isViewMode ? "Fechar" : "Cancelar"}</Button>
+          <Button onClick={onClose}>
+            {isViewMode ? "Fechar" : "Cancelar"}
+          </Button>
           {!isViewMode && (
             <Button type="submit" variant="contained" color="primary">
               {mode === "create" ? "Criar" : "Salvar"}
