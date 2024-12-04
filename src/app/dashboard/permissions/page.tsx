@@ -13,9 +13,9 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { RoleModal } from "./components/RoleModal";
 import PermissionsList from "./components/PermissionsList";
 import { mockRolePermissions } from "../../stores/permissionsStore";
+import RolePermissionForm from "./components/forms/RolePermissionForm";
 
 export default function PermissionsManagement() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
@@ -200,14 +200,15 @@ export default function PermissionsManagement() {
       )}
 
       {modalMode && (
-        <RoleModal
-          role={selectedRolePermissions}
-          onSave={handleSave}
+        <RolePermissionForm
+          open={!!modalMode}
           onClose={() => {
             setModalMode(null);
             setSelectedRolePermissions(null);
           }}
+          rolePermissions={selectedRolePermissions}
           mode={modalMode}
+          onSave={handleSave}
         />
       )}
 
