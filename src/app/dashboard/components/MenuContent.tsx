@@ -17,6 +17,7 @@ import { MonitorHeart, SecurityOutlined } from '@mui/icons-material';
 import { Divider } from '@mui/material';
 import Link from 'next/link';
 import { User2Icon } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 const mainListItems = [
   {
@@ -56,6 +57,7 @@ const secondaryListItems = [
 
 export default function MenuContent() {
   const [open, setOpen] = React.useState<{ [key: number]: boolean }>({});
+  const { data } = useSession()
 
   const handleClick = (index: number) => {
     setOpen((prevOpen) => ({
@@ -109,7 +111,7 @@ export default function MenuContent() {
 
       <Divider />
 
-      <Stack>
+      {data?.user?.email === 'adm@onlineclinic.com.br' && <Stack>
         <Stack direction={'row'} spacing={1}>
           <SecurityOutlined className='opacity-50' style={{ width: '20px' }} />
           <p className='opacity-75'>ADMINISTRATIVO</p>
@@ -126,7 +128,7 @@ export default function MenuContent() {
             </Link>
           ))}
         </List>
-      </Stack>
+      </Stack>}
 
 
     </Stack>

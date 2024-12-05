@@ -53,11 +53,8 @@ export default function OptionsMenu() {
           },
         }}
       >
-        <MenuItem sx={{ margin: '2px 0' }} onClick={handleClose}>Profile</MenuItem>
-        <MenuItem sx={{ margin: '2px 0' }} onClick={handleClose}>My account</MenuItem>
-        <Divider />
-        <MenuItem sx={{ margin: '2px 0' }} onClick={handleClose}>Add another account</MenuItem>
-        <MenuItem sx={{ margin: '2px 0' }} onClick={handleClose}>Settings</MenuItem>
+        <MenuItem sx={{ margin: '2px 0' }} onClick={handleClose}>Perfil</MenuItem>
+        <MenuItem sx={{ margin: '2px 0' }} onClick={handleClose}>Configurações</MenuItem>
         <Divider />
         <MenuItem
           onClick={() => signOut()}
@@ -68,7 +65,7 @@ export default function OptionsMenu() {
             },
           }}
         >
-          <ListItemText>Logout</ListItemText>
+          <ListItemText>Sair</ListItemText>
           <ListItemIcon>
             <LogoutRoundedIcon fontSize="small" />
           </ListItemIcon>
