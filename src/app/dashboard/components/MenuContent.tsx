@@ -43,9 +43,9 @@ const mainListItems = [
     path: "/dashboard/workflow",
   },
   {
-    text: "Pacientes",
+    text: "Clientes",
     icon: <PeopleRoundedIcon />,
-    path: "/pacientes",
+    path: "/dashboard/clientes",
   },
 ];
 
