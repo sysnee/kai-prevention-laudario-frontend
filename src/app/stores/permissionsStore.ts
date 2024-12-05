@@ -7,7 +7,7 @@ export const mockRolePermissions: RolePermissions[] = [
     name: "Recepcionista",
     isActive: true,
     permissions: [
-      { module: "patient", access: "write" },
+      { module: "client", access: "write" },
       { module: "exam", access: "read" },
     ],
     examStages: [
@@ -90,7 +90,7 @@ export const mockRolePermissions: RolePermissions[] = [
     name: "Enfermeiro",
     isActive: true,
     permissions: [
-      { module: "patient", access: "write" },
+      { module: "client", access: "write" },
       { module: "exam", access: "write" },
     ],
     examStages: [
@@ -153,7 +153,7 @@ export const mockRolePermissions: RolePermissions[] = [
     name: "Biomedico",
     isActive: true,
     permissions: [
-      { module: "patient", access: "read" },
+      { module: "client", access: "read" },
       { module: "exam", access: "write" },
     ],
     examStages: [
@@ -208,7 +208,7 @@ export const mockRolePermissions: RolePermissions[] = [
     name: "Radiologista",
     isActive: true,
     permissions: [
-      { module: "patient", access: "read" },
+      { module: "client", access: "read" },
       { module: "exam", access: "write" },
     ],
     examStages: [
@@ -283,7 +283,7 @@ export const mockRolePermissions: RolePermissions[] = [
     name: "HeadDoctor",
     isActive: true,
     permissions: [
-      { module: "patient", access: "write" },
+      { module: "client", access: "write" },
       { module: "exam", access: "write" },
     ],
     examStages: [
@@ -346,7 +346,7 @@ export const mockRolePermissions: RolePermissions[] = [
     name: "Master",
     isActive: true,
     permissions: [
-      { module: "patient", access: "full" },
+      { module: "client", access: "full" },
       { module: "exam", access: "full" },
     ],
     examStages: [

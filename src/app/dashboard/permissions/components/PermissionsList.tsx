@@ -12,9 +12,7 @@ import {
 } from "@mui/material";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import {
-  RolePermissions,
-} from "../../../types/pemissions/permissions";
+import { RolePermissions } from "../../../types/pemissions/permissions";
 import AccessChip from "./AccessChip";
 import StagePermissions from "./StagePermissions";
 import ActionButtons from "./ActionButtons";
@@ -67,83 +65,107 @@ export default function PermissionsList({
         <div key={role.name}>
           <ListItem
             sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              alignItems: { xs: "flex-start", sm: "center" },
+              justifyContent: "space-between",
               "&:hover": {
                 backgroundColor: isDarkMode
                   ? theme.palette.action.hover
                   : "rgba(0, 0, 0, 0.04)",
               },
             }}
-            secondaryAction={
-              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                <ActionButtons
-                  onView={() => onView(role)}
-                  onEdit={() => onEdit(role)}
-                  onDelete={() => onDelete(role)}
-                />
-                <IconButton
-                  edge="end"
-                  onClick={() => handleToggle(role.name!)}
-                  size="small"
-                >
-                  {expandedItems.includes(role.name!) ? (
-                    <ChevronDown size={18} />
-                  ) : (
-                    <ChevronRight size={18} />
-                  )}
-                </IconButton>
-              </Box>
-            }
           >
-            <ListItemText
-              primary={
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                  <Typography
-                    component="span" // Mudança aqui: evita o problema do <p>
-                    sx={{
-                      fontWeight: "bold",
-                      color: theme.palette.text.primary,
-                    }}
-                  >
-                    {role.name}
-                  </Typography>
-                  <StatusChip isActive={role.isActive} />
-                </Box>
-              }
-              secondary={
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    marginTop: 1,
-                  }}
-                >
-                  <Typography
-                    component="span" // Mudança aqui também
-                    sx={{
-                      fontSize: "0.875rem",
-                      color: theme.palette.text.secondary,
-                      fontWeight: 500,
-                    }}
-                  >
-                    Módulo de pacientes:
-                  </Typography>
-                  <Box>
-                    <AccessChip
-                      access={
-                        role.permissions.find((p) => p.module === "patient")
-                          ?.access || "none"
-                      }
-                      description={getPatientAccessDescription(
-                        role.permissions.find((p) => p.module === "patient")
-                          ?.access || "none",
-                        role.name!
-                      )}
-                    />
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: 1,
+                alignItems: "flex-start",
+              }}
+            >
+              <ListItemText
+                primary={
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <Typography
+                      component={"span"}
+                      sx={{
+                        color: theme.palette.text.primary,
+                        fontWeight: "bold !important",
+                      }}
+                    >
+                      {role.name}
+                    </Typography>
+                    <StatusChip isActive={role.isActive} />
                   </Box>
-                </Box>
-              }
-            />
+                }
+                secondary={
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: { xs: "column", sm: "row" },
+                      alignItems: { xs: "flex-start", sm: "center" },
+                      gap: 1,
+                      marginTop: 1,
+                    }}
+                  >
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontSize: "0.875rem",
+                        color: theme.palette.text.secondary,
+                        fontWeight: 500,
+                      }}
+                    >
+                      Módulo de Clientes
+                    </Typography>
+                    <Box>
+                      <AccessChip
+                        access={
+                          role.permissions.find((p) => p.module == "client")
+                            ?.access || "none"
+                        }
+                        description={getPatientAccessDescription(
+                          role.permissions.find((p) => p.module === "client")
+                            ?.access || "none",
+                          role.name!
+                        )}
+                      />
+                    </Box>
+                  </Box>
+                }
+              />
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                alignItems: "center",
+                gap: 1,
+                width: "auto",
+                marginTop: { xs: 2, sm: 0 },
+              }}
+            >
+              <ActionButtons
+                onView={() => onView(role)}
+                onEdit={() => onEdit(role)}
+                onDelete={() => onDelete(role)}
+              />
+              <IconButton
+                edge="end"
+                onClick={() => handleToggle(role.name!)}
+                size="small"
+              >
+                {expandedItems.includes(role.name!) ? (
+                  <ChevronDown size={18} />
+                ) : (
+                  <ChevronRight size={18} />
+                )}
+              </IconButton>
+            </Box>
           </ListItem>
           <Collapse
             in={expandedItems.includes(role.name!)}

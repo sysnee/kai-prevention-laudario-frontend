@@ -1,10 +1,7 @@
 "use client";
 
 import { Box, Typography, useTheme } from "@mui/material";
-import {
-  ExamStageAccess,
-  ExamStatusEnum,
-} from "../../../types/pemissions/permissions";
+import { ExamStageAccess, ExamStatusEnum } from "../../../types/pemissions/permissions";
 import AccessChip from "./AccessChip";
 
 interface StagePermissionsProps {
@@ -30,8 +27,11 @@ export default function StagePermissions({ stages }: StagePermissionsProps) {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
+          gridTemplateColumns: "repeat(2, 1fr)", // Duas colunas para telas maiores
           gap: 1.5,
+          ["@media (max-width: 960px)"]: {
+            gridTemplateColumns: "1fr", // Uma coluna para telas menores
+          },
         }}
       >
         {stages.map((stage) => (
@@ -39,7 +39,8 @@ export default function StagePermissions({ stages }: StagePermissionsProps) {
             key={stage.stage}
             sx={{
               display: "flex",
-              alignItems: "center",
+              flexDirection: { xs: "column", sm: "row" }, // Em telas menores será 'column' e em telas maiores será 'row'
+              alignItems: "center", // Alinha os itens no início
               justifyContent: "space-between",
               padding: "8px 12px",
               backgroundColor: isDarkMode
@@ -62,6 +63,7 @@ export default function StagePermissions({ stages }: StagePermissionsProps) {
                   ? theme.palette.text.secondary
                   : "rgba(0, 0, 0, 0.87)",
                 textTransform: "capitalize",
+                wordWrap: "break-word", 
               }}
             >
               {
@@ -70,7 +72,10 @@ export default function StagePermissions({ stages }: StagePermissionsProps) {
                 ]
               }
             </Typography>
-            <AccessChip access={stage.access} description={stage.description} />
+            <AccessChip
+              access={stage.access}
+              description={stage.description}
+            />
           </Box>
         ))}
       </Box>

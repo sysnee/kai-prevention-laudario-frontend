@@ -19,7 +19,16 @@ export default function AccessChip({ access, description }: AccessChipProps) {
 
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      <Chip label={description ? description : access} color={colors[access] as any} size="small" />
+      <Chip
+        label={description ? description : access}
+        color={colors[access] as any}
+        size="small"
+        sx={{
+          "@media (max-width: 600px)": {
+            fontSize: "0.75rem", 
+          },
+        }}
+      />
     </Box>
   );
 }

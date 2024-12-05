@@ -8,7 +8,7 @@ export type Role =
   | "HeadDoctor"
   | "Master";
 
-export type Module = "patient" | "exam";
+export type Module = "client" | "exam";
 
 export type ExamStatus =
   | "planned"
@@ -24,7 +24,7 @@ export enum ExamStatusEnum {
   PLANNED = "Planejado",
   WAITING = "Aguardando",
   STARTED = "Iniciado",
-  ONHOLD = "Em espera",
+  ONHOLD = "Pausado",
   COMPLETED = "Concluído",
   TRANSCRIPTION = "Transcrição",
   REVISION = "Revisão",
