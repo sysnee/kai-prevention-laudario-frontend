@@ -26,7 +26,7 @@ const TRANSLATIONS = {
     planned: "Planejado",
     waiting: "Aguardando",
     started: "Iniciado",
-    onhold: "Em espera",
+    onhold: "Pausado",
     completed: "Concluído",
     transcription: "Transcrição",
     revision: "Revisão",
@@ -35,8 +35,8 @@ const TRANSLATIONS = {
   accessLevels: {
     none: "Nulo",
     read: "Visualizar",
-    write: "Editar",
-    full: "Total",
+    write: "Modificar",
+    full: "Completo",
   },
 } as const;
 
@@ -63,6 +63,7 @@ export default function AccessCard({
         backgroundColor: "white",
         border: `1px solid ${theme.palette.divider}`,
         padding: 2,
+        minWidth: 350
       }}
     >
       {/* Cabeçalho */}
@@ -113,7 +114,7 @@ export default function AccessCard({
           </Typography>
           <Tooltip
             title={`Módulo de Pacientes: ${translateAccess(
-              role.permissions.find((p) => p.module === "patient")
+              role.permissions.find((p) => p.module === "client")
                 ?.access as AccessLevelKey || "none"
             )}`}
             arrow
@@ -132,15 +133,15 @@ export default function AccessCard({
                 variant="body2"
                 sx={{ color: theme.palette.text.secondary }}
               >
-                Pacientes
+                Clientes
               </Typography>
               <AccessChip
                 access={
-                  role.permissions.find((p) => p.module === "patient")?.access ||
+                  role.permissions.find((p) => p.module === "client")?.access ||
                   "none"
                 }
                 description={translateAccess(
-                  role.permissions.find((p) => p.module === "patient")
+                  role.permissions.find((p) => p.module === "client")
                     ?.access as AccessLevelKey || "none"
                 )}
               />
@@ -186,7 +187,7 @@ export default function AccessCard({
                 >
                   <Typography
                     variant="body2"
-                    sx={{ color: theme.palette.text.secondary }}
+                    sx={{ color: theme.palette.text.secondary, fontSize: "0.8rem" }}
                   >
                     {translateStage(stage.stage)}
                   </Typography>

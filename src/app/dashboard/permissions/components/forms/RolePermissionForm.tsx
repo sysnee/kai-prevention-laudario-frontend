@@ -47,7 +47,7 @@ export default function RolePermissionForm({
         name: undefined,
         isActive: true,
         permissions: [
-          { module: "patient", access: "none" },
+          { module: "client", access: "none" },
           { module: "exam", access: "none" },
         ],
         examStages: [
@@ -83,7 +83,7 @@ export default function RolePermissionForm({
     setFormData((prev) => ({
       ...prev,
       permissions: prev.permissions.map((permission) =>
-        permission.module === "patient" ? { ...permission, access } : permission
+        permission.module === "client" ? { ...permission, access } : permission
       ),
     }));
   };
@@ -148,7 +148,7 @@ export default function RolePermissionForm({
                 <InputLabel>Nível de acesso</InputLabel>
                 <Select
                   value={
-                    formData.permissions.find((p) => p.module === "patient")
+                    formData.permissions.find((p) => p.module === "client")
                       ?.access || "none"
                   }
                   label="Nível de Acesso"

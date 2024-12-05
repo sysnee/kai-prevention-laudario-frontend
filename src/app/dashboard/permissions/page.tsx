@@ -179,7 +179,7 @@ export default function PermissionsManagement() {
               sm: "repeat(2, 1fr)",
               md: "repeat(3, 1fr)",
             },
-            gap: 3,
+            gap: 1,
             width: "100%",
           }}
         >

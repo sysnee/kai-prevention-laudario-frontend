@@ -10,7 +10,7 @@ export const examAccessDescriptions: Record<
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: {
-      Recepcionista: "Gerenciar exames: agendar, editar, cancelar e reagendar",
+      Recepcionista: "Agendar, editar, cancelar e reagendar exames",
     },
     full: "Acesso completo",
   },
@@ -26,8 +26,8 @@ export const examAccessDescriptions: Record<
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: {
-      Enfermeiro: "Assistir paciente: preparar e atualizar observações",
-      Biomedico: "Executar exame: iniciar, realizar, registrar observações",
+      Enfermeiro: "Preparar paciente e atualizar observações",
+      Biomedico: "Iniciar, realizar, registrar observações do exame",
     },
     full: "Acesso completo",
   },
@@ -35,8 +35,8 @@ export const examAccessDescriptions: Record<
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: {
-      Enfermeiro: "Assistir paciente: preparar e atualizar observações",
-      Biomedico: "Executar exame: iniciar, realizar, registrar observações",
+      Enfermeiro: "Preparar paciente e atualizar observações",
+      Biomedico: "Iniciar, realizar, registrar observações do exame",
     },
     full: "Acesso completo",
   },
@@ -44,8 +44,8 @@ export const examAccessDescriptions: Record<
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: {
-      Enfermeiro: "Assistir paciente: preparar e atualizar observações",
-      Biomedico: "Executar exame: iniciar, realizar, registrar observações",
+      Enfermeiro: "Preparar paciente e atualizar observações",
+      Biomedico: "Iniciar, realizar, registrar observações do exame",
     },
     full: "Acesso completo",
   },
@@ -78,9 +78,9 @@ export const patientAccessDescriptions: Record<AccessLevel, AccessDescription> =
     none: "Acesso não autorizado",
     read: "Visualizar informações do paciente",
     write: {
-      Recepcionista: "Criar e editar registros de pacientes",
-      Enfermeiro: "Gerenciar informações clínicas do paciente",
-      HeadDoctor: "Aprovar modificações em registros de pacientes",
+      Recepcionista: "Criar e editar registros de clientes",
+      Enfermeiro: "Gerenciar informações clínicas do clientes",
+      HeadDoctor: "Aprovar modificações em registros de clients",
     },
-    full: "Acesso e controle total sobre registros de pacientes",
+    full: "Acesso e controle total sobre registros de clientes",
   };
