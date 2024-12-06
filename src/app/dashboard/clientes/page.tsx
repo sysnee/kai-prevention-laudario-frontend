@@ -19,19 +19,19 @@ export default function Clients() {
   const [alertVisible, setAlertVisible] = useState(false);
   const theme = useTheme();
 
-  React.useEffect(() => {
-    const getClients = async () => {
-        try {
-            const clientesResponse = await axios.get("https://ris-api.kaiprevention.com.br/v1/clients");
-            const clientesData = clientesResponse.data.data;
-            setClientes(clientesData)
-        } catch (err) {
-            console.error("Erro ao buscar os dados:", err);
-        } finally {
-          setLoading(false);
-        }
-    };
+  const getClients = async () => {
+    try {
+        const clientesResponse = await axios.get("https://ris-api.kaiprevention.com.br/v1/clients");
+        const clientesData = clientesResponse.data.data;
+        setClientes(clientesData)
+    } catch (err) {
+        console.error("Erro ao buscar os dados:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  React.useEffect(() => {
     getClients();
   }, []);
 
@@ -61,8 +61,8 @@ export default function Clients() {
 
   const handleCreateClient = async (data: any) => {
     try {
-      setErrorCPF("");
-      setErrorEmail("");
+      setErrorCPF('');
+      setErrorEmail('');
       const response = await axios.post('https://ris-api.kaiprevention.com.br/v1/clients', data);
   
       if (response.status === 200 || response.status === 201) {
@@ -71,8 +71,8 @@ export default function Clients() {
         setShowForm(false);
         setSelectedClient(null);
         setFormMode('create');
-        setErrorCPF('')
-        setErrorEmail('')
+        setErrorCPF('');
+        setErrorEmail('');
       }
     } catch (error: unknown) {
         console.error('Erro ao enviar a requisição:', error);
@@ -85,7 +85,9 @@ export default function Clients() {
             setErrorEmail('Email já cadastrado.')
           }
         }
-      }
+    } finally {
+      getClients();
+    }
   };
 
   const handleEditClient = (data: any) => {
@@ -98,7 +100,11 @@ export default function Clients() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4">
+    <div className="max-w-7xl mx-auto py-8 px-4"
+      style={{
+        width: '100%'
+      }}
+    >
       <div
         style={{
           marginBottom: '1em'
