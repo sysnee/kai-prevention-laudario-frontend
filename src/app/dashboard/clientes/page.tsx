@@ -21,7 +21,7 @@ export default function Clients() {
 
   const getClients = async () => {
     try {
-      const clientesResponse = await axios.get("http://localhost:4000/v1/clients");
+      const clientesResponse = await axios.get("https://ris-api.kaiprevention.com.br/v1/clients");
       const clientesData = clientesResponse.data.data;
       setClientes(clientesData)
     } catch (err) {
@@ -63,7 +63,7 @@ export default function Clients() {
     try {
       setErrorCPF('');
       setErrorEmail('');
-      const response = await axios.post('http://localhost:4000/v1/clients', data);
+      const response = await axios.post('https://ris-api.kaiprevention.com.br/v1/clients', data);
 
       if (response.status === 200 || response.status === 201) {
         setAlertVisible(true);

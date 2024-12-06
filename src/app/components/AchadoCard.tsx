@@ -2,8 +2,8 @@ import { Avatar, Box, Button, Card, CardContent, Stack, Typography } from "@mui/
 import EditIcon from '@mui/icons-material/Edit';
 import { Achado } from "../types/types";
 
-export default function AchadoCard({achado, onEdit}: {achado: Achado, onEdit: () => void}){
-    return(
+export default function AchadoCard({ achado, onEdit }: { achado: Achado, onEdit: () => void }) {
+    return (
         <Card
             sx={(theme) => ({
                 width: "100%",
@@ -29,19 +29,19 @@ export default function AchadoCard({achado, onEdit}: {achado: Achado, onEdit: ()
                 marginTop={2}
             >
                 <Box>
-                    <Typography 
+                    <Typography
                         sx={{
                             fontSize: "16px",
-                        }} 
+                        }}
                         variant="h6"
                     >
                         Sistema
                     </Typography>
-                    <Typography 
+                    <Typography
                         sx={{
                             fontSize: "12px",
                             fontWeight: "lighter"
-                        }} 
+                        }}
                         variant="h6"
                     >
                         {achado.sistema}
@@ -49,19 +49,19 @@ export default function AchadoCard({achado, onEdit}: {achado: Achado, onEdit: ()
                 </Box>
 
                 <Box>
-                <Typography 
+                    <Typography
                         sx={{
                             fontSize: "16px",
-                        }} 
+                        }}
                         variant="h6"
                     >
                         Orgão
                     </Typography>
-                    <Typography 
+                    <Typography
                         sx={{
                             fontSize: "12px",
                             fontWeight: "lighter"
-                        }} 
+                        }}
                         variant="h6"
                     >
                         {achado.orgao}
@@ -69,23 +69,23 @@ export default function AchadoCard({achado, onEdit}: {achado: Achado, onEdit: ()
                 </Box>
 
                 <Box>
-                <Typography 
+                    <Typography
                         sx={{
                             fontSize: "16px",
-                        }} 
+                        }}
                         variant="h6"
                     >
                         Patologias
                     </Typography>
-                    <Typography 
+                    <Typography
                         sx={{
                             fontSize: "12px",
                             fontWeight: "lighter"
-                        }} 
+                        }}
                         variant="h6"
                     >
-                        {achado.patologias.map(patologia => (
-                            <p>{patologia}</p>
+                        {achado.patologias.map((patologia, index) => (
+                            <p key={index}>{patologia}</p>
                         ))}
                     </Typography>
                 </Box>
@@ -104,12 +104,12 @@ export default function AchadoCard({achado, onEdit}: {achado: Achado, onEdit: ()
                         gap: ".5em"
                     }}
                 >
-                    <Avatar sx={{width: 35, height: 35}}></Avatar>
+                    <Avatar sx={{ width: 35, height: 35 }}></Avatar>
                     <Box>
                         <Typography
                             sx={{
                                 fontSize: "11px",
-                                fontWeight:"bold"
+                                fontWeight: "bold"
                             }}
                         >
                             Laudado por
@@ -132,7 +132,7 @@ export default function AchadoCard({achado, onEdit}: {achado: Achado, onEdit: ()
                         border: "1px solid #333b4d"
                     })}
                 >
-                    <EditIcon sx={{fontSize: "16px", marginRight: ".2em"}} />
+                    <EditIcon sx={{ fontSize: "16px", marginRight: ".2em" }} />
                     Editar achado
                 </Button>
             </Stack>

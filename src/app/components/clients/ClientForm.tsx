@@ -26,17 +26,17 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
 
   const formatCPF = (value: string): string => {
     return value
-      .replace(/\D/g, '') 
-      .replace(/(\d{3})(\d)/, '$1.$2') 
-      .replace(/(\d{3})(\d)/, '$1.$2') 
-      .replace(/(\d{3})(\d{1,2})$/, '$1-$2') 
-      .slice(0, 14); 
+      .replace(/\D/g, '')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+      .slice(0, 14);
   };
-    
-  
+
+
   const formatPhone = (value: string): string => {
     return value
-      .replace(/\D/g, '') 
+      .replace(/\D/g, '')
       .replace(/(\d{2})(\d)/, '($1) $2')
       .replace(/(\d{5})(\d)/, '$1-$2')
       .slice(0, 15);
@@ -51,14 +51,14 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
     name: client?.name || '',
     birthdate: client?.birthdate || '',
     gender: client?.gender
-    ? client.gender === 'male'
-      ? 'male'
-      : client.gender === 'female'
-      ? 'female'
-      : 'other' 
-    : '',
+      ? client.gender === 'male'
+        ? 'male'
+        : client.gender === 'female'
+          ? 'female'
+          : 'other'
+      : '',
     cpf: cpfFormatted,
-    
+
     // Contact Information
     phone: phoneFormatted,
     email: client?.email || '',
@@ -83,8 +83,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
 
   const handleCEPChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (readOnly) return;
-    
-    let zipcode = e.target.value.replace(/\D/g, '');
+
+    const zipcode = e.target.value.replace(/\D/g, '');
     setFormData(prev => ({
       ...prev,
       zipcode: formatCEP(zipcode)
@@ -120,16 +120,16 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     if (readOnly) return;
-  
+
     const { name, value } = e.target;
-  
+
     let formattedValue = value;
     if (name === 'cpf') {
       formattedValue = formatCPF(value);
     } else if (name === 'phone') {
       formattedValue = formatPhone(value);
     }
-  
+
     setFormData(prev => ({
       ...prev,
       [name]: formattedValue,
@@ -142,7 +142,7 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
 
   const handleSubmitCreate = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!readOnly) {
       const cleanedData = {
         ...formData,
@@ -150,14 +150,14 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
         cpf: removeFormatting(formData.cpf),
         phone: removeFormatting(formData.phone),
       };
-      
+
       onCreate(cleanedData);
     }
   };
 
   const handleSubmitEdit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!readOnly) {
       const cleanedData = {
         ...formData,
@@ -165,7 +165,7 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
         cpf: removeFormatting(formData.cpf),
         phone: removeFormatting(formData.phone),
       };
-      
+
       onEdit(cleanedData);
     }
   };
@@ -192,11 +192,10 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
             {client.questionnaires.map((questionnaire: any) => (
               <div
                 key={questionnaire.id}
-                className={`p-4 rounded-lg border ${
-                  questionnaire.status === 'completed'
+                className={`p-4 rounded-lg border ${questionnaire.status === 'completed'
                     ? 'border-green-200 bg-green-50'
                     : 'border-amber-200 bg-amber-50'
-                }`}
+                  }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
@@ -256,7 +255,7 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
           </button>
         </div>
 
-        <form onSubmit={client ? handleSubmitEdit : handleSubmitCreate } className="flex-1 overflow-y-auto">
+        <form onSubmit={client ? handleSubmitEdit : handleSubmitCreate} className="flex-1 overflow-y-auto">
           <div className="p-6 space-y-6">
             <div className="grid grid-cols-2 gap-6">
               {/* Informações Pessoais */}
@@ -278,9 +277,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleChange}
                       required
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -298,9 +296,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleChange}
                       required
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -317,9 +314,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleChange}
                       required
                       disabled={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                         backgroundColor: theme.palette.mode == 'light' ? 'white' : '#3b3b3b',
@@ -343,9 +339,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleChange}
                       required
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -374,9 +369,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleChange}
                       required
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -394,9 +388,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleChange}
                       required
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -415,9 +408,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleCEPChange}
                       required
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -436,9 +428,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleChange}
                       required
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -456,9 +447,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleChange}
                       required
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -475,9 +465,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       value={formData.complement}
                       onChange={handleChange}
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -495,9 +484,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleChange}
                       required
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -515,9 +503,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleChange}
                       required
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -535,9 +522,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                       onChange={handleChange}
                       required
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${
-                        readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                      }`}
+                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+                        }`}
                       style={{
                         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
                       }}
@@ -598,4 +584,3 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
 }
 
 
-        

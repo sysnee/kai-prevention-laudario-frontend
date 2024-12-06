@@ -81,7 +81,7 @@ export default function AgendamentosPage() {
 
     const getServiceRequests = async () => {
         try {
-            const clientesResponse = await axios.get("http://localhost:4000/v1/service-requests");
+            const clientesResponse = await axios.get("https://ris-api.kaiprevention.com.br/v1/service-requests");
             const clientesData = clientesResponse.data.data;
             setServiceRequests(clientesData)
         } catch (err) {
@@ -93,7 +93,7 @@ export default function AgendamentosPage() {
 
     const postServiceRequest = async (data: any) => {
         try {
-            await axios.post("http://localhost:4000/v1/service-requests", data, {
+            await axios.post("https://ris-api.kaiprevention.com.br/v1/service-requests", data, {
                 headers: {
                     'api-key': 'AcN55Gg1Hfe30LMtZ2'
                 }

@@ -1,7 +1,7 @@
 import { RequestOptions } from "http";
 import { getSession, signIn } from "next-auth/react";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://ris-api.kaiprevention.com.br/v1';
 
 async function handleResponse(response: any) {
   if (!response.ok) {
@@ -50,8 +50,8 @@ const apiCall = async (url: string, options: RequestOptions & { body?: any, para
 };
 
 export default {
-    get: async (url: string, params?: any) => apiCall(url, { method: 'GET', params }),
-    post: async (url: string, body?: any, params?: any) => apiCall(url, { method: 'POST', body, params }),
-    put: async (url: string, body?: any, params?: any) => apiCall(url, { method: 'PUT', body, params }),
-    delete: async (url: string, params?: any) => apiCall(url, { method: 'DELETE', params }),
+  get: async (url: string, params?: any) => apiCall(url, { method: 'GET', params }),
+  post: async (url: string, body?: any, params?: any) => apiCall(url, { method: 'POST', body, params }),
+  put: async (url: string, body?: any, params?: any) => apiCall(url, { method: 'PUT', body, params }),
+  delete: async (url: string, params?: any) => apiCall(url, { method: 'DELETE', params }),
 };

@@ -23,7 +23,7 @@ export function ServiceRequestForm({ client, onCreate, onEdit, onCancel, readOnl
 
     const getClients = async () => {
         try {
-            const clientesResponse = await axios.get("http://localhost:4000/v1/clients");
+            const clientesResponse = await axios.get("https://ris-api.kaiprevention.com.br/v1/clients");
             const clientesData = clientesResponse.data.data;
             setClients(clientesData)
         } catch (err) {
@@ -267,7 +267,7 @@ export function ServiceRequestForm({ client, onCreate, onEdit, onCancel, readOnl
                                             <option value="">Selecione</option>
                                             {
                                                 clients.map((client: any) => {
-                                                    return <option value={client.cpf}>{client.name}, CPF: {client.cpf}</option>
+                                                    return <option key={client.cpf} value={client.cpf}>{client.name}, CPF: {client.cpf}</option>
                                                 })
                                             }
                                         </select>
