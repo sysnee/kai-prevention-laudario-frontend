@@ -3,7 +3,7 @@ import { CircularProgress, Stack } from "@mui/material";
 import { signIn, useSession } from "next-auth/react";
 
 export default function ProtectedPage({ children }: { children: React.ReactNode, }) {
-  const { status, data } = useSession({
+  const { status } = useSession({
     required: true,
     onUnauthenticated() {
       signIn('auth0')

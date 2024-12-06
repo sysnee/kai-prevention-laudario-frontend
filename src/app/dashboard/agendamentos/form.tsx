@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { X, Save, User, Send, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
+import { X, Save, Send, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTheme } from '@mui/material';
 import { QuestionnaireAnswersModal } from '../../components/clients/QuestionnaireAnswersModal';
 import axios from 'axios';
-import { DateTimePicker } from '@mui/x-date-pickers';
 
 interface ClientFormProps {
     client?: any;
@@ -18,10 +17,8 @@ interface ClientFormProps {
 
 export function ServiceRequestForm({ client, onCreate, onEdit, onCancel, readOnly = false, cpfError, emailError }: ClientFormProps) {
     const theme = useTheme();
-    const [isLoadingCep, setIsLoadingCep] = useState(false);
-    const [cepError, setCepError] = useState('');
     const [clients, setClients] = useState<any>([]);
-    const [selectedClient, setSelectedClient] = useState<any>();
+    const [, setSelectedClient] = useState<any>();
     const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<any>(null);
 
     const getClients = async () => {
@@ -96,7 +93,7 @@ export function ServiceRequestForm({ client, onCreate, onEdit, onCancel, readOnl
     });
 
 
-    const handleResendQuestionnaire = async (email: string) => {
+    const handleResendQuestionnaire = async () => {
         try {
             await new Promise(resolve => setTimeout(resolve, 1000));
             toast.success('Link do questionário reenviado com sucesso');
@@ -167,7 +164,7 @@ export function ServiceRequestForm({ client, onCreate, onEdit, onCancel, readOnl
                         <h3 className="text-lg font-medium text-gray-900">Histórico de Questionários</h3>
                         <button
                             type="button"
-                            onClick={() => handleResendQuestionnaire(formData.email)}
+                            onClick={() => handleResendQuestionnaire()}
                             className="px-4 py-2 bg-kai-primary text-white rounded-lg hover:bg-kai-primary/90 flex items-center text-sm"
                         >
                             <Send className="w-4 h-4 mr-2" />
