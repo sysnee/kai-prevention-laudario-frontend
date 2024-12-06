@@ -21,11 +21,11 @@ export default function Clients() {
 
   const getClients = async () => {
     try {
-        const clientesResponse = await axios.get("https://ris-api.kaiprevention.com.br/v1/clients");
-        const clientesData = clientesResponse.data.data;
-        setClientes(clientesData)
+      const clientesResponse = await axios.get("http://localhost:4000/v1/clients");
+      const clientesData = clientesResponse.data.data;
+      setClientes(clientesData)
     } catch (err) {
-        console.error("Erro ao buscar os dados:", err);
+      console.error("Erro ao buscar os dados:", err);
     } finally {
       setLoading(false);
     }
@@ -63,8 +63,8 @@ export default function Clients() {
     try {
       setErrorCPF('');
       setErrorEmail('');
-      const response = await axios.post('https://ris-api.kaiprevention.com.br/v1/clients', data);
-  
+      const response = await axios.post('http://localhost:4000/v1/clients', data);
+
       if (response.status === 200 || response.status === 201) {
         setAlertVisible(true);
         setTimeout(() => setAlertVisible(false), 3000);
@@ -75,16 +75,16 @@ export default function Clients() {
         setErrorEmail('');
       }
     } catch (error: unknown) {
-        console.error('Erro ao enviar a requisição:', error);
-        if (error instanceof AxiosError && error.response) {
-          const errorMessage = error.response.data.message.message;
-          if(errorMessage === "CPF already exists"){
-            setErrorCPF("CPF já cadastrado.")
-          }
-          if(errorMessage === "Email already exists"){
-            setErrorEmail('Email já cadastrado.')
-          }
+      console.error('Erro ao enviar a requisição:', error);
+      if (error instanceof AxiosError && error.response) {
+        const errorMessage = error.response.data.message.message;
+        if (errorMessage === "CPF already exists") {
+          setErrorCPF("CPF já cadastrado.")
         }
+        if (errorMessage === "Email already exists") {
+          setErrorEmail('Email já cadastrado.')
+        }
+      }
     } finally {
       getClients();
     }
@@ -143,20 +143,20 @@ export default function Clients() {
         />
         <Search className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
       </div>
-      
+
       {loading ? (
         <CircularProgress />
-      ) : ( clientes.length != 0 ? (
-          <ClientsGrid
-            clientes={clientes}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            searchQuery={searchQuery}
-          />
-        ): (
-          <span>Não foram encontrados clientes.</span>
-        )
+      ) : (clientes.length != 0 ? (
+        <ClientsGrid
+          clientes={clientes}
+          onView={handleView}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          searchQuery={searchQuery}
+        />
+      ) : (
+        <span>Não foram encontrados clientes.</span>
+      )
       )}
 
       {showForm && (

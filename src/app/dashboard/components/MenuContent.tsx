@@ -29,8 +29,8 @@ const mainListItems = [
     text: "Agendamento",
     icon: <CalendarIcon />,
     subItems: [
-      { text: "Consultar todos", path: "/agenda" },
-      { text: "Criar novo", path: "/agenda/novo" },
+      { text: "Consultar todos", path: "/dashboard/agendamentos" },
+      { text: "Criar novo", path: "/dashboard/agendamentos/novo" },
     ],
   },
   {

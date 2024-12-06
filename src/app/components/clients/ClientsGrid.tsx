@@ -49,7 +49,7 @@ export default function ClientsGrid({ clientes, searchQuery, onView, onEdit, onD
         <Box sx={{ height: "100%", width: "100%", paddingBottom: "2em" }}>
             <DataGrid
                 rows={filteredRows}
-                columns={colum(onView, onEdit, onDelete)} 
+                columns={colum(onView, onEdit, onDelete)}
                 pageSizeOptions={[5, 10, 20]}
                 initialState={{
                     pagination: { paginationModel: { pageSize: 10 } },

@@ -74,7 +74,7 @@ export default function BaseLayout({ children, session }: { children: ReactNode,
                                     <Stack
                                         spacing={2}
                                         sx={{
-                                            alignItems: 'center',
+                                            alignItems: 'normal',
                                             height: '100vh',
                                             mx: 3,
                                             pb: 5,
