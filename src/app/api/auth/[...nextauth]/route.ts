@@ -1,7 +1,7 @@
 import NextAuth, { SessionStrategy } from "next-auth"
 import Auth0Provider from "next-auth/providers/auth0";
 
-export const auth0Options = {
+const auth0Options = {
     providers: [
         Auth0Provider({
             clientId: process.env.AUTH0_CLIENT_ID as string,

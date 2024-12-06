@@ -30,7 +30,7 @@ const PERMISSION_LEVELS: Record<AccessLevel, string> = {
   full: "Completo",
 };
 
-const MODULES: Module[] = ["patient", "exam"];
+const MODULES: Module[] = ["client", "exam"];
 const STAGES: ExamStatus[] = [
   "planned",
   "waiting",
@@ -124,8 +124,8 @@ export function RoleModal({
         {mode === "create"
           ? "Novo Perfil"
           : mode === "edit"
-          ? "Editar Perfil"
-          : "Detalhes do Perfil"}
+            ? "Editar Perfil"
+            : "Detalhes do Perfil"}
       </DialogTitle>
       <Divider />
       <DialogContent>

@@ -51,7 +51,7 @@ const mainListItems = [
 ];
 
 const secondaryListItems = [
-  { text: 'Usuários', icon: <User2Icon />, path: '/dashboard/usuarios' },
+  // { text: 'Usuários', icon: <User2Icon />, path: '/dashboard/usuarios' },
   { text: 'Permissões', icon: <SettingsRoundedIcon />, path: '/dashboard/permissions' },
 ];
 

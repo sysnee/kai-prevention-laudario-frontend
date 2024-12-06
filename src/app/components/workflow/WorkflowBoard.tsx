@@ -3,11 +3,11 @@ import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { WorkflowColumn } from './WorkflowColumn';
 import { WorkflowCard } from './WorkflowCard';
 import { useWorkflowStore } from '../../stores/workflowStore';
-import { 
-  ClipboardList, 
-  Clock, 
+import {
+  ClipboardList,
+  Clock,
   PlayCircle,
-  PauseCircle, 
+  PauseCircle,
   CheckCircle2,
   FileText,
   ShieldCheck,
@@ -102,7 +102,7 @@ export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: Wor
     if (!result.destination) return;
 
     const { source, destination, draggableId } = result;
-    
+
     if (source.droppableId !== destination.droppableId) {
       try {
         await moveExam(draggableId, source.droppableId, destination.droppableId);
@@ -114,7 +114,7 @@ export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: Wor
 
   const filteredExams = exams?.filter(exam => {
     const matchesSearch = exam.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         exam.examType.toLowerCase().includes(searchQuery.toLowerCase());
+      exam.examType.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = !selectedStatus || exam.stage === selectedStatus;
     const matchesDate = selectedDate.toDateString() === new Date(exam.date).toDateString();
     return matchesSearch && matchesStatus && matchesDate;
@@ -129,7 +129,7 @@ export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: Wor
               key={stage.id}
               className="w-[280px] md:w-[320px] lg:w-80 flex-shrink-0"
             >
-              <Droppable droppableId={stage.id}>
+              {/* <Droppable droppableId={stage.id}>
                 {(provided) => (
                   <div
                     ref={provided.innerRef}
@@ -156,7 +156,7 @@ export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: Wor
                     </WorkflowColumn>
                   </div>
                 )}
-              </Droppable>
+              </Droppable> */}
             </div>
           ))}
         </DragDropContext>

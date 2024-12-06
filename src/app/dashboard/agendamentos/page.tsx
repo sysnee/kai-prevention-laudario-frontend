@@ -5,7 +5,6 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Box, Chip, CircularProgress, Stack, useTheme } from "@mui/material";
 import axios from "axios";
 import { Plus } from "lucide-react";
-import { ClientForm } from "../../components/clients/ClientForm";
 import { ServiceRequestForm } from "./form";
 
 function renderStatus(status: 'PLANNED' | 'WAITING') {
@@ -23,7 +22,7 @@ function renderStatus(status: 'PLANNED' | 'WAITING') {
 }
 
 
-export const columns: GridColDef[] = [
+const columns: GridColDef[] = [
     {
         field: 'examType',
         headerName: 'Serviço',
