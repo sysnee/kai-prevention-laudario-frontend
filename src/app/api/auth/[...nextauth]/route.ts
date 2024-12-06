@@ -10,7 +10,7 @@ const auth0Options = {
             authorization: {
                 url: 'https://ris.kaiprevention.com.br',
                 params: {
-                    // redirect_uri: 'https://ris.kaiprevention.com.br/api/auth/callback/auth0',
+                    redirect_uri: 'https://ris.kaiprevention.com.br/api/auth/callback/auth0',
                     prompt: 'login',
                     // audience: process.env.NEXT_PUBLIC_API_URL,
                     // scope: 'email',
