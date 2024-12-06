@@ -80,7 +80,7 @@ export const patientAccessDescriptions: Record<AccessLevel, AccessDescription> =
     write: {
       Recepcionista: "Criar e editar registros de clientes",
       Enfermeiro: "Gerenciar informações clínicas do clientes",
-      HeadDoctor: "Aprovar modificações em registros de clients",
+      HeadDoctor: "Aprovar modificações em registros de clientes",
     },
     full: "Acesso e controle total sobre registros de clientes",
   };
