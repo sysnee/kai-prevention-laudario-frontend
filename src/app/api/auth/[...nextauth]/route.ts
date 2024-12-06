@@ -8,9 +8,8 @@ const auth0Options = {
             clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
             issuer: process.env.AUTH0_APP_DOMAIN as string,
             authorization: {
-                url: 'https://ris.kaiprevention.com.br',
+                url: process.env.NODE_ENV === 'production' ? 'https://ris.kaiprevention.com.br' : 'http://localhost:3000',
                 params: {
-                    redirect_uri: 'https://ris.kaiprevention.com.br/api/auth/callback/auth0',
                     prompt: 'login',
                     // audience: process.env.NEXT_PUBLIC_API_URL,
                     // scope: 'email',
