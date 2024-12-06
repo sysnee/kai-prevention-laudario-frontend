@@ -16,6 +16,7 @@ const auth0Options = {
             },
         })
     ],
+    secret: 'sdfsdfsdfsdf897489-32h9preh89pf',
     session: {
         strategy: "jwt" as SessionStrategy,
     },
