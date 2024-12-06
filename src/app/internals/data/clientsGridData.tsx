@@ -102,10 +102,20 @@ export const colum = (
 ];
 
 export const generateRows = (clientes: any[]): GridRowsProp => {
+
+  const formatCPF = (value: string): string => {
+    return value
+      .replace(/\D/g, '') 
+      .replace(/(\d{3})(\d)/, '$1.$2') 
+      .replace(/(\d{3})(\d)/, '$1.$2') 
+      .replace(/(\d{3})(\d{1,2})$/, '$1-$2') 
+      .slice(0, 14); 
+  };
+
   return clientes.map((cliente: any) => ({
       id: cliente.id,
       name: cliente.name,
-      cpf: cliente.cpf,
+      cpf: formatCPF(cliente.cpf),
       email: cliente.email,
       gender: cliente.gender,
       phone: cliente.phone,
