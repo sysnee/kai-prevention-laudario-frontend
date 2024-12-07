@@ -5,7 +5,7 @@ import { CheckIcon, Plus, Search } from 'lucide-react';
 import { ClientForm } from '../../components/clients/ClientForm';
 import ClientsGrid from '../../components/clients/ClientsGrid';
 import { Alert, CircularProgress, useTheme } from '@mui/material';
-import axios, { AxiosError } from "axios";
+import api from '@/src/lib/api';
 
 export default function Clients() {
   const [showForm, setShowForm] = useState(false);
@@ -21,7 +21,7 @@ export default function Clients() {
 
   const getClients = async () => {
     try {
-      const clientesResponse = await axios.get("https://ris-api.kaiprevention.com.br/v1/clients");
+      const clientesResponse = await api.get("clients");
       const clientesData = clientesResponse.data.data;
       setClientes(clientesData)
     } catch (err) {
@@ -63,7 +63,7 @@ export default function Clients() {
     try {
       setErrorCPF('');
       setErrorEmail('');
-      const response = await axios.post('https://ris-api.kaiprevention.com.br/v1/clients', data);
+      const response = await api.post('clients', data);
 
       if (response.status === 200 || response.status === 201) {
         setAlertVisible(true);
@@ -74,9 +74,9 @@ export default function Clients() {
         setErrorCPF('');
         setErrorEmail('');
       }
-    } catch (error: unknown) {
+    } catch (error: unknown | any | Error) {
       console.error('Erro ao enviar a requisição:', error);
-      if (error instanceof AxiosError && error.response) {
+      if (error.response) {
         const errorMessage = error.response.data.message.message;
         if (errorMessage === "CPF already exists") {
           setErrorCPF("CPF já cadastrado.")

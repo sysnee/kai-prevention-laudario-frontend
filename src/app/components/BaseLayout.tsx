@@ -36,7 +36,7 @@ export default function BaseLayout({ children, session }: { children: ReactNode,
 
     async function getUser() {
         try {
-            // const userData = await axios.get("http://localhost:5000/users/1")
+            // const userData = await api.get("users/1")
             const userData = db.users[0]
             setUser(userData)
         } catch (error) {

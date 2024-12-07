@@ -24,6 +24,10 @@ const apiCall = async (url: string, options: RequestOptions & { body?: any, para
   }
 
   const queryString = new URLSearchParams(params).toString();
+  if (url[0] !== '/') {
+    url = '/' + url
+  }
+
   const fullUrl = `${API_BASE_URL}${url}${queryString ? `?${queryString}` : ''}`;
 
   const fetchOptions = {

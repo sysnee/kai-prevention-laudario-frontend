@@ -3,7 +3,7 @@ import { X, Save, Send, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTheme } from '@mui/material';
 import { QuestionnaireAnswersModal } from '../../components/clients/QuestionnaireAnswersModal';
-import axios from 'axios';
+import api from '@/src/lib/api';
 
 interface ClientFormProps {
     client?: any;
@@ -23,7 +23,7 @@ export function ServiceRequestForm({ client, onCreate, onEdit, onCancel, readOnl
 
     const getClients = async () => {
         try {
-            const clientesResponse = await axios.get("https://ris-api.kaiprevention.com.br/v1/clients");
+            const clientesResponse = await api.get('clients')
             const clientesData = clientesResponse.data.data;
             setClients(clientesData)
         } catch (err) {

@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Box, Chip, CircularProgress, Stack, useTheme } from "@mui/material";
-import axios from "axios";
 import { Plus } from "lucide-react";
 import { ServiceRequestForm } from "./form";
+import api from "@/src/lib/api";
 
 function renderStatus(status: 'PLANNED' | 'WAITING') {
     const colors: { [index: string]: 'success' | 'default' } = {
@@ -80,7 +80,7 @@ export default function AgendamentosPage() {
 
     const getServiceRequests = async () => {
         try {
-            const clientesResponse = await axios.get("https://ris-api.kaiprevention.com.br/v1/service-requests");
+            const clientesResponse = await api.get("service-requests");
             const clientesData = clientesResponse.data.data;
             setServiceRequests(clientesData)
         } catch (err) {
@@ -92,7 +92,7 @@ export default function AgendamentosPage() {
 
     const postServiceRequest = async (data: any) => {
         try {
-            await axios.post("https://ris-api.kaiprevention.com.br/v1/service-requests", data, {
+            await api.post("service-requests", data, {
                 headers: {
                     'api-key': 'AcN55Gg1Hfe30LMtZ2'
                 }

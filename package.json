@@ -29,7 +29,6 @@
     "@mui/x-date-pickers": "^7.22.2",
     "@mui/x-date-pickers-pro": "^7.22.2",
     "@mui/x-tree-view": "^7.22.1",
-    "axios": "^1.7.7",
     "cookies-next": "^4.3.0",
     "date-fns": "^4.1.0",
     "json-server": "^1.0.0-beta.3",
