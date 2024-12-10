@@ -162,6 +162,7 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
     if (!readOnly) {
       const cleanedData = {
         ...formData,
+        id: client?.id,
         zipcode: removeFormatting(formData.zipcode),
         cpf: removeFormatting(formData.cpf),
         phone: removeFormatting(formData.phone),
