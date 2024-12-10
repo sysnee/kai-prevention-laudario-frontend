@@ -4,8 +4,10 @@ import React, { useState } from 'react';
 import { CheckIcon, Plus, Search } from 'lucide-react';
 import { ClientForm } from '../../components/clients/ClientForm';
 import ClientsGrid from '../../components/clients/ClientsGrid';
-import { Alert, CircularProgress, useTheme } from '@mui/material';
+import { Alert, AlertColor, CircularProgress, useTheme } from '@mui/material';
 import api from '@/src/lib/api';
+import { DeleteConfirmationModal } from '../../components/clients/DeleleConfirmationModal';
+
 
 export default function Clients() {
   const [showForm, setShowForm] = useState(false);
@@ -16,7 +18,16 @@ export default function Clients() {
   const [formMode, setFormMode] = useState<'edit' | 'view' | 'create'>('create');
   const [errorCPF, setErrorCPF] = useState('')
   const [errorEmail, setErrorEmail] = useState('')
-  const [alertVisible, setAlertVisible] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [alertInfo, setAlertInfo] = useState<{
+    visible: boolean;
+    message: string;
+    severity: AlertColor | undefined;
+  }>({
+    visible: false,
+    message: '',
+    severity: undefined,
+  });
   const theme = useTheme();
 
   const getClients = async () => {
@@ -35,6 +46,18 @@ export default function Clients() {
     getClients();
   }, []);
 
+  const showAlert = (message: string, severity: AlertColor) => {
+    setAlertInfo({
+      visible: true,
+      message,
+      severity,
+    });
+  
+    setTimeout(() => {
+      setAlertInfo({ visible: false, message: '', severity: undefined });
+    }, 3000);
+  };
+
   const handleView = (client: any) => {
     setSelectedClient(client);
     setFormMode('view');
@@ -48,7 +71,8 @@ export default function Clients() {
   };
 
   const handleDelete = (client: any) => {
-    console.log('remover cliente')
+    setDeleteModal(true)
+    setSelectedClient(client);
   };
 
   const handleClose = () => {
@@ -59,6 +83,12 @@ export default function Clients() {
     setErrorEmail('')
   };
 
+  const handleCloseModal = () => {
+    setDeleteModal(false)
+    selectedClient(null)
+  }
+
+
   const handleCreateClient = async (data: any) => {
     try {
       setErrorCPF('');
@@ -66,8 +96,7 @@ export default function Clients() {
       const response = await api.post('clients', data);
 
       if (response.status === 200 || response.status === 201) {
-        setAlertVisible(true);
-        setTimeout(() => setAlertVisible(false), 3000);
+        showAlert('Cliente cadastrado com sucesso.', 'success')
         setShowForm(false);
         setSelectedClient(null);
         setFormMode('create');
@@ -90,14 +119,53 @@ export default function Clients() {
     }
   };
 
-  const handleEditClient = (data: any) => {
-    console.log(data)
-    setShowForm(false);
-    setSelectedClient(null);
-    setFormMode('create');
-    setErrorCPF("");
-    setErrorEmail("");
+  const handleEditClient = async (data: any) => {
+    try {
+      setErrorCPF('');
+      setErrorEmail('');
+      const { id, ...dataWithoutId } = data;
+      const response = await api.post(`clients/${data.id}`, dataWithoutId);
+
+      if (response.status === 200 || response.status === 201) {
+        showAlert('Cliente atualizado com sucesso.', 'success')
+        setShowForm(false);
+        setSelectedClient(null);
+        setFormMode('create');
+        setErrorCPF('');
+        setErrorEmail('');
+      }
+    } catch (error: unknown | any | Error) {
+      console.error('Erro ao enviar a requisição:', error);
+      if (error.response) {
+        const errorMessage = error.response.data.message.message;
+        if (errorMessage === "CPF already exists") {
+          setErrorCPF("CPF já cadastrado.")
+        }
+        if (errorMessage === "Email already exists") {
+          setErrorEmail('Email já cadastrado.')
+        }
+      }
+    } finally {
+      getClients();
+    }
   };
+
+  const handleDeleteClient = async () => {
+    try {
+      const response = await api.delete(`clients/${selectedClient.id}`);
+
+      if (response.status === 200 || response.status === 201) {
+        showAlert('Cliente excluído com sucesso.', 'success')
+        setDeleteModal(false);
+        setSelectedClient(null);
+      }
+    } catch(error) {
+      console.error('Erro ao enviar a requisição:', error);
+
+    } finally {
+      getClients();
+    }
+  }
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4"
@@ -110,9 +178,13 @@ export default function Clients() {
           marginBottom: '1em'
         }}
       >
-        {alertVisible && (
-          <Alert variant='filled' icon={<CheckIcon fontSize="inherit" />} severity="success">
-            Cliente cadastrado com sucesso.
+        {alertInfo.visible && alertInfo.severity && (
+          <Alert 
+            variant='filled' 
+            icon={<CheckIcon fontSize="inherit" />} 
+            severity={alertInfo.severity}
+          >
+            {alertInfo.message}
           </Alert>
         )}
       </div>
@@ -168,6 +240,15 @@ export default function Clients() {
           readOnly={formMode === 'view'}
           cpfError={errorCPF}
           emailError={errorEmail}
+        />
+      )}
+
+      {deleteModal && (
+        <DeleteConfirmationModal
+          isOpen={true}
+          roleName={selectedClient.name}
+          onClose={handleCloseModal}
+          onConfirm={handleDeleteClient}
         />
       )}
     </div>

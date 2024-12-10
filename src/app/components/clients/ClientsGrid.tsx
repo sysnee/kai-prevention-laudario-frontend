@@ -23,7 +23,6 @@ export default function ClientsGrid({ clientes, searchQuery, onView, onEdit, onD
             const clientesRows = generateRows(clientes);
             setRows(clientesRows);
             setFilteredRows(clientesRows);
-            console.log(clientes)
         };
 
         fetchData();
