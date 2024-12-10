@@ -3,6 +3,7 @@ import { X, Save, User, Send, Clock, CheckCircle, AlertTriangle } from 'lucide-r
 import { QuestionnaireAnswersModal } from './QuestionnaireAnswersModal';
 import toast from 'react-hot-toast';
 import { useTheme } from '@mui/material';
+import BirthdateInput from './BirthdateInput';
 
 interface ClientFormProps {
   client?: any;
@@ -286,21 +287,12 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                   </div>
 
                   <div>
-                    <label className="block text-sm mb-1">
-                      Data de Nascimento
-                    </label>
-                    <input
-                      type="date"
-                      name="birthdate"
+                    <BirthdateInput
                       value={formData.birthdate}
-                      onChange={handleChange}
-                      required
+                      onChange={(value) =>
+                        setFormData((prev) => ({ ...prev, birthdate: value }))
+                      }
                       readOnly={readOnly}
-                      className={`w-full px-3 py-2 rounded-md ${readOnly ? '' : 'focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-                        }`}
-                      style={{
-                        border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
-                      }}
                     />
                   </div>
 
