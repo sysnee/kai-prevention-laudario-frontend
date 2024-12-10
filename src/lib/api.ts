@@ -1,7 +1,7 @@
 import { RequestOptions } from "http";
 import { getSession, signIn } from "next-auth/react";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/v1';
+let API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/v1';
 
 async function handleResponse(response: any) {
   if (!response.ok) {
@@ -26,6 +26,10 @@ const apiCall = async (url: string, options: RequestOptions & { body?: any, para
   const queryString = new URLSearchParams(params).toString();
   if (url[0] !== '/') {
     url = '/' + url
+  }
+
+  if (API_BASE_URL[API_BASE_URL.length - 1] === '/') {
+    API_BASE_URL = API_BASE_URL.slice(0, -1);
   }
 
   const fullUrl = `${API_BASE_URL}${url}${queryString ? `?${queryString}` : ''}`;
