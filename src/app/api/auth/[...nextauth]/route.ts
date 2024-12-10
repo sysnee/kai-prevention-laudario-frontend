@@ -7,7 +7,6 @@ const auth0Options = {
             clientId: process.env.AUTH0_CLIENT_ID as string,
             clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
             issuer: process.env.AUTH0_APP_DOMAIN as string,
-            wellKnown: `${process.env.AUTH0_ISSUER}.well-known/openid-configuration`,
             authorization: {
                 url: process.env.NODE_ENV === 'production' ? 'https://ris.kaiprevention.com.br' : 'http://localhost:3000',
                 params: {

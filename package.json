@@ -1,6 +1,6 @@
 {
   "name": "nextjs-template",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,11 @@
     "lint": "next lint",
     "json-server": "json-server --watch db.json --port 5000",
     "prepare": "husky install",
-    "precommit-version-update": "npm version patch --no-git-tag-version"
+    "precommit-version-update": "npm version patch --no-git-tag-version",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up",
+    "docker:build": "docker-compose -f docker-compose.prod.yml build",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up",
+    "docker:stop": "docker-compose down"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",
