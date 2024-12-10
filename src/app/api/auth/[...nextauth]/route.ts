@@ -11,8 +11,7 @@ const auth0Options = {
                 url: process.env.NODE_ENV === 'production' ? 'https://ris.kaiprevention.com.br' : 'http://localhost:3000',
                 params: {
                     prompt: 'login',
-                    // audience: process.env.NEXT_PUBLIC_API_URL,
-                    // scope: 'email',
+                    audience: process.env.AUTH0_ISSUER,
                 }
             },
         })
