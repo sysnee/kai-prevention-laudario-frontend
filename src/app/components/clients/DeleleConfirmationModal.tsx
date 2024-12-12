@@ -75,7 +75,7 @@ export function DeleteConfirmationModal({
               color: theme.palette.text.primary,
             }}
           >
-            "{roleName}"
+            {roleName}
           </span>
           ? Esta ação não poderá ser desfeita.
         </Typography>

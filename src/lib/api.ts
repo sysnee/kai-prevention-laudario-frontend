@@ -1,5 +1,6 @@
 import { RequestOptions } from "http";
 import { getSession, signIn } from "next-auth/react";
+import jwt from "jsonwebtoken";
 
 let API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/v1';
 
@@ -33,6 +34,8 @@ const apiCall = async (url: string, options: RequestOptions & { body?: any, para
   }
 
   const fullUrl = `${API_BASE_URL}${url}${queryString ? `?${queryString}` : ''}`;
+  console.log('session.user', session.user);
+  const sessionJwt = jwt.sign(session.user, 'any')
 
   const fetchOptions = {
     method,
@@ -40,6 +43,7 @@ const apiCall = async (url: string, options: RequestOptions & { body?: any, para
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      'X-Session': 'Bearer ' + sessionJwt,
       'Authorization': 'Bearer ' + (session as any)['accessToken'],
       ...headers,
     },

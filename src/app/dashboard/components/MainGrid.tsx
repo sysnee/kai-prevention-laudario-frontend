@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Copyright from '../../internals/components/Copyright';
 import { StatCardProps } from './StatCard';
+import { Button } from '@mui/material';
+import api from '@/src/lib/api';
 
 const data: StatCardProps[] = [
   {
@@ -37,6 +39,10 @@ const data: StatCardProps[] = [
   },
 ];
 
+async function ping() {
+  await api.get('/service-requests')
+}
+
 export default function MainGrid() {
   return (
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
@@ -44,6 +50,7 @@ export default function MainGrid() {
       <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
         Resumo
       </Typography>
+      <Button onClick={ping}>Test API</Button>
       {/* <Grid
         container
         spacing={2}
