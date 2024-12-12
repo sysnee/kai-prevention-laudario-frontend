@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Clock, User, MoreVertical, Edit2, Trash2, CalendarX } from 'lucide-react';
-import { formatCurrency } from '../../utils/format';
-import api from '@/src/lib/api';
 import { CircularProgress } from '@mui/material';
 
+// Interface do componente
 interface AppointmentListProps {
   date: Date;
   searchQuery: string;
 }
 
+// Interface para os dados do agendamento
 interface Appointment {
   id: string;
   clientCpf: string;
@@ -21,9 +21,11 @@ interface Appointment {
 }
 
 export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
+  // Estado para armazenar os agendamentos e o status de carregamento
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Função para formatar a data
   const formatDate = (date: Date): string => {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -31,13 +33,47 @@ export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
     return `${day}/${month}/${year}`;
   };
 
+  // Função que simula a obtenção dos agendamentos (mocando os dados)
   const fetchAppointments = async () => {
     setLoading(true);
     try {
-      const response = await api.get("service-requests");
-      const data = response.data.data;
-      setAppointments(data)
-      console.log(data)
+      // Dados mocados
+      const mockAppointments: Appointment[] = [
+        {
+          id: '1',
+          clientCpf: '123.456.789-00',
+          clientName: 'João Silva',
+          dateTime: '2024-12-12, 10:00',
+          examType: 'Exame de Sangue',
+          status: 'PLANNED',
+          questionnaireIsPending: true,
+          createdAt: '2024-12-01T12:00:00Z',
+        },
+        {
+          id: '2',
+          clientCpf: '987.654.321-00',
+          clientName: 'Maria Oliveira',
+          dateTime: '2024-12-12, 11:30',
+          examType: 'Raio-X',
+          status: 'CONFIRMED',
+          questionnaireIsPending: false,
+          createdAt: '2024-12-02T14:00:00Z',
+        },
+        {
+          id: '3',
+          clientCpf: '456.789.123-00',
+          clientName: 'Carlos Souza',
+          dateTime: '2024-12-12, 15:00',
+          examType: 'Ultrassonografia',
+          status: 'CANCELLED',
+          questionnaireIsPending: false,
+          createdAt: '2024-12-03T16:00:00Z',
+        },
+      ];
+
+      // Simulando a resposta da API
+      setAppointments(mockAppointments);
+      console.log(mockAppointments);
     } catch (err) {
       console.error("Erro ao buscar os dados:", err);
     } finally {
@@ -45,12 +81,15 @@ export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
     }
   };
 
+  // Usando useEffect para rodar a função de busca (simulação)
   useEffect(() => {
     fetchAppointments();
   }, []);
 
+  // Formatação da data selecionada
   const formattedDate = formatDate(date);
 
+  // Filtrando os agendamentos com base na data e no termo de pesquisa
   const filteredAppointments = appointments.filter(
     (appointment) =>
       appointment.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -58,10 +97,12 @@ export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
       appointment.dateTime.startsWith(formattedDate)
   );
 
+  // Caso os dados estejam carregando, mostra o spinner
   if (loading) {
     return <CircularProgress />;
   }
 
+  // Caso não haja agendamentos filtrados, exibe uma mensagem
   if (filteredAppointments.length === 0) {
     return (
       <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">

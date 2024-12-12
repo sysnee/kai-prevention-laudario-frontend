@@ -50,44 +50,46 @@ export default function BaseLayout({ children, session }: { children: ReactNode,
 
     return (
         <SessionProvider session={session}>
-            <AppTheme themeComponents={xThemeComponents}>
-                <CssBaseline enableColorScheme />
-                <Grid container>
-                    <Grid size={{ xs: 0, lg: 3 }}>
-                        <SideMenu />
-                    </Grid>
+            <ProtectedPage>
+                <AppTheme themeComponents={xThemeComponents}>
+                    <CssBaseline enableColorScheme />
+                    <Grid container>
+                        <Grid size={{ xs: 0, lg: 3 }}>
+                            <SideMenu />
+                        </Grid>
 
-                    <Grid size={{ xs: 12, lg: 9 }}>
-                        <Box>
-                            <AppNavbar />
-                            <Box
-                                component="main"
-                                sx={(theme: Theme) => ({
-                                    flexGrow: 1,
-                                    backgroundColor: theme.cssVariables
-                                        ? `rgba(${theme.palette.background.default} / 1)`
-                                        : alpha(theme.palette.background.default, 1),
-                                    overflow: 'auto',
-                                })}
-                            >
-                                <Stack
-                                    spacing={2}
-                                    sx={{
-                                        alignItems: 'normal',
-                                        height: '100vh',
-                                        mx: 3,
-                                        pb: 5,
-                                        mt: { xs: 8, md: 0 },
-                                    }}
+                        <Grid size={{ xs: 12, lg: 9 }}>
+                            <Box>
+                                <AppNavbar />
+                                <Box
+                                    component="main"
+                                    sx={(theme: Theme) => ({
+                                        flexGrow: 1,
+                                        backgroundColor: theme.cssVariables
+                                            ? `rgba(${theme.palette.background.default} / 1)`
+                                            : alpha(theme.palette.background.default, 1),
+                                        overflow: 'auto',
+                                    })}
                                 >
-                                    <Header />
-                                    {children}
-                                </Stack>
+                                    <Stack
+                                        spacing={2}
+                                        sx={{
+                                            alignItems: 'normal',
+                                            height: '100vh',
+                                            mx: 3,
+                                            pb: 5,
+                                            mt: { xs: 8, md: 0 },
+                                        }}
+                                    >
+                                        <Header />
+                                        {children}
+                                    </Stack>
+                                </Box>
                             </Box>
-                        </Box>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </AppTheme>
+                </AppTheme>
+            </ProtectedPage>
         </SessionProvider>
     )
 }
