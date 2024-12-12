@@ -44,7 +44,7 @@ export function WorkflowColumn({ title, icon: Icon, color, description, children
         </div>
       </div>
       
-      <div className="p-4 space-y-3 max-h-[calc(100vh-300px)] overflow-y-auto scrollbar-thin scrollbar-thumb-kai-primary/20 scrollbar-track-transparent">
+      <div className="p-4 space-y-3 max-h-[calc(60vh)] overflow-y-auto scrollbar-thin scrollbar-thumb-kai-primary/20 scrollbar-track-transparent">
         {children}
       </div>
     </div>
