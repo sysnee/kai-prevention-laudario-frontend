@@ -13,20 +13,21 @@ import { useTheme } from '@mui/material';
 
 interface WorkflowMetricsProps {
   date: Date;
+  total: number; // Total number of exams in the workflow
 }
 
-export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
+export function WorkflowMetrics({ date, total }: WorkflowMetricsProps) {
   const theme = useTheme();
-  // Mock data - replace with actual API integration
+
   const metrics = {
-    totalExams: 24,
-    inProgress: 8,
-    completed: 12,
-    delayed: 4,
-    avgCompletionTime: '45min',
-    occupancyRate: 75,
-    patientWaitTime: '12min',
-    scheduledExams: 18
+    totalExams: total,
+    inProgress: 0,
+    completed: 0,
+    delayed: 0,
+    avgCompletionTime: '-- min',
+    occupancyRate: 85,
+    patientWaitTime: '-- min',
+    scheduledExams: total
   };
 
   return (
@@ -85,7 +86,7 @@ export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
           >
             <TrendingUp className="w-4 h-4 mr-1 text-kai-success" />
             <span>
-              +12% em relação à média
+              +--% em relação à média
             </span>
           </div>
         </div>
@@ -131,10 +132,10 @@ export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
           }}
         >
           <div className="flex items-center justify-between mb-3">
-            <div className="p-2 bg-kai-accent rounded-lg">
+            <div className="p-2 bg-kai-primary/10 rounded-lg">
               <Timer className="w-5 h-5 text-kai-primary" />
             </div>
-            <span className="text-xs font-medium text-kai-primary bg-kai-accent px-2 py-1 rounded-full">
+            <span className="text-xs font-medium text-kai-primary bg-kai-primary/10 px-2 py-1 rounded-full">
               Tempo Médio
             </span>
           </div>
@@ -165,11 +166,11 @@ export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
           }}
         >
           <div className="flex items-center justify-between mb-3">
-            <div className="p-2 rounded-lg">
-              <CheckCircle2 className="w-5 h-5 text-kai-success" />
+            <div className="p-2 rounded-lg bg-kai-primary/10">
+              <CheckCircle2 className="w-5 h-5 text-kai-primary" />
             </div>
-            <span className="text-xs font-medium text-kai-text-primary px-2 py-1 rounded-full">
-              Status
+            <span className="text-xs font-medium bg-kai-primary/10 text-kai-primary px-2 py-1 rounded-full">
+              Situação
             </span>
           </div>
           <div className="space-y-2">

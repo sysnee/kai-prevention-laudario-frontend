@@ -68,7 +68,7 @@ export default function Workflow() {
       </div>
 
       <div className="space-y-6">
-        <WorkflowMetrics date={selectedDate} />
+        <WorkflowMetrics date={selectedDate} total={plannedList.length} />
         <WorkflowBoard
           planned={plannedList}
           waiting={waitingList}

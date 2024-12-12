@@ -1,9 +1,16 @@
 import React from 'react';
 import { Clock } from 'lucide-react';
 import { useTheme } from '@mui/material';
+import { WORKFLOW_STAGES } from '../WorkflowBoard';
 
 interface TimelineSectionProps {
   currentStage: string;
+}
+
+function StatusIcon({ icon: Icon }) {
+  return (
+    <Icon className={`w-5 h-5 text-white`} />
+  )
 }
 
 export function TimelineSection({ currentStage }: TimelineSectionProps) {
@@ -51,11 +58,12 @@ export function TimelineSection({ currentStage }: TimelineSectionProps) {
                   className={`
                     w-8 h-8 rounded-full flex items-center justify-center
                     transition-all duration-300
-                    ${isActive ? theme.palette.mode === 'dark' ? 'bg-blue-600' : 'bg-blue-400' :
-                      theme.palette.mode === 'dark' ? 'bg-gray-600' : 'bg-gray-400'}
+                    ${isActive ? theme.palette.mode === 'dark' ? 'bg-kai-primary' : 'bg-kai-primary' :
+                      theme.palette.mode === 'dark' ? 'bg-gray-500' : 'bg-gray-200'}
                   `}
                 >
-                  <Clock className="w-4 h-4 text-white" />
+                  {/* <Icon className="w-4 h-4 text-white" /> */}
+                  <StatusIcon icon={WORKFLOW_STAGES.find(st => st.id === stage.id).icon} />
                 </div>
                 <span className={`
                   mt-2 text-xs font-medium

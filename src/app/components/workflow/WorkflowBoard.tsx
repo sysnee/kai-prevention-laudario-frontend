@@ -39,49 +39,35 @@ export const WORKFLOW_STAGES = [
     description: 'Em execução'
   },
   {
-    id: 'on_hold',
+    id: 'ON_HOLD',
     title: 'Pausado',
     icon: PauseCircle,
     color: 'text-orange-500',
     description: 'Temporariamente pausado'
   },
   {
-    id: 'completed',
+    id: 'COMPLETED',
     title: 'Concluído',
     icon: CheckCircle2,
     color: 'text-green-500',
     description: 'Exames finalizados'
   },
   {
-    id: 'transcription',
+    id: 'IN_TRANSCRIPTION',
     title: 'Transcrição',
     icon: FileText,
     color: 'text-purple-500',
     description: 'Em transcrição'
   },
   {
-    id: 'quality',
-    title: 'Controle de Qualidade',
-    icon: ShieldCheck,
-    color: 'text-indigo-500',
-    description: 'Revisão técnica'
-  },
-  {
-    id: 'relevant_findings',
-    title: 'Achados Relevantes',
-    icon: AlertOctagon,
-    color: 'text-yellow-500',
-    description: 'Achados importantes identificados'
-  },
-  {
-    id: 'reported',
+    id: 'SIGNED',
     title: 'Laudado',
     icon: FileCheck,
     color: 'text-teal-500',
     description: 'Laudos finalizados'
   },
   {
-    id: 'canceled',
+    id: 'CANCELED',
     title: 'Cancelados',
     icon: XCircle,
     color: 'text-red-500',
