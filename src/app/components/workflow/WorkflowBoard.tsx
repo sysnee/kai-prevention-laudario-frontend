@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
-import { WorkflowColumn } from './WorkflowColumn';
-import { WorkflowCard } from './WorkflowCard';
 import { useWorkflowStore } from '../../stores/workflowStore';
 import {
   ClipboardList,
@@ -15,6 +13,8 @@ import {
   XCircle,
   AlertOctagon
 } from 'lucide-react';
+import { WorkflowCard } from './WorkflowCard';
+import { WorkflowColumn } from './WorkflowColumn';
 
 export const WORKFLOW_STAGES = [
   {
@@ -129,8 +129,8 @@ export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: Wor
               key={stage.id}
               className="w-[280px] md:w-[320px] lg:w-80 flex-shrink-0"
             >
-              {/* <Droppable droppableId={stage.id}>
-                {(provided) => (
+              <Droppable droppableId={stage.id}>
+                {(provided, _) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
@@ -152,11 +152,12 @@ export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: Wor
                             index={index}
                           />
                         ))}
-                      {provided.placeholder}
+                      {provided.placeholder as ReactNode}
                     </WorkflowColumn>
                   </div>
                 )}
-              </Droppable> */}
+
+              </Droppable>
             </div>
           ))}
         </DragDropContext>

@@ -10,7 +10,7 @@ const auth0Options = {
             authorization: {
                 url: process.env.NODE_ENV === 'production' ? 'https://ris.kaiprevention.com.br' : 'http://localhost:3000',
                 params: {
-                    //prompt: 'login',
+                    prompt: 'login',
                     audience: process.env.AUTH0_ISSUER,
                 }
             },

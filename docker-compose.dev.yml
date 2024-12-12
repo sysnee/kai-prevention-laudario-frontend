@@ -15,3 +15,12 @@ services:
     command: npm run dev
     env_file:
       - .env
+    develop:
+      watch:
+        - action: sync
+          path: ./nextjs-app
+          target: /src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
