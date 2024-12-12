@@ -1,8 +1,9 @@
 import React from 'react';
 import { Calendar, XCircle, PlayCircle, PauseCircle, ArrowRightCircle } from 'lucide-react';
+import { ServiceStatus } from '@/src/app/types/pemissions/permissions';
 
 interface ActionButtonsProps {
-  stage: string;
+  status: ServiceStatus;
   onReschedule: () => void;
   onCancel: () => void;
   onPause?: () => void;
@@ -15,7 +16,7 @@ interface ActionButtonsProps {
 }
 
 export function ActionButtons({
-  stage,
+  status,
   onReschedule,
   onCancel,
   onPause,
@@ -44,7 +45,7 @@ export function ActionButtons({
         Cancelar
       </button>
 
-      {stage === 'started' && onPause && (
+      {status === 'STARTED' && onPause && (
         <button
           onClick={onPause}
           className="flex-1 px-4 py-2 bg-orange-50 text-orange-600 rounded-lg hover:bg-orange-100"
@@ -54,7 +55,7 @@ export function ActionButtons({
         </button>
       )}
 
-      {stage === 'on_hold' ? (
+      {status === 'ONHOLD' ? (
         <div className="flex-1">
           {showResumeInput ? (
             <div className="flex space-x-2">
@@ -83,7 +84,7 @@ export function ActionButtons({
           )}
         </div>
       ) : (
-        stage !== 'completed' && onProceed && (
+        status !== 'COMPLETED' && onProceed && (
           <button
             onClick={onProceed}
             className="flex-1 px-4 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100"

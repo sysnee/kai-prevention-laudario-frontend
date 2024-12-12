@@ -10,15 +10,15 @@ export type Role =
 
 export type Module = "client" | "exam";
 
-export type ExamStatus =
-  | "planned"
-  | "waiting"
-  | "started"
-  | "onhold"
-  | "completed"
-  | "transcription"
-  | "revision"
-  | "signed";
+export type ServiceStatus =
+  | "PLANNED"
+  | "WAITING"
+  | "STARTED"
+  | "ONHOLD"
+  | "COMPLETED"
+  | "TRANSCRIPTION"
+  | "REVISION"
+  | "SIGNED";
 
 export enum ExamStatusEnum {
   PLANNED = "Planejado",
@@ -32,7 +32,7 @@ export enum ExamStatusEnum {
 }
 
 export interface ExamStageAccess {
-  stage: ExamStatus;
+  stage: ServiceStatus;
   access: AccessLevel;
   description: string;
 }

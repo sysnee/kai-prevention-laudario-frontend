@@ -1,21 +1,46 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Search, Calendar, Filter } from 'lucide-react';
+import { Search, Filter } from 'lucide-react';
 import { WorkflowMetrics } from '../../components/workflow/WorkflowMetrics';
 import { WorkflowBoard } from '../../components/workflow/WorkflowBoard';
+import api from '@/src/lib/api';
 
 
 export default function Workflow() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [selectedStatus] = useState<string | null>(null);
+  const [plannedList, setPlannedList] = useState([])
+  const [waitingList, setWaitingList] = useState([])
+  const [startedList, setStartedList] = useState([])
+
+  async function fetchPlannedList() {
+    const { data } = await api.get('service-requests?status=PLANNED&limit=20');
+    setPlannedList(data);
+  }
+
+  async function fetchWaitingList() {
+    const { data } = await api.get('service-requests?status=WAITING&limit=20');
+    setWaitingList(data);
+  }
+
+  async function fetchStartedList() {
+    const { data } = await api.get('service-requests?status=STARTED&limit=20');
+    setStartedList(data);
+  }
+
+  React.useEffect(() => {
+    fetchPlannedList();
+    fetchWaitingList();
+    fetchStartedList();
+  }, []);
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-kai-gray-900">Fluxo de Trabalho</h1>
-        
+
         <div className="flex space-x-4">
           <div className="relative">
             <input
@@ -44,7 +69,15 @@ export default function Workflow() {
 
       <div className="space-y-6">
         <WorkflowMetrics date={selectedDate} />
-        <WorkflowBoard 
+        <WorkflowBoard
+          planned={plannedList}
+          waiting={waitingList}
+          started={startedList}
+          on_hold={[]}
+          completed={[]}
+          transcription={[]}
+          signed={[]}
+          canceled={[]}
           searchQuery={searchQuery}
           selectedStatus={selectedStatus}
           selectedDate={selectedDate}

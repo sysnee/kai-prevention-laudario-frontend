@@ -159,7 +159,7 @@ export function WorkflowMetrics({ date }: WorkflowMetricsProps) {
 
         {/* Status */}
         <div
-          className="bg-gradient-to-br from-kai-surface/50 to-kai-surface rounded-lg p-4"
+          className="rounded-lg p-4"
           style={{
             border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
           }}

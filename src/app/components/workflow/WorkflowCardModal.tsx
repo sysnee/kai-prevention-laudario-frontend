@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useWorkflowStore } from '../../stores/workflowStore';
+import { ServiceRequest, useWorkflowStore } from '../../stores/workflowStore';
 import { RescheduleModal } from './RescheduleModal';
 import { CancelModal } from './CancelModal';
 import { MedicalPrescriptionModal } from './MedicalPrescriptionModal';
@@ -11,9 +11,11 @@ import { NotesSection } from './card/NotesSection';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTheme } from '@mui/material';
+import { serviceExams } from '../../constants';
+import { ServiceStatus } from '../../types/pemissions/permissions';
 
 interface WorkflowCardModalProps {
-  exam: any;
+  exam: ServiceRequest;
   onClose: () => void;
 }
 
@@ -22,11 +24,11 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showMedicalPrescriptionModal, setShowMedicalPrescriptionModal] = useState(false);
   const [newNote, setNewNote] = useState('');
-  const [examStatuses, setExamStatuses] = useState<Record<string, 'waiting' | 'in_progress' | 'completed'>>(() => {
-    const initialStatuses: Record<string, 'waiting' | 'in_progress' | 'completed'> = {};
-    exam.exams.forEach((ex: any) => {
-      initialStatuses[ex.id] = 'waiting';
-    });
+  const [examStatuses, setExamStatuses] = useState<Record<string, 'PLANNED' | 'STARTED' | 'COMPLETED'>>(() => {
+    const initialStatuses: Record<string, 'PLANNED' | 'STARTED' | 'COMPLETED'> = {};
+    // exam.exams.forEach((ex: any) => {
+    //   initialStatuses[ex.id] = 'PLANNED';
+    // });
     return initialStatuses;
   });
   const [resumeReason, setResumeReason] = useState('');
@@ -38,11 +40,10 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
   const handleExamStatusChange = (examId: string) => {
     setExamStatuses(prev => {
       const currentStatus = prev[examId];
-      const nextStatus = 
-        currentStatus === 'waiting' ? 'in_progress' :
-        currentStatus === 'in_progress' ? 'completed' :
-        'waiting';
-      
+      const nextStatus =
+        currentStatus === 'PLANNED' ? 'STARTED' :
+          currentStatus === 'STARTED' ? 'COMPLETED' : 'PLANNED';
+
       return { ...prev, [examId]: nextStatus };
     });
   };
@@ -56,15 +57,15 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
     if (!newNote.trim()) return;
     const currentUser = {
       id: 'user1',
-      name: 'Dr. João Silva' 
+      name: 'Dr. João Silva'
     };
-    addWorkflowNote(exam.id, { text: newNote, mentions: [], createdBy: currentUser});
+    addWorkflowNote(exam.id, { text: newNote, mentions: [], createdBy: currentUser });
     setNewNote('');
   };
 
   const handleReschedule = async (date: Date, time: string, reason: string) => {
     try {
-      await moveExam(exam.id, exam.stage, 'planned', reason);
+      await moveExam(exam.id, exam.status, 'planned', reason);
       toast.success('Exame reagendado com sucesso');
       onClose();
     } catch (error) {
@@ -74,7 +75,7 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
 
   const handleCancel = async (reason: string) => {
     try {
-      await moveExam(exam.id, exam.stage, 'canceled', reason);
+      await moveExam(exam.id, exam.status, 'canceled', reason);
       toast.success('Exame cancelado com sucesso');
       onClose();
     } catch (error) {
@@ -84,7 +85,7 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
 
   const handlePause = async () => {
     try {
-      await moveExam(exam.id, exam.stage, 'on_hold', 'Exame pausado');
+      await moveExam(exam.id, exam.status, 'on_hold', 'Exame pausado');
       toast.success('Exame pausado com sucesso');
       onClose();
     } catch (error) {
@@ -99,7 +100,7 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
     }
 
     try {
-      await moveExam(exam.id, exam.stage, 'started', resumeReason);
+      await moveExam(exam.id, exam.status, 'started', resumeReason);
       toast.success('Exame retomado com sucesso');
       onClose();
     } catch (error) {
@@ -108,13 +109,13 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
   };
 
   const handleProceed = async () => {
-    const nextStage = exam.stage === 'planned' ? 'waiting' : 
-                     exam.stage === 'waiting' ? 'started' : 
-                     exam.stage === 'started' ? 'completed' : null;
-    
+    const nextStage = exam.status === 'planned' ? 'waiting' :
+      exam.status === 'waiting' ? 'started' :
+        exam.status === 'started' ? 'completed' : null;
+
     if (nextStage) {
       try {
-        await moveExam(exam.id, exam.stage, nextStage, 'Progresso automático');
+        await moveExam(exam.id, exam.status, nextStage, 'Progresso automático');
         toast.success(`Exame movido para ${nextStage}`);
         onClose();
       } catch (error) {
@@ -130,11 +131,11 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
   };
 
   return (
-    <div 
+    <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
       onClick={handleBackdropClick}
     >
-      <div 
+      <div
         className="rounded-lg w-full max-w-4xl mx-4 max-h-[90vh] flex flex-col"
         style={{
           backgroundColor: theme.palette.background.default,
@@ -150,8 +151,8 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold">{exam.patientName}</h2>
-              <p className="text-gray-500">ID: {exam.patientId}</p>
+              <h2 className="text-xl font-semibold">{exam.clientName}</h2>
+              <p className="text-gray-500">ID: {exam.code}</p>
             </div>
             <button
               onClick={onClose}
@@ -169,15 +170,15 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
             <DocumentSection
               documents={{
                 prescription: Boolean(exam.medicalPrescription),
-                questionnaire: Boolean(exam.questionnaire),
-                consent: Boolean(exam.consentForm)
+                questionnaire: Boolean(!exam.questionnaireIsPending),
+                consent: Boolean(!exam.questionnaireIsPending)
               }}
               onPrescriptionClick={() => setShowMedicalPrescriptionModal(true)}
               onQuestionnaireClick={() => toast('Link do questionário será implementado em breve', { icon: '📋' })}
               onConsentClick={() => toast('Link do termo de consentimento será implementado em breve', { icon: '📄' })}
             />
 
-            <TimelineSection currentStage={exam.stage} />
+            <TimelineSection currentStage={exam.status} />
 
             <div
               style={{
@@ -186,13 +187,13 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
             >
               <h3 className="text-lg font-medium mb-4">Status dos Exames</h3>
               <div className="space-y-3">
-                {exam.exams.map((ex: any) => (
+                {serviceExams[exam.examType].map((ex: any, index) => (
                   <ExamStatus
-                    key={ex.id}
+                    key={index}
                     examId={ex.id}
                     name={ex.name}
                     room={ex.room}
-                    status={examStatuses[ex.id]}
+                    status={exam.status as ServiceStatus}
                     onStatusChange={handleExamStatusChange}
                     onRoomChange={handleRoomChange}
                   />
@@ -200,12 +201,12 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
               </div>
             </div>
 
-            <NotesSection
+            {/* <NotesSection
               notes={exam.workflowNotes}
               newNote={newNote}
               onNoteChange={setNewNote}
               onAddNote={handleAddNote}
-            />
+            /> */}
           </div>
         </div>
 
@@ -216,7 +217,7 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
           }}
         >
           <ActionButtons
-            stage={exam.stage}
+            status={exam.status as ServiceStatus}
             onReschedule={() => setShowRescheduleModal(true)}
             onCancel={() => setShowCancelModal(true)}
             onPause={handlePause}

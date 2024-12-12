@@ -26,8 +26,7 @@ export function CalendarView({ date, onDateSelect }: CalendarViewProps) {
   const fetchAppointments = async () => {
     setLoading(true);
     try {
-      const response = await api.get("service-requests");
-      const data = response.data.data;
+      const { data } = await api.get("service-requests");
       setAppointments(data);
     } catch (err) {
       console.error("Erro ao buscar os dados:", err);
@@ -62,13 +61,13 @@ export function CalendarView({ date, onDateSelect }: CalendarViewProps) {
     return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   };
 
-  const appointmentsByTime = appointments.filter(apt => {
+  const appointmentsByTime = appointments?.filter(apt => {
     const appointmentDate = new Date(apt.dateTime);
     const selectedDate = new Date(date);
     return appointmentDate.getDate() === selectedDate.getDate() &&
       appointmentDate.getMonth() === selectedDate.getMonth() &&
       appointmentDate.getFullYear() === selectedDate.getFullYear();
-  });
+  }) || [];
 
   return (
     <div className="bg-white rounded-lg border border-gray-200">
