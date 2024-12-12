@@ -23,13 +23,13 @@ export function AppointmentDashboard({ date }: AppointmentDashboardProps) {
       {/* Total Appointments */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex items-center">
-          <div className="p-2 bg-blue-50 rounded-lg">
-            <Calendar className="w-6 h-6 text-blue-600" />
+          <div className="p-2 bg-kai-primary/10 to-ka rounded-lg">
+            <Calendar className="w-6 h-6 text-kai-primary" />
           </div>
           <div className="ml-4">
             <p className="text-sm font-medium text-gray-500">Total de Exames</p>
             <div className="flex items-baseline">
-              <h3 className="text-2xl font-bold text-gray-900 mr-2">
+              <h3 className="text-2xl font-bold text-kai-text-primary mr-2">
                 {stats.totalAppointments}
               </h3>
               <span className="text-sm text-green-600 font-medium">
@@ -43,9 +43,9 @@ export function AppointmentDashboard({ date }: AppointmentDashboardProps) {
             <span className="text-gray-500">Taxa de ocupação</span>
             <span className="font-medium text-gray-900">--%</span>
           </div>
-          <div className="mt-1 bg-gray-200 rounded-full h-2">
+          <div className="mt-1 bg-kai-primary/10 rounded-full h-2">
             <div
-              className="bg-blue-600 rounded-full h-2"
+              className="bg-kai-primary rounded-full h-2"
               style={{ width: `${stats.occupancyRate}%` }}
             />
           </div>
@@ -55,12 +55,12 @@ export function AppointmentDashboard({ date }: AppointmentDashboardProps) {
       {/* Confirmed */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex items-center">
-          <div className="p-2 bg-green-50 rounded-lg">
-            <CheckCircle2 className="w-6 h-6 text-green-600" />
+          <div className="p-2 bg-kai-primary/10 rounded-lg">
+            <CheckCircle2 className="w-6 h-6 text-kai-primary" />
           </div>
           <div className="ml-4">
             <p className="text-sm font-medium text-gray-500">Confirmados</p>
-            <h3 className="text-2xl font-bold text-gray-900">
+            <h3 className="text-2xl font-bold tetext-kai-text-primary">
               {stats.confirmedAppointments}
             </h3>
           </div>
@@ -78,12 +78,12 @@ export function AppointmentDashboard({ date }: AppointmentDashboardProps) {
       {/* Pending */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex items-center">
-          <div className="p-2 bg-yellow-50 rounded-lg">
-            <Clock className="w-6 h-6 text-yellow-600" />
+          <div className="p-2 bg-kai-primary/10 rounded-lg">
+            <Clock className="w-6 h-6 text-kai-primary" />
           </div>
           <div className="ml-4">
             <p className="text-sm font-medium text-gray-500">Com Pendências</p>
-            <h3 className="text-2xl font-bold text-gray-900">
+            <h3 className="text-2xl font-bold text-kai-text-primary">
               {stats.pendingAppointments}
             </h3>
           </div>
@@ -91,7 +91,7 @@ export function AppointmentDashboard({ date }: AppointmentDashboardProps) {
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-500">Necessitam ação</span>
-            <span className="font-medium text-yellow-600">
+            <span className="font-medium text-kai-primary">
               Confirmar
             </span>
           </div>
@@ -106,7 +106,7 @@ export function AppointmentDashboard({ date }: AppointmentDashboardProps) {
           </div>
           <div className="ml-4">
             <p className="text-sm font-medium text-gray-500">Cancelados</p>
-            <h3 className="text-2xl font-bold text-gray-900">
+            <h3 className="text-2xl font-bold text-kai-text-primary">
               {stats.canceledAppointments}
             </h3>
           </div>

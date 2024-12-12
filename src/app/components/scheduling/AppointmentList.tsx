@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Clock, User, MoreVertical, Edit2, Trash2, CalendarX } from 'lucide-react';
-import { formatCurrency } from '../../utils/format';
-import api from '@/src/lib/api';
 import { CircularProgress } from '@mui/material';
+import api from '@/src/lib/api';
 
+// Interface do componente
 interface AppointmentListProps {
   date: Date;
   searchQuery: string;
 }
 
+// Interface para os dados do agendamento
 interface Appointment {
   id: string;
   clientCpf: string;
@@ -21,9 +22,11 @@ interface Appointment {
 }
 
 export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
+  // Estado para armazenar os agendamentos e o status de carregamento
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Função para formatar a data
   const formatDate = (date: Date): string => {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -31,13 +34,12 @@ export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
     return `${day}/${month}/${year}`;
   };
 
+  // Função que simula a obtenção dos agendamentos (mocando os dados)
   const fetchAppointments = async () => {
     setLoading(true);
     try {
       const { data } = await api.get("service-requests");
-      console.log('services', data)
       setAppointments(data)
-      console.log(data)
     } catch (err) {
       console.error("Erro ao buscar os dados:", err);
     } finally {
@@ -45,10 +47,12 @@ export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
     }
   };
 
+  // Usando useEffect para rodar a função de busca (simulação)
   useEffect(() => {
     fetchAppointments();
   }, []);
 
+  // Formatação da data selecionada
   const formattedDate = formatDate(date);
 
   const filteredAppointments = appointments?.filter(
@@ -58,10 +62,12 @@ export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
       appointment.dateTime.startsWith(formattedDate)
   ) || [];
 
+  // Caso os dados estejam carregando, mostra o spinner
   if (loading) {
     return <CircularProgress />;
   }
 
+  // Caso não haja agendamentos filtrados, exibe uma mensagem
   if (filteredAppointments.length === 0) {
     return (
       <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">

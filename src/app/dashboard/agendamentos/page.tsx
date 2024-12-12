@@ -26,7 +26,7 @@ export default function SchedulingList() {
     return (
         <div className="max-w-7xl mx-auto py-8 px-4">
             <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold text-gray-800">
+                <h1 className="text-3xl font-bold text-kai-gray-900">
                     Consulta de Agendamentos
                 </h1>
             </div>
@@ -77,7 +77,7 @@ export default function SchedulingList() {
                             <button
                                 onClick={() => setView('list')}
                                 className={`px-3 py-1 rounded flex items-center ${view === 'list'
-                                    ? 'bg-blue-50 text-blue-600'
+                                    ? 'bg-kai-primary/10 text-kai-primary'
                                     : 'text-gray-600 hover:bg-gray-50'
                                     }`}
                             >
@@ -87,7 +87,7 @@ export default function SchedulingList() {
                             <button
                                 onClick={() => setView('calendar')}
                                 className={`px-3 py-1 rounded flex items-center ${view === 'calendar'
-                                    ? 'bg-blue-50 text-blue-600'
+                                    ? 'bg-kai-primary/10 text-kai-primary'
                                     : 'text-gray-600 hover:bg-gray-50'
                                     }`}
                             >
