@@ -1,11 +1,13 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
+import { WorkflowColumn } from './WorkflowColumn';
+import { WorkflowCard } from './WorkflowCard';
 import { useWorkflowStore } from '../../stores/workflowStore';
-import {
-  ClipboardList,
-  Clock,
+import { 
+  ClipboardList, 
+  Clock, 
   PlayCircle,
-  PauseCircle,
+  PauseCircle, 
   CheckCircle2,
   FileText,
   ShieldCheck,
@@ -13,8 +15,6 @@ import {
   XCircle,
   AlertOctagon
 } from 'lucide-react';
-import { WorkflowCard } from './WorkflowCard';
-import { WorkflowColumn } from './WorkflowColumn';
 
 export const WORKFLOW_STAGES = [
   {
@@ -102,7 +102,7 @@ export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: Wor
     if (!result.destination) return;
 
     const { source, destination, draggableId } = result;
-
+    
     if (source.droppableId !== destination.droppableId) {
       try {
         await moveExam(draggableId, source.droppableId, destination.droppableId);
@@ -114,14 +114,14 @@ export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: Wor
 
   const filteredExams = exams?.filter(exam => {
     const matchesSearch = exam.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      exam.examType.toLowerCase().includes(searchQuery.toLowerCase());
+                         exam.examType.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = !selectedStatus || exam.stage === selectedStatus;
     const matchesDate = selectedDate.toDateString() === new Date(exam.date).toDateString();
     return matchesSearch && matchesStatus && matchesDate;
   }) || [];
 
   return (
-    <div className="overflow-x-auto workflow-scroll-x -mx-4 px-4">
+    <div className="overflow-x-auto -mx-4 px-4">
       <div className="inline-flex gap-4 lg:gap-6 min-w-full py-4">
         <DragDropContext onDragEnd={handleDragEnd}>
           {WORKFLOW_STAGES.map((stage) => (
@@ -130,11 +130,11 @@ export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: Wor
               className="w-[280px] md:w-[320px] lg:w-80 flex-shrink-0"
             >
               <Droppable droppableId={stage.id}>
-                {(provided, _) => (
+                {(provided) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="workflow-scroll overflow-y-auto max-h-[calc(100vh-24rem)]"
+                    className="max-h-100"
                   >
                     <WorkflowColumn
                       title={stage.title}
@@ -152,11 +152,10 @@ export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: Wor
                             index={index}
                           />
                         ))}
-                      {provided.placeholder as ReactNode}
+                      {provided.placeholder}
                     </WorkflowColumn>
                   </div>
                 )}
-
               </Droppable>
             </div>
           ))}
