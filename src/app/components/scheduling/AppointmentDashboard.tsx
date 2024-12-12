@@ -8,11 +8,11 @@ interface AppointmentDashboardProps {
 
 // Mock data - replace with actual API integration
 const getStats = (date: Date) => ({
-  totalAppointments: 15,
-  confirmedAppointments: 8,
-  pendingAppointments: 5,
-  canceledAppointments: 2,
-  occupancyRate: 75,
+  totalAppointments: 13,
+  confirmedAppointments: 0,
+  pendingAppointments: 13,
+  canceledAppointments: 0,
+  occupancyRate: 87,
 });
 
 export function AppointmentDashboard({ date }: AppointmentDashboardProps) {
@@ -33,7 +33,7 @@ export function AppointmentDashboard({ date }: AppointmentDashboardProps) {
                 {stats.totalAppointments}
               </h3>
               <span className="text-sm text-green-600 font-medium">
-                +12%
+                --%
               </span>
             </div>
           </div>
@@ -41,7 +41,7 @@ export function AppointmentDashboard({ date }: AppointmentDashboardProps) {
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-500">Taxa de ocupação</span>
-            <span className="font-medium text-gray-900">{stats.occupancyRate}%</span>
+            <span className="font-medium text-gray-900">--%</span>
           </div>
           <div className="mt-1 bg-gray-200 rounded-full h-2">
             <div
@@ -82,7 +82,7 @@ export function AppointmentDashboard({ date }: AppointmentDashboardProps) {
             <Clock className="w-6 h-6 text-yellow-600" />
           </div>
           <div className="ml-4">
-            <p className="text-sm font-medium text-gray-500">Pendentes</p>
+            <p className="text-sm font-medium text-gray-500">Com Pendências</p>
             <h3 className="text-2xl font-bold text-gray-900">
               {stats.pendingAppointments}
             </h3>

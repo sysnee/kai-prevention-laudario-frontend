@@ -34,7 +34,6 @@ const apiCall = async (url: string, options: RequestOptions & { body?: any, para
   }
 
   const fullUrl = `${API_BASE_URL}${url}${queryString ? `?${queryString}` : ''}`;
-  console.log('session.user', session.user);
   const sessionJwt = jwt.sign(session.user, 'any')
 
   const fetchOptions = {

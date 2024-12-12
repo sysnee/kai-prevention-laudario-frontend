@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { WorkflowColumn } from './WorkflowColumn';
 import { WorkflowCard } from './WorkflowCard';
 import { useWorkflowStore } from '../../stores/workflowStore';
-import { 
-  ClipboardList, 
-  Clock, 
+import {
+  ClipboardList,
+  Clock,
   PlayCircle,
-  PauseCircle, 
+  PauseCircle,
   CheckCircle2,
   FileText,
   ShieldCheck,
@@ -18,21 +18,21 @@ import {
 
 export const WORKFLOW_STAGES = [
   {
-    id: 'planned',
+    id: 'PLANNED',
     title: 'Planejado',
     icon: ClipboardList,
     color: 'text-kai-primary',
     description: 'Exames agendados'
   },
   {
-    id: 'waiting',
+    id: 'WAITING',
     title: 'Aguardando',
     icon: Clock,
     color: 'text-amber-500',
     description: 'Pacientes em espera'
   },
   {
-    id: 'started',
+    id: 'STARTED',
     title: 'Iniciado',
     icon: PlayCircle,
     color: 'text-blue-500',
@@ -90,19 +90,59 @@ export const WORKFLOW_STAGES = [
 ];
 
 interface WorkflowBoardProps {
+  planned: any[];
+  waiting: any[];
+  started: any[];
+  on_hold: any[];
+  completed: any[];
+  transcription: any[];
+  signed: any[];
+  canceled: any[];
   searchQuery: string;
   selectedStatus: string | null;
   selectedDate: Date;
 }
 
-export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: WorkflowBoardProps) {
-  const { exams, moveExam } = useWorkflowStore();
+export function WorkflowBoard({
+  planned,
+  waiting,
+  started,
+  on_hold,
+  completed,
+  transcription,
+  signed,
+  canceled,
+  searchQuery,
+  selectedStatus,
+  selectedDate
+}: WorkflowBoardProps) {
+  const { serviceRequests, moveExam, setServiceRequests } = useWorkflowStore();
+
+
+  useEffect(() => {
+    setServiceRequests(
+      new Array().concat(
+        planned,
+        waiting,
+        started,
+        on_hold,
+        completed,
+        transcription,
+        signed,
+        canceled
+      )
+    )
+  }, [
+    planned,
+    waiting,
+    started,
+  ])
 
   const handleDragEnd = async (result: any) => {
     if (!result.destination) return;
 
     const { source, destination, draggableId } = result;
-    
+
     if (source.droppableId !== destination.droppableId) {
       try {
         await moveExam(draggableId, source.droppableId, destination.droppableId);
@@ -112,39 +152,42 @@ export function WorkflowBoard({ searchQuery, selectedStatus, selectedDate }: Wor
     }
   };
 
-  const filteredExams = exams?.filter(exam => {
-    const matchesSearch = exam.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         exam.examType.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = !selectedStatus || exam.stage === selectedStatus;
-    const matchesDate = selectedDate.toDateString() === new Date(exam.date).toDateString();
-    return matchesSearch && matchesStatus && matchesDate;
-  }) || [];
+  // const filteredExams = serviceRequests?.filter(sr => {
+  //   // const matchesSearch = exam.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //   //   exam.examType.toLowerCase().includes(searchQuery.toLowerCase());
+  //   const matchesStatus = !selectedStatus || sr.status === selectedStatus;
+  //   // const matchesDate = selectedDate.toDateString() === new Date(exam.date).toDateString();
+  //   return matchesStatus;
+  // }) || [];
 
   return (
     <div className="overflow-x-auto -mx-4 px-4">
       <div className="inline-flex gap-4 lg:gap-6 min-w-full py-4">
+        {/* <pre>
+          {JSON.stringify(serviceRequests, null, 2)}
+        </pre> */}
         <DragDropContext onDragEnd={handleDragEnd}>
-          {WORKFLOW_STAGES.map((stage) => (
+          {WORKFLOW_STAGES.map((status) => (
             <div
-              key={stage.id}
+              key={status.id}
               className="w-[280px] md:w-[320px] lg:w-80 flex-shrink-0"
             >
-              <Droppable droppableId={stage.id}>
-                {(provided) => (
+              <Droppable droppableId={status.id}>
+                {(provided, _) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     className="max-h-100"
                   >
                     <WorkflowColumn
-                      title={stage.title}
-                      icon={stage.icon}
-                      color={stage.color}
-                      description={stage.description}
-                      count={filteredExams.filter(exam => exam.stage === stage.id).length}
+                      title={status.title}
+                      icon={status.icon}
+                      color={status.color}
+                      description={status.description}
+                      count={serviceRequests.filter(sr => sr.status === status.id).length}
                     >
-                      {filteredExams
-                        .filter(exam => exam.stage === stage.id)
+                      {serviceRequests
+                        .filter(exam => exam.status === status.id)
                         .map((exam, index) => (
                           <WorkflowCard
                             key={exam.id}

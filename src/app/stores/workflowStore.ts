@@ -2,19 +2,21 @@ import { create } from 'zustand';
 import toast from 'react-hot-toast';
 //import { pacsService } from '../services/pacsService';
 import { WorkflowNote, WorkflowTransition } from '../types/workflow/workflow';
+import { ServiceStatus } from '../types/pemissions/permissions';
 
-interface Exam {
+export interface ServiceRequest {
   id: string;
-  patientName: string;
+  code: number;
+  clientName: string;
   patientId: string;
   examType: string;
   priority: 'low' | 'medium' | 'high';
-  stage: string;
+  status: ServiceStatus | string;
   timeInStage: string;
   doctor: string;
   room: string;
   scheduledTime: string;
-  startTime: string;
+  dateTime: string;
   date: Date;
   notes?: string;
   exams: Array<{
@@ -24,6 +26,7 @@ interface Exam {
   }>;
   workflowNotes: WorkflowNote[];
   transitions: WorkflowTransition[];
+  questionnaireIsPending: boolean
   cancellationReason?: string;
   canceledAt?: string;
   canceledBy?: {
@@ -39,140 +42,55 @@ interface Exam {
 }
 
 interface WorkflowStore {
-  exams: Exam[];
-  addExam: (exam: Exam) => void;
-  updateExam: (examId: string, data: Partial<Exam>) => void;
+  serviceRequests: ServiceRequest[];
+  setServiceRequests: (serviceRequests: any[]) => void
+  addExam: (exam: ServiceRequest) => void;
+  updateExam: (examId: string, data: Partial<ServiceRequest>) => void;
   moveExam: (examId: string, fromStage: string, toStage: string, reason?: string) => Promise<void>;
   addWorkflowNote: (examId: string, note: Omit<WorkflowNote, 'id' | 'createdAt'>) => void;
   cancelExam: (examId: string, reason: string) => void;
   rescheduleExam: (examId: string, newDate: Date, newTime: string, reason: string) => void;
 }
 
-// Mock data para cada fase do workflow
-const mockExams: Exam[] = [
-  {
-    id: 'exam-1',
-    patientName: 'João Silva',
-    patientId: 'PAT001',
-    examType: 'Raio-X Tórax',
-    priority: 'high',
-    stage: 'planned',
-    timeInStage: '30min',
-    doctor: 'Dr. Maria Santos',
-    room: 'Sala 3',
-    scheduledTime: '09:30',
-    startTime: '2024-03-20T09:30:00',
-    date: new Date(),
-    notes: 'Paciente com dificuldade de locomoção',
-    exams: [
-      { id: 'ex1', name: 'Raio-X Tórax PA', room: 'Sala 3' },
-      { id: 'ex2', name: 'Raio-X Tórax Perfil', room: 'Sala 3' },
-      { id: 'ex3', name: 'Raio-X Coluna Cervical', room: 'Sala 4' }
-    ],
-    workflowNotes: [
-      {
-        id: 'note-1',
-        text: 'Paciente agendado',
-        createdAt: '2024-03-20T09:00:00',
-        createdBy: {
-          id: 'user1',
-          name: 'Dr. Maria Santos'
-        },
-        mentions: []
-      }
-    ],
-    transitions: [
-      {
-        from: 'created',
-        to: 'planned',
-        timestamp: '2024-03-20T09:00:00',
-        userId: 'user1',
-        reason: 'Agendamento inicial'
-      }
-    ]
-  },
-  {
-    id: 'exam-2',
-    patientName: 'Maria Oliveira',
-    patientId: 'PAT002',
-    examType: 'Tomografia',
-    priority: 'medium',
-    stage: 'waiting',
-    timeInStage: '15min',
-    doctor: 'Dr. João Santos',
-    room: 'Sala 2',
-    scheduledTime: '10:00',
-    startTime: '2024-03-20T10:00:00',
-    date: new Date(),
-    exams: [
-      { id: 'ex4', name: 'Tomografia de Crânio', room: 'Sala 2' },
-      { id: 'ex5', name: 'Tomografia de Seios da Face', room: 'Sala 2' },
-      { id: 'ex6', name: 'Tomografia de Pescoço', room: 'Sala 2' },
-      { id: 'ex7', name: 'Angiotomografia', room: 'Sala 1' }
-    ],
-    workflowNotes: [],
-    transitions: []
-  },
-  {
-    id: 'exam-3',
-    patientName: 'Pedro Santos',
-    patientId: 'PAT003',
-    examType: 'Ressonância',
-    priority: 'low',
-    stage: 'started',
-    timeInStage: '45min',
-    doctor: 'Dra. Ana Silva',
-    room: 'Sala 1',
-    scheduledTime: '11:00',
-    startTime: '2024-03-20T11:00:00',
-    date: new Date(),
-    exams: [
-      { id: 'ex8', name: 'Ressonância de Coluna Cervical', room: 'Sala 1' },
-      { id: 'ex9', name: 'Ressonância de Coluna Lombar', room: 'Sala 1' },
-      { id: 'ex10', name: 'Ressonância de Crânio', room: 'Sala 1' },
-      { id: 'ex11', name: 'Angioressonância', room: 'Sala 5' },
-      { id: 'ex12', name: 'Ressonância de ATM', room: 'Sala 1' }
-    ],
-    workflowNotes: [],
-    transitions: []
-  }
-];
-
 export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
-  exams: mockExams,
-  
-  addExam: (exam) => set((state) => ({ 
-    exams: [...state.exams, exam] 
+  serviceRequests: [],
+
+  setServiceRequests: (sr) => set((state) => ({
+    serviceRequests: sr
+  })),
+
+  addExam: (exam) => set((state) => ({
+    serviceRequests: [...state.serviceRequests, exam]
   })),
 
   updateExam: (examId, data) => set((state) => ({
-    exams: state.exams.map(exam => 
+    serviceRequests: state.serviceRequests.map(exam =>
       exam.id === examId ? { ...exam, ...data } : exam
     )
   })),
-  
+
   moveExam: async (examId, fromStage, toStage, reason) => {
-    const exam = get().exams.find(e => e.id === examId);
+    const exam = get().serviceRequests.find(e => e.id === examId);
     if (!exam) {
       toast.error('Exame não encontrado');
       return;
     }
 
     try {
-      // If moving to waiting stage, send to PACS
+      // If moving to waiting status, send to PACS
       if (toStage === 'waiting') {
         try {
           const pacsData = {
             id: exam.patientId,
-            name: exam.patientName,
+            name: exam.clientName,
             birthDate: '1985-06-15', // Mock data
             gender: 'M',
             cpf: '12345678900',
             examType: exam.examType,
             accessionNumber: 'ACC001',
             referringPhysician: exam.doctor,
-            modality: exam.examType.includes('Raio-X') ? 'CR' : 
-                     exam.examType.includes('Tomografia') ? 'CT' : 'MR',
+            modality: exam.examType.includes('Raio-X') ? 'CR' :
+              exam.examType.includes('Tomografia') ? 'CT' : 'MR',
             scheduledDate: exam.date
           };
 
@@ -193,12 +111,12 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
         reason
       };
 
-      // Update exam stage and add transition
+      // Update exam status and add transition
       set((state) => ({
-        exams: state.exams.map((e) =>
-          e.id === examId ? { 
-            ...e, 
-            stage: toStage,
+        serviceRequests: state.serviceRequests.map((e) =>
+          e.id === examId ? {
+            ...e,
+            status: toStage as ServiceStatus,
             transitions: [...e.transitions, transition]
           } : e
         )
@@ -225,7 +143,7 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
     };
 
     set((state) => ({
-      exams: state.exams.map((exam) =>
+      serviceRequests: state.serviceRequests.map((exam) =>
         exam.id === examId ? {
           ...exam,
           workflowNotes: [...exam.workflowNotes, newNote]
@@ -244,22 +162,26 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
         id: 'user1',
         name: 'Dr. João Silva'
       },
-      stage: 'canceled'
+      status: 'canceled'
     };
 
     set((state) => ({
-      exams: state.exams.map((exam) =>
+      serviceRequests: state.serviceRequests.map((exam) =>
         exam.id === examId ? {
           ...exam,
+          status: exam.status as ServiceStatus,
           ...cancelInfo,
           transitions: [...exam.transitions, {
-            from: exam.stage,
-            to: 'canceled',
+            from: exam.status as ServiceStatus,
+            to: 'CANCELED',
             timestamp: cancelInfo.canceledAt,
             userId: 'user1',
             reason: cancelInfo.cancellationReason
           }]
-        } : exam
+        } : {
+          ...exam,
+          status: exam.status as ServiceStatus
+        }
       )
     }));
 
@@ -268,14 +190,14 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
 
   rescheduleExam: (examId, newDate, newTime, reason) => {
     set((state) => ({
-      exams: state.exams.map((exam) =>
+      serviceRequests: state.serviceRequests.map((exam) =>
         exam.id === examId ? {
           ...exam,
           date: newDate,
           scheduledTime: newTime,
-          stage: 'planned',
+          status: 'planned',
           transitions: [...exam.transitions, {
-            from: exam.stage,
+            from: exam.status,
             to: 'planned',
             timestamp: new Date().toISOString(),
             userId: 'user1',

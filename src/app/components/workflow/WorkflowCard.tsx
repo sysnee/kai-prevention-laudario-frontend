@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  Clock, 
+import {
+  Clock,
   User,
   AlertTriangle
 } from 'lucide-react';
-import { useWorkflowStore } from '../../stores/workflowStore';
 import { WorkflowCardModal } from './WorkflowCardModal';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import { Draggable } from '@hello-pangea/dnd';
 import { useTheme } from '@mui/material';
 
@@ -45,15 +42,15 @@ export function WorkflowCard({ exam, index }: WorkflowCardProps) {
               color: theme.palette.text.primary,
               border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
               borderLeft: hasDocumentsPending && exam.stage !== 'started' ? '4px solid #F59E0B'
-              : (theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)")
+                : (theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)")
             }}
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center">
                 <User className="w-8 h-8 text-gray-400" />
                 <div className="ml-3">
-                  <h4 className="font-medium">{exam.patientName}</h4>
-                  <p className="text-sm text-gray-500">ID: {exam.patientId}</p>
+                  <h4 className="font-medium">{exam.clientName}</h4>
+                  <p className="text-sm text-gray-500">ID: {exam.code}</p>
                 </div>
               </div>
             </div>
@@ -84,7 +81,7 @@ export function WorkflowCard({ exam, index }: WorkflowCardProps) {
 
             <div className="flex items-center text-sm text-gray-500">
               <Clock className="w-4 h-4 mr-1" />
-              {format(new Date(exam.startTime), 'HH:mm', { locale: ptBR })}
+              {exam.dateTime}
             </div>
           </div>
 

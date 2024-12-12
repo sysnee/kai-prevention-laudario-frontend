@@ -1,45 +1,37 @@
 import React from 'react';
 import { Check } from 'lucide-react';
 import { useTheme } from '@mui/material';
+import { ExamStatusEnum, ServiceStatus } from '@/src/app/types/pemissions/permissions';
 
 interface ExamStatusProps {
   examId: string;
   name: string;
   room: string;
-  status: 'waiting' | 'in_progress' | 'completed';
+  status: ServiceStatus;
   onStatusChange: (examId: string) => void;
   onRoomChange: (examId: string, room: string) => void;
 }
 
-export function ExamStatus({ 
-  examId, 
-  name, 
-  room, 
-  status, 
-  onStatusChange, 
-  onRoomChange 
+export function ExamStatus({
+  examId,
+  name,
+  room,
+  status,
+  onStatusChange,
+  onRoomChange
 }: ExamStatusProps) {
   const theme = useTheme();
 
-  const getStatusColor = (status: 'waiting' | 'in_progress' | 'completed') => {
+  const getStatusColor = (status: ServiceStatus) => {
     switch (status) {
-      case 'waiting':
+      case 'PLANNED':
         return 'bg-yellow-100 text-yellow-800';
-      case 'in_progress':
+      case 'WAITING':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'STARTED':
         return 'bg-blue-100 text-blue-800';
-      case 'completed':
+      case 'COMPLETED':
         return 'bg-green-100 text-green-800';
-    }
-  };
-
-  const getStatusText = (status: 'waiting' | 'in_progress' | 'completed') => {
-    switch (status) {
-      case 'waiting':
-        return 'Aguardando';
-      case 'in_progress':
-        return 'Em Andamento';
-      case 'completed':
-        return 'Concluído';
     }
   };
 
@@ -70,8 +62,8 @@ export function ExamStatus({
         onClick={() => onStatusChange(examId)}
         className={`px-4 py-2 rounded-full flex items-center space-x-2 ${getStatusColor(status)}`}
       >
-        {status === 'completed' && <Check className="w-4 h-4" />}
-        <span>{getStatusText(status)}</span>
+        {status === 'COMPLETED' && <Check className="w-4 h-4" />}
+        <span>{ExamStatusEnum[status]}</span>
       </button>
     </div>
   );

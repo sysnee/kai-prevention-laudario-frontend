@@ -34,8 +34,8 @@ export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
   const fetchAppointments = async () => {
     setLoading(true);
     try {
-      const response = await api.get("service-requests");
-      const data = response.data.data;
+      const { data } = await api.get("service-requests");
+      console.log('services', data)
       setAppointments(data)
       console.log(data)
     } catch (err) {
@@ -51,12 +51,12 @@ export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
 
   const formattedDate = formatDate(date);
 
-  const filteredAppointments = appointments.filter(
+  const filteredAppointments = appointments?.filter(
     (appointment) =>
       appointment.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       appointment.examType.toLowerCase().includes(searchQuery.toLowerCase()) ||
       appointment.dateTime.startsWith(formattedDate)
-  );
+  ) || [];
 
   if (loading) {
     return <CircularProgress />;
