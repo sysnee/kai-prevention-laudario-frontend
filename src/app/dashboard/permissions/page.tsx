@@ -1,198 +1,175 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import { ListIcon, PlusIcon, Search, Grid } from "lucide-react";
-import { DeleteConfirmationModal } from "./components/DeleteConfirmationModal";
-import { RolePermissions } from "../../types/pemissions/permissions";
-import AccessCard from "./components/AccessCard";
-import {
-  Button,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from "@mui/material";
-import { Box } from "@mui/system";
-import PermissionsList from "./components/PermissionsList";
-import { mockRolePermissions } from "../../stores/permissionsStore";
-import RolePermissionForm from "./components/forms/RolePermissionForm";
+import React, { useState, useEffect } from 'react'
+import { ListIcon, PlusIcon, Search, Grid } from 'lucide-react'
+import { DeleteConfirmationModal } from './components/DeleteConfirmationModal'
+import { Role } from '../../types/types'
+import AccessCard from './components/AccessCard'
+import { Button, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
+import { Box } from '@mui/system'
+import PermissionsList from './components/PermissionsList'
+import RolePermissionForm from './components/forms/RolePermissionForm'
+import api from '../../../lib/api'
 
 export default function PermissionsManagement() {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [rolesPermissions, setRolesPermissions] =
-    useState<RolePermissions[]>(mockRolePermissions);
-  const [selectedRolePermissions, setSelectedRolePermissions] =
-    useState<RolePermissions | null>(null);
-  const [modalMode, setModalMode] = useState<"create" | "edit" | "view" | null>(
-    null
-  );
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [rolePermissionToDelete, setRoleToDelete] =
-    useState<RolePermissions | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [roles, setRoles] = useState<Role[]>([])
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null)
+  const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view' | null>(null)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [roleToDelete, setRoleToDelete] = useState<Role | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-  const filteredRolesPermissions = rolesPermissions.filter((role) =>
-    role.name!.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    fetchRoles()
+  }, [])
 
-  const handleSave = (updatedRolePermission: RolePermissions) => {
-    if (modalMode === "create") {
-      setRolesPermissions((prev) => [
-        ...prev,
-        { ...updatedRolePermission, id: crypto.randomUUID() },
-      ]);
-    } else {
-      setRolesPermissions((prev) =>
-        prev.map((rolePermission) =>
-          rolePermission.id === updatedRolePermission.id
-            ? updatedRolePermission
-            : rolePermission
-        )
-      );
+  const fetchRoles = async () => {
+    try {
+      const response = await api.get('/roles')
+      setRoles(response)
+      setIsLoading(false)
+    } catch (error) {
+      console.error('Error fetching roles:', error)
+      setIsLoading(false)
     }
-    setModalMode(null);
-    setSelectedRolePermissions(null);
-  };
+  }
 
-  const handleDeleteConfirm = () => {
-    if (rolePermissionToDelete) {
-      setRolesPermissions(
-        rolesPermissions.filter(
-          (rolesPermissions) =>
-            rolesPermissions.id !== rolePermissionToDelete.id
-        )
-      );
-      setDeleteModalOpen(false);
-      setRoleToDelete(null);
+  const filteredRoles = roles.filter(role => role.name.toLowerCase().includes(searchQuery.toLowerCase()))
+
+  const handleSave = async (updatedRole: Role) => {
+    try {
+      if (modalMode === 'create') {
+        await api.post('/roles', updatedRole)
+      } else {
+        await api.put(`/roles/${updatedRole.id}`, updatedRole)
+      }
+      fetchRoles() // Refresh the roles list
+      setModalMode(null)
+      setSelectedRole(null)
+    } catch (error) {
+      console.error('Error saving role:', error)
+      // Handle error (show notification, etc.)
     }
-  };
+  }
 
-  const handleViewModeChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    mode: "grid" | "list"
-  ) => {
-    if (mode) setViewMode(mode);
-  };
+  const handleDeleteConfirm = async () => {
+    if (roleToDelete) {
+      try {
+        await api.delete(`/roles/${roleToDelete.id}`)
+        fetchRoles() // Refresh the roles list
+        setDeleteModalOpen(false)
+        setRoleToDelete(null)
+      } catch (error) {
+        console.error('Error deleting role:', error)
+        // Handle error (show notification, etc.)
+      }
+    }
+  }
 
-  const handleView = (role: RolePermissions) => {
-    setSelectedRolePermissions(role);
-    setModalMode("view");
-  };
+  const handleViewModeChange = (_event: React.MouseEvent<HTMLElement>, mode: 'grid' | 'list') => {
+    if (mode) setViewMode(mode)
+  }
 
-  const handleEdit = (role: RolePermissions) => {
-    setSelectedRolePermissions(role);
-    setModalMode("edit");
-  };
+  const handleView = (role: Role) => {
+    setSelectedRole(role)
+    setModalMode('view')
+  }
 
-  const handleDeleteClick = (rolePermission: RolePermissions) => {
-    setRoleToDelete(rolePermission);
-    setDeleteModalOpen(true);
-  };
+  const handleEdit = (role: Role) => {
+    setSelectedRole(role)
+    setModalMode('edit')
+  }
+
+  const handleDeleteClick = (role: Role) => {
+    setRoleToDelete(role)
+    setDeleteModalOpen(true)
+  }
 
   return (
-    <Box sx={{ padding: 3, width: "100%", boxSizing: "border-box" }}>
-      <Typography
-        variant="h4"
-        component="h1"
-        sx={{ fontWeight: "bold", marginBottom: 3 }}
-      >
+    <Box sx={{ padding: 3, width: '100%', boxSizing: 'border-box' }}>
+      <Typography variant='h4' component='h1' sx={{ fontWeight: 'bold', marginBottom: 3 }}>
         Gerenciamento de Permissões
       </Typography>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           gap: 2,
           marginBottom: 3,
-          flexWrap: "wrap",
-        }}
-      >
+          flexWrap: 'wrap'
+        }}>
         <TextField
-          variant="outlined"
-          placeholder="Buscar perfis..."
-          size="medium"
+          variant='outlined'
+          placeholder='Buscar perfis...'
+          size='medium'
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={e => setSearchQuery(e.target.value)}
           slotProps={{
             input: {
-              startAdornment: <Search size={18} style={{ marginRight: 8 }} />,
-            },
+              startAdornment: <Search size={18} style={{ marginRight: 8 }} />
+            }
           }}
         />
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
             gap: 1,
-            flexWrap: "wrap",
-          }}
-        >
-          <ToggleButtonGroup
-            value={viewMode}
-            exclusive
-            onChange={handleViewModeChange}
-            size="small"
-          >
-            <ToggleButton value="list">
+            flexWrap: 'wrap'
+          }}>
+          <ToggleButtonGroup value={viewMode} exclusive onChange={handleViewModeChange} size='small'>
+            <ToggleButton value='list'>
               <ListIcon size={20} />
             </ToggleButton>
-            <ToggleButton value="grid">
+            <ToggleButton value='grid'>
               <Grid size={20} />
             </ToggleButton>
           </ToggleButtonGroup>
           <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             onClick={() => {
-              setSelectedRolePermissions(null);
-              setModalMode("create");
+              setSelectedRole(null)
+              setModalMode('create')
             }}
-            startIcon={<PlusIcon />}
-          >
+            startIcon={<PlusIcon />}>
             Novo Perfil
           </Button>
         </Box>
       </Box>
 
-      {viewMode == "list" ? (
+      {isLoading ? (
+        <Box sx={{ textAlign: 'center', py: 3 }}>Carregando...</Box>
+      ) : viewMode === 'list' ? (
         <Box
           sx={{
-            width: "100%",
-            maxWidth: "100%",
-            boxSizing: "border-box",
-          }}
-        >
-          <PermissionsList
-            rolesPermissions={filteredRolesPermissions}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDelete={handleDeleteClick}
-          />
+            width: '100%',
+            maxWidth: '100%',
+            boxSizing: 'border-box'
+          }}>
+          <PermissionsList roles={filteredRoles} onView={handleView} onEdit={handleEdit} onDelete={handleDeleteClick} />
         </Box>
       ) : (
         <Box
           sx={{
-            display: "grid",
+            display: 'grid',
             gridTemplateColumns: {
-              xs: "1fr",
-              sm: "repeat(2, 1fr)",
-              md: "repeat(3, 1fr)",
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)'
             },
-            gap: 1,
-            width: "100%",
-          }}
-        >
-          {filteredRolesPermissions.map((role) => (
+            gap: 2,
+            width: '100%'
+          }}>
+          {filteredRoles.map(role => (
             <AccessCard
               key={role.id}
-              rolePermission={role}
-              onEdit={() => {
-                handleEdit(role);
-              }}
-              onView={() => {
-                handleView(role);
-              }}
+              role={role}
+              onEdit={() => handleEdit(role)}
+              onView={() => handleView(role)}
               onDelete={() => handleDeleteClick(role)}
             />
           ))}
@@ -203,10 +180,10 @@ export default function PermissionsManagement() {
         <RolePermissionForm
           open={!!modalMode}
           onClose={() => {
-            setModalMode(null);
-            setSelectedRolePermissions(null);
+            setModalMode(null)
+            setSelectedRole(null)
           }}
-          rolePermissions={selectedRolePermissions}
+          role={selectedRole}
           mode={modalMode}
           onSave={handleSave}
         />
@@ -215,12 +192,12 @@ export default function PermissionsManagement() {
       <DeleteConfirmationModal
         isOpen={deleteModalOpen}
         onClose={() => {
-          setDeleteModalOpen(false);
-          setRoleToDelete(null);
+          setDeleteModalOpen(false)
+          setRoleToDelete(null)
         }}
         onConfirm={handleDeleteConfirm}
-        roleName={rolePermissionToDelete?.name || ""}
+        roleName={roleToDelete?.name || ''}
       />
     </Box>
-  );
+  )
 }

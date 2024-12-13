@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from 'react'
 import { Plus, Search, Edit2, Trash2, Key, User, Shield } from 'lucide-react'
 import api from '../../../lib/api'
-import { User as UserType } from '../../../app/types/types'
+import { User as UserType, Role } from '../../../app/types/types'
 import { UserForm } from './components/user-form'
 
 export default function UserManagement() {
   const [users, setUsers] = useState<UserType[]>([])
+  const [roles, setRoles] = useState<Role[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [showUserForm, setShowUserForm] = useState(false)
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null)
@@ -15,6 +16,7 @@ export default function UserManagement() {
 
   useEffect(() => {
     fetchUsers()
+    fetchRoles()
   }, [])
 
   const fetchUsers = async () => {
@@ -28,20 +30,50 @@ export default function UserManagement() {
     }
   }
 
+  const fetchRoles = async () => {
+    try {
+      const response = await api.get('/roles')
+      setRoles(response)
+    } catch (error) {
+      console.error('Error fetching roles:', error)
+    }
+  }
+
+  const getRolePermissions = (roleName: string) => {
+    const role = roles.find(r => r.name === roleName)
+    return role?.permissions || []
+  }
+
   const filteredUsers = users.filter(
     user =>
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const handleSave = (user: UserType) => {
-    if (selectedUser) {
-      setUsers(users.map(u => (u.id === selectedUser.id ? { ...user, roleName: selectedUser.roleName } : u)))
-    } else {
-      setUsers([...users, { ...user, roleName: 'Novo Perfil' }])
+  const handleSave = async (user: UserType) => {
+    try {
+      if (selectedUser) {
+        await api.put(`/users/${selectedUser.id}`, user)
+      } else {
+        await api.post('/users', user)
+      }
+      fetchUsers() // Refresh the users list
+      setShowUserForm(false)
+      setSelectedUser(null)
+    } catch (error) {
+      console.error('Error saving user:', error)
+      // Handle error (show notification, etc.)
     }
-    setShowUserForm(false)
-    setSelectedUser(null)
+  }
+
+  const handleDelete = async (userId: number) => {
+    try {
+      await api.delete(`/users/${userId}`)
+      fetchUsers() // Refresh the users list
+    } catch (error) {
+      console.error('Error deleting user:', error)
+      // Handle error (show notification, etc.)
+    }
   }
 
   return (
@@ -80,44 +112,54 @@ export default function UserManagement() {
           {isLoading ? (
             <div className='p-4 text-center'>Carregando...</div>
           ) : (
-            filteredUsers.map(user => (
-              <div key={user.id} className='grid grid-cols-5 gap-4 p-4 items-center'>
-                <div className='col-span-2'>
-                  <div className='font-medium text-gray-900'>{user.name}</div>
-                  <div className='text-sm text-gray-500'>{user.email}</div>
+            filteredUsers.map(user => {
+              const userPermissions = getRolePermissions(user.role)
+              return (
+                <div key={user.id} className='grid grid-cols-5 gap-4 p-4 items-center'>
+                  <div className='col-span-2'>
+                    <div className='font-medium text-gray-900'>{user.name}</div>
+                    <div className='text-sm text-gray-500'>{user.email}</div>
+                  </div>
+                  <div className='flex items-center'>
+                    <Shield className='w-4 h-4 mr-2 text-kai-primary' />
+                    <span>{user.role}</span>
+                  </div>
+                  <div>
+                    <div className='text-sm text-gray-500'>{userPermissions.length} permissões</div>
+                    <div className='text-xs text-gray-400'>
+                      {userPermissions.slice(0, 2).map(p => (
+                        <span key={p.id} className='mr-1'>
+                          {p.permission}:{p.resource},
+                        </span>
+                      ))}
+                      {userPermissions.length > 2 && '...'}
+                    </div>
+                  </div>
+                  <div className='flex justify-end space-x-2'>
+                    <button
+                      onClick={() => {
+                        setSelectedUser(user)
+                        setShowUserForm(true)
+                      }}
+                      className='p-2 text-gray-400 hover:text-kai-primary rounded-lg hover:bg-kai-gray-50'>
+                      <Edit2 className='w-5 h-5' />
+                    </button>
+                    <button className='p-2 text-gray-400 hover:text-yellow-600 rounded-lg hover:bg-yellow-50'>
+                      <Key className='w-5 h-5' />
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
+                          handleDelete(user.id)
+                        }
+                      }}
+                      className='p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50'>
+                      <Trash2 className='w-5 h-5' />
+                    </button>
+                  </div>
                 </div>
-                <div className='flex items-center'>
-                  <Shield className='w-4 h-4 mr-2 text-kai-primary' />
-                  <span>{user.role}</span>
-                </div>
-                <div>
-                  <div className='text-sm text-gray-500'>Pacientes: {user.patientPermissions.length}</div>
-                  <div className='text-sm text-gray-500'>Solicitações: {user.serviceRequestPermissions.length}</div>
-                </div>
-                <div className='flex justify-end space-x-2'>
-                  <button
-                    onClick={() => {
-                      setSelectedUser(user)
-                      setShowUserForm(true)
-                    }}
-                    className='p-2 text-gray-400 hover:text-kai-primary rounded-lg hover:bg-kai-gray-50'>
-                    <Edit2 className='w-5 h-5' />
-                  </button>
-                  <button className='p-2 text-gray-400 hover:text-yellow-600 rounded-lg hover:bg-yellow-50'>
-                    <Key className='w-5 h-5' />
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
-                        // Implement delete API call here
-                      }
-                    }}
-                    className='p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50'>
-                    <Trash2 className='w-5 h-5' />
-                  </button>
-                </div>
-              </div>
-            ))
+              )
+            })
           )}
         </div>
       </div>
@@ -125,6 +167,7 @@ export default function UserManagement() {
       {showUserForm && (
         <UserForm
           user={selectedUser}
+          roles={roles}
           onSave={handleSave}
           onCancel={() => {
             setShowUserForm(false)
