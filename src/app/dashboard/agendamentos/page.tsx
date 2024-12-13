@@ -8,7 +8,6 @@ import { CalendarView } from '../../components/scheduling/CalendarView';
 
 export default function SchedulingList() {
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [searchQuery, setSearchQuery] = useState('');
     const [view, setView] = useState<'list' | 'calendar'>('list');
 
     const handlePrevDay = () => {
@@ -62,17 +61,6 @@ export default function SchedulingList() {
                     </div>
 
                     <div className="flex items-center space-x-4">
-                        <div className="relative">
-                            <input
-                                type="text"
-                                placeholder="Buscar agendamentos..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
-                            <Search className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
-                        </div>
-
                         <div className="flex rounded-lg border border-gray-200 p-1 bg-white">
                             <button
                                 onClick={() => setView('list')}
@@ -102,12 +90,10 @@ export default function SchedulingList() {
             {view === 'calendar' ? (
                 <CalendarView
                     date={selectedDate}
-                    onDateSelect={setSelectedDate}
                 />
             ) : (
                 <AppointmentList
                     date={selectedDate}
-                    searchQuery={searchQuery}
                 />
             )}
         </div>
