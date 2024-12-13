@@ -1,7 +1,8 @@
 export type User = {
-  id: string
-  nome: string
-  avatar: string
+  id: number
+  name: string
+  email: string
+  role: string
 }
 
 export type Estudo = {

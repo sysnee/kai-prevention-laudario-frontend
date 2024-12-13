@@ -1,67 +1,37 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Plus, Search, Edit2, Trash2, Key, UserCog, User, Shield } from 'lucide-react'
-// import { UserForm } from './UserForm'
+import React, { useState, useEffect } from 'react'
+import { Plus, Search, Edit2, Trash2, Key, User, Shield } from 'lucide-react'
+import api from '../../../lib/api'
 import { User as UserType } from '../../../app/types/types'
-
-// Mock data with role information
-const mockUsers: (UserType & { roleName: string })[] = [
-  {
-    id: '1',
-    fullName: 'Dr. João Silva',
-    birthDate: '1980-05-15',
-    gender: 'male',
-    cpf: '123.456.789-00',
-    isHealthcareProfessional: true,
-    professionalType: {
-      id: 'doctor',
-      name: 'Médico',
-      councilCode: 'CRM',
-      federalCouncil: 'CFM',
-      description: 'Conselho Federal de Medicina'
-    },
-    registrationNumber: 'CRM-123456',
-    contact: {
-      phone: '(11) 98765-4321',
-      email: 'joao.silva@example.com'
-    },
-    address: 'Rua Example, 123 - São Paulo, SP',
-    status: 'active',
-    lastAccess: '2024-03-15 14:30',
-    roleId: '2',
-    roleName: 'Médico'
-  },
-  {
-    id: '2',
-    fullName: 'Maria Santos',
-    birthDate: '1985-08-20',
-    gender: 'female',
-    cpf: '987.654.321-00',
-    isHealthcareProfessional: false,
-    contact: {
-      phone: '(11) 97654-3210',
-      email: 'maria.santos@example.com'
-    },
-    address: 'Av. Example, 456 - São Paulo, SP',
-    status: 'active',
-    lastAccess: '2024-03-15 15:45',
-    roleId: '3',
-    roleName: 'Recepcionista'
-  }
-]
+import { UserForm } from './components/user-form'
 
 export default function UserManagement() {
-  const [users, setUsers] = useState(mockUsers)
+  const [users, setUsers] = useState<UserType[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [showUserForm, setShowUserForm] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<(UserType & { roleName: string }) | null>(null)
+  const [selectedUser, setSelectedUser] = useState<UserType | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    fetchUsers()
+  }, [])
+
+  const fetchUsers = async () => {
+    try {
+      const response = await api.get('/users')
+      setUsers(response)
+      setIsLoading(false)
+    } catch (error) {
+      console.error('Error fetching users:', error)
+      setIsLoading(false)
+    }
+  }
 
   const filteredUsers = users.filter(
     user =>
-      user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.contact.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.cpf.includes(searchQuery)
+      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   const handleSave = (user: UserType) => {
@@ -99,78 +69,60 @@ export default function UserManagement() {
       </div>
 
       <div className='bg-white rounded-lg border border-gray-200'>
-        <div className='grid grid-cols-7 gap-4 p-4 font-medium text-gray-500 border-b border-gray-200'>
+        <div className='grid grid-cols-5 gap-4 p-4 font-medium text-gray-500 border-b border-gray-200'>
           <div className='col-span-2'>Usuário</div>
-          <div>Tipo</div>
           <div>Perfil</div>
-          <div>Status</div>
-          <div>Último Acesso</div>
+          <div>Permissões</div>
           <div className='text-right'>Ações</div>
         </div>
 
         <div className='divide-y divide-gray-200'>
-          {filteredUsers.map(user => (
-            <div key={user.id} className='grid grid-cols-7 gap-4 p-4 items-center'>
-              <div className='col-span-2'>
-                <div className='font-medium text-gray-900'>{user.fullName}</div>
-                <div className='text-sm text-gray-500'>{user.contact.email}</div>
+          {isLoading ? (
+            <div className='p-4 text-center'>Carregando...</div>
+          ) : (
+            filteredUsers.map(user => (
+              <div key={user.id} className='grid grid-cols-5 gap-4 p-4 items-center'>
+                <div className='col-span-2'>
+                  <div className='font-medium text-gray-900'>{user.name}</div>
+                  <div className='text-sm text-gray-500'>{user.email}</div>
+                </div>
+                <div className='flex items-center'>
+                  <Shield className='w-4 h-4 mr-2 text-kai-primary' />
+                  <span>{user.role}</span>
+                </div>
+                <div>
+                  <div className='text-sm text-gray-500'>Pacientes: {user.patientPermissions.length}</div>
+                  <div className='text-sm text-gray-500'>Solicitações: {user.serviceRequestPermissions.length}</div>
+                </div>
+                <div className='flex justify-end space-x-2'>
+                  <button
+                    onClick={() => {
+                      setSelectedUser(user)
+                      setShowUserForm(true)
+                    }}
+                    className='p-2 text-gray-400 hover:text-kai-primary rounded-lg hover:bg-kai-gray-50'>
+                    <Edit2 className='w-5 h-5' />
+                  </button>
+                  <button className='p-2 text-gray-400 hover:text-yellow-600 rounded-lg hover:bg-yellow-50'>
+                    <Key className='w-5 h-5' />
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
+                        // Implement delete API call here
+                      }
+                    }}
+                    className='p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50'>
+                    <Trash2 className='w-5 h-5' />
+                  </button>
+                </div>
               </div>
-              <div className='text-gray-600 flex items-center'>
-                {user.isHealthcareProfessional ? (
-                  <>
-                    <UserCog className='w-4 h-4 mr-2' />
-                    <span>
-                      {user.professionalType.councilCode} {user.registrationNumber}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <User className='w-4 h-4 mr-2' />
-                    <span>Usuário Regular</span>
-                  </>
-                )}
-              </div>
-              <div className='flex items-center'>
-                <Shield className='w-4 h-4 mr-2 text-kai-primary' />
-                <span>{user.roleName}</span>
-              </div>
-              <div>
-                <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                  }`}>
-                  {user.status === 'active' ? 'Ativo' : 'Inativo'}
-                </span>
-              </div>
-              <div className='text-sm text-gray-500'>{user.lastAccess}</div>
-              <div className='flex justify-end space-x-2'>
-                <button
-                  onClick={() => {
-                    setSelectedUser(user)
-                    setShowUserForm(true)
-                  }}
-                  className='p-2 text-gray-400 hover:text-kai-primary rounded-lg hover:bg-kai-gray-50'>
-                  <Edit2 className='w-5 h-5' />
-                </button>
-                <button className='p-2 text-gray-400 hover:text-yellow-600 rounded-lg hover:bg-yellow-50'>
-                  <Key className='w-5 h-5' />
-                </button>
-                <button
-                  onClick={() => {
-                    if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
-                      setUsers(users.filter(u => u.id !== user.id))
-                    }
-                  }}
-                  className='p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50'>
-                  <Trash2 className='w-5 h-5' />
-                </button>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 
-      {/* {showUserForm && (
+      {showUserForm && (
         <UserForm
           user={selectedUser}
           onSave={handleSave}
@@ -179,7 +131,7 @@ export default function UserManagement() {
             setSelectedUser(null)
           }}
         />
-      )} */}
+      )}
     </div>
   )
 }
