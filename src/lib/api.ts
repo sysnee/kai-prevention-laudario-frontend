@@ -42,7 +42,7 @@ const apiCall = async (url: string, options: RequestOptions & { body?: any, para
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      'X-Session': 'Bearer ' + sessionJwt,
+      'Session': 'Bearer ' + sessionJwt,
       'Authorization': 'Bearer ' + (session as any)['accessToken'],
       ...headers,
     },
