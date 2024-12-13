@@ -44,7 +44,7 @@ export function PatientForm({ onSubmit }: PatientFormProps) {
       setFormData(prev => ({
         ...prev,
         [parent]: {
-          ...prev[parent as keyof typeof prev],
+          ...prev[parent],
           [child]: value
         }
       }));
@@ -61,8 +61,8 @@ export function PatientForm({ onSubmit }: PatientFormProps) {
   };
 
   const handleCEPChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    let cep = e.target.value.replace(/\D/g, '');
-    
+    const cep = e.target.value.replace(/\D/g, '');
+
     // Update the CEP field with formatted value
     setFormData(prev => ({
       ...prev,

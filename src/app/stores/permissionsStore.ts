@@ -12,73 +12,64 @@ export const mockRolePermissions: RolePermissions[] = [
     ],
     examStages: [
       {
-        stage: "planned",
+        stage: "PLANNED",
         access: "write",
         description: getExamAccessDescription(
-          "planned",
+          "PLANNED",
           "write",
           "Recepcionista"
         ),
       },
       {
-        stage: "waiting",
+        stage: "WAITING",
         access: "write",
         description: getExamAccessDescription(
-          "waiting",
+          "WAITING",
           "write",
           "Recepcionista"
         ),
       },
       {
-        stage: "started",
+        stage: "STARTED",
         access: "read",
         description: getExamAccessDescription(
-          "started",
+          "STARTED",
           "read",
           "Recepcionista"
         ),
       },
       {
-        stage: "onhold",
+        stage: "ONHOLD",
         access: "read",
         description: getExamAccessDescription(
-          "onhold",
+          "ONHOLD",
           "read",
           "Recepcionista"
         ),
       },
       {
-        stage: "completed",
+        stage: "COMPLETED",
         access: "read",
         description: getExamAccessDescription(
-          "completed",
+          "COMPLETED",
           "read",
           "Recepcionista"
         ),
       },
       {
-        stage: "transcription",
+        stage: "TRANSCRIPTION",
         access: "none",
         description: getExamAccessDescription(
-          "transcription",
+          "TRANSCRIPTION",
           "none",
           "Recepcionista"
         ),
       },
       {
-        stage: "revision",
+        stage: "SIGNED",
         access: "none",
         description: getExamAccessDescription(
-          "revision",
-          "none",
-          "Recepcionista"
-        ),
-      },
-      {
-        stage: "signed",
-        access: "none",
-        description: getExamAccessDescription(
-          "signed",
+          "SIGNED",
           "none",
           "Recepcionista"
         ),
@@ -95,56 +86,47 @@ export const mockRolePermissions: RolePermissions[] = [
     ],
     examStages: [
       {
-        stage: "planned",
+        stage: "PLANNED",
         access: "write",
-        description: getExamAccessDescription("planned", "write", "Enfermeiro"),
+        description: getExamAccessDescription("PLANNED", "write", "Enfermeiro"),
       },
       {
-        stage: "waiting",
+        stage: "WAITING",
         access: "write",
-        description: getExamAccessDescription("waiting", "write", "Enfermeiro"),
+        description: getExamAccessDescription("WAITING", "write", "Enfermeiro"),
       },
       {
-        stage: "started",
+        stage: "STARTED",
         access: "read",
-        description: getExamAccessDescription("started", "read", "Enfermeiro"),
+        description: getExamAccessDescription("STARTED", "read", "Enfermeiro"),
       },
       {
-        stage: "onhold",
+        stage: "ONHOLD",
         access: "read",
-        description: getExamAccessDescription("onhold", "read", "Enfermeiro"),
+        description: getExamAccessDescription("ONHOLD", "read", "Enfermeiro"),
       },
       {
-        stage: "completed",
+        stage: "COMPLETED",
         access: "read",
         description: getExamAccessDescription(
-          "completed",
+          "COMPLETED",
           "read",
           "Enfermeiro"
         ),
       },
       {
-        stage: "transcription",
+        stage: "TRANSCRIPTION",
         access: "write",
         description: getExamAccessDescription(
-          "transcription",
+          "TRANSCRIPTION",
           "write",
           "Enfermeiro"
         ),
       },
       {
-        stage: "revision",
-        access: "write",
-        description: getExamAccessDescription(
-          "revision",
-          "write",
-          "Enfermeiro"
-        ),
-      },
-      {
-        stage: "signed",
+        stage: "SIGNED",
         access: "none",
-        description: getExamAccessDescription("signed", "none", "Enfermeiro"),
+        description: getExamAccessDescription("SIGNED", "none", "Enfermeiro"),
       },
     ],
   },
@@ -158,48 +140,43 @@ export const mockRolePermissions: RolePermissions[] = [
     ],
     examStages: [
       {
-        stage: "planned",
+        stage: "PLANNED",
         access: "write",
-        description: getExamAccessDescription("planned", "write", "Biomedico"),
+        description: getExamAccessDescription("PLANNED", "write", "Biomedico"),
       },
       {
-        stage: "waiting",
+        stage: "WAITING",
         access: "write",
-        description: getExamAccessDescription("waiting", "write", "Biomedico"),
+        description: getExamAccessDescription("WAITING", "write", "Biomedico"),
       },
       {
-        stage: "started",
+        stage: "STARTED",
         access: "read",
-        description: getExamAccessDescription("started", "read", "Biomedico"),
+        description: getExamAccessDescription("STARTED", "read", "Biomedico"),
       },
       {
-        stage: "onhold",
+        stage: "ONHOLD",
         access: "read",
-        description: getExamAccessDescription("onhold", "read", "Biomedico"),
+        description: getExamAccessDescription("ONHOLD", "read", "Biomedico"),
       },
       {
-        stage: "completed",
+        stage: "COMPLETED",
         access: "read",
-        description: getExamAccessDescription("completed", "read", "Biomedico"),
+        description: getExamAccessDescription("COMPLETED", "read", "Biomedico"),
       },
       {
-        stage: "transcription",
+        stage: "TRANSCRIPTION",
         access: "write",
         description: getExamAccessDescription(
-          "transcription",
+          "TRANSCRIPTION",
           "write",
           "Biomedico"
         ),
       },
       {
-        stage: "revision",
-        access: "write",
-        description: getExamAccessDescription("revision", "write", "Biomedico"),
-      },
-      {
-        stage: "signed",
+        stage: "SIGNED",
         access: "none",
-        description: getExamAccessDescription("signed", "none", "Biomedico"),
+        description: getExamAccessDescription("SIGNED", "none", "Biomedico"),
       },
     ],
   },
@@ -213,68 +190,59 @@ export const mockRolePermissions: RolePermissions[] = [
     ],
     examStages: [
       {
-        stage: "planned",
+        stage: "PLANNED",
         access: "write",
         description: getExamAccessDescription(
-          "planned",
+          "PLANNED",
           "write",
           "Radiologista"
         ),
       },
       {
-        stage: "waiting",
+        stage: "WAITING",
         access: "write",
         description: getExamAccessDescription(
-          "waiting",
+          "WAITING",
           "write",
           "Radiologista"
         ),
       },
       {
-        stage: "started",
+        stage: "STARTED",
         access: "read",
         description: getExamAccessDescription(
-          "started",
+          "STARTED",
           "read",
           "Radiologista"
         ),
       },
       {
-        stage: "onhold",
+        stage: "ONHOLD",
         access: "read",
-        description: getExamAccessDescription("onhold", "read", "Radiologista"),
+        description: getExamAccessDescription("ONHOLD", "read", "Radiologista"),
       },
       {
-        stage: "completed",
+        stage: "COMPLETED",
         access: "read",
         description: getExamAccessDescription(
-          "completed",
+          "COMPLETED",
           "read",
           "Radiologista"
         ),
       },
       {
-        stage: "transcription",
+        stage: "TRANSCRIPTION",
         access: "write",
         description: getExamAccessDescription(
-          "transcription",
+          "TRANSCRIPTION",
           "write",
           "Radiologista"
         ),
       },
       {
-        stage: "revision",
-        access: "write",
-        description: getExamAccessDescription(
-          "revision",
-          "write",
-          "Radiologista"
-        ),
-      },
-      {
-        stage: "signed",
+        stage: "SIGNED",
         access: "none",
-        description: getExamAccessDescription("signed", "none", "Radiologista"),
+        description: getExamAccessDescription("SIGNED", "none", "Radiologista"),
       },
     ],
   },
@@ -288,56 +256,47 @@ export const mockRolePermissions: RolePermissions[] = [
     ],
     examStages: [
       {
-        stage: "planned",
+        stage: "PLANNED",
         access: "write",
-        description: getExamAccessDescription("planned", "write", "HeadDoctor"),
+        description: getExamAccessDescription("PLANNED", "write", "HeadDoctor"),
       },
       {
-        stage: "waiting",
+        stage: "WAITING",
         access: "write",
-        description: getExamAccessDescription("waiting", "write", "HeadDoctor"),
+        description: getExamAccessDescription("WAITING", "write", "HeadDoctor"),
       },
       {
-        stage: "started",
+        stage: "STARTED",
         access: "read",
-        description: getExamAccessDescription("started", "read", "HeadDoctor"),
+        description: getExamAccessDescription("STARTED", "read", "HeadDoctor"),
       },
       {
-        stage: "onhold",
+        stage: "ONHOLD",
         access: "read",
-        description: getExamAccessDescription("onhold", "read", "HeadDoctor"),
+        description: getExamAccessDescription("ONHOLD", "read", "HeadDoctor"),
       },
       {
-        stage: "completed",
+        stage: "COMPLETED",
         access: "read",
         description: getExamAccessDescription(
-          "completed",
+          "COMPLETED",
           "read",
           "HeadDoctor"
         ),
       },
       {
-        stage: "transcription",
+        stage: "TRANSCRIPTION",
         access: "write",
         description: getExamAccessDescription(
-          "transcription",
+          "TRANSCRIPTION",
           "write",
           "HeadDoctor"
         ),
       },
       {
-        stage: "revision",
-        access: "write",
-        description: getExamAccessDescription(
-          "revision",
-          "write",
-          "HeadDoctor"
-        ),
-      },
-      {
-        stage: "signed",
+        stage: "SIGNED",
         access: "none",
-        description: getExamAccessDescription("signed", "none", "HeadDoctor"),
+        description: getExamAccessDescription("SIGNED", "none", "HeadDoctor"),
       },
     ],
   },
@@ -351,48 +310,43 @@ export const mockRolePermissions: RolePermissions[] = [
     ],
     examStages: [
       {
-        stage: "planned",
+        stage: "PLANNED",
         access: "write",
-        description: getExamAccessDescription("planned", "write", "Master"),
+        description: getExamAccessDescription("PLANNED", "write", "Master"),
       },
       {
-        stage: "waiting",
+        stage: "WAITING",
         access: "write",
-        description: getExamAccessDescription("waiting", "write", "Master"),
+        description: getExamAccessDescription("WAITING", "write", "Master"),
       },
       {
-        stage: "started",
+        stage: "STARTED",
         access: "read",
-        description: getExamAccessDescription("started", "read", "Master"),
+        description: getExamAccessDescription("STARTED", "read", "Master"),
       },
       {
-        stage: "onhold",
+        stage: "ONHOLD",
         access: "read",
-        description: getExamAccessDescription("onhold", "read", "Master"),
+        description: getExamAccessDescription("ONHOLD", "read", "Master"),
       },
       {
-        stage: "completed",
+        stage: "COMPLETED",
         access: "read",
-        description: getExamAccessDescription("completed", "read", "Master"),
+        description: getExamAccessDescription("COMPLETED", "read", "Master"),
       },
       {
-        stage: "transcription",
+        stage: "TRANSCRIPTION",
         access: "write",
         description: getExamAccessDescription(
-          "transcription",
+          "TRANSCRIPTION",
           "write",
           "Master"
         ),
       },
       {
-        stage: "revision",
-        access: "write",
-        description: getExamAccessDescription("revision", "write", "Master"),
-      },
-      {
-        stage: "signed",
+        stage: "SIGNED",
         access: "none",
-        description: getExamAccessDescription("signed", "none", "Master"),
+        description: getExamAccessDescription("SIGNED", "none", "Master"),
       },
     ],
   },

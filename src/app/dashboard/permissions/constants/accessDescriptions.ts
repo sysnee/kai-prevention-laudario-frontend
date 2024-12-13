@@ -1,12 +1,12 @@
-import { AccessLevel, ExamStatus, Role } from "@/src/app/types/pemissions/permissions";
+import { AccessLevel, Role, ServiceStatus } from "@/src/app/types/pemissions/permissions";
 
 type AccessDescription = string | Partial<Record<Role, string>>;
 
 export const examAccessDescriptions: Record<
-  ExamStatus,
+  ServiceStatus,
   Record<AccessLevel, string | Partial<Record<Role, string>>>
 > = {
-  planned: {
+  PLANNED: {
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: {
@@ -14,7 +14,7 @@ export const examAccessDescriptions: Record<
     },
     full: "Acesso completo",
   },
-  waiting: {
+  WAITING: {
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: {
@@ -22,7 +22,7 @@ export const examAccessDescriptions: Record<
     },
     full: "Acesso completo",
   },
-  started: {
+  STARTED: {
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: {
@@ -31,7 +31,7 @@ export const examAccessDescriptions: Record<
     },
     full: "Acesso completo",
   },
-  onhold: {
+  ONHOLD: {
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: {
@@ -40,7 +40,7 @@ export const examAccessDescriptions: Record<
     },
     full: "Acesso completo",
   },
-  completed: {
+  COMPLETED: {
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: {
@@ -49,7 +49,7 @@ export const examAccessDescriptions: Record<
     },
     full: "Acesso completo",
   },
-  transcription: {
+  TRANSCRIPTION: {
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: {
@@ -57,7 +57,7 @@ export const examAccessDescriptions: Record<
     },
     full: "Acesso completo",
   },
-  revision: {
+  REVISION: {
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: {
@@ -65,7 +65,7 @@ export const examAccessDescriptions: Record<
     },
     full: "Acesso completo",
   },
-  signed: {
+  SIGNED: {
     none: "Acesso não autorizado",
     read: "Visualizar / Consultar",
     write: "Não aplicável",
@@ -74,13 +74,13 @@ export const examAccessDescriptions: Record<
 };
 
 export const patientAccessDescriptions: Record<AccessLevel, AccessDescription> =
-  {
-    none: "Acesso não autorizado",
-    read: "Visualizar informações do paciente",
-    write: {
-      Recepcionista: "Criar e editar registros de clientes",
-      Enfermeiro: "Gerenciar informações clínicas do clientes",
-      HeadDoctor: "Aprovar modificações em registros de clientes",
-    },
-    full: "Acesso e controle total sobre registros de clientes",
-  };
+{
+  none: "Acesso não autorizado",
+  read: "Visualizar informações do paciente",
+  write: {
+    Recepcionista: "Criar e editar registros de clientes",
+    Enfermeiro: "Gerenciar informações clínicas do clientes",
+    HeadDoctor: "Aprovar modificações em registros de clientes",
+  },
+  full: "Acesso e controle total sobre registros de clientes",
+};

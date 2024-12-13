@@ -19,7 +19,7 @@ import {
   RolePermissions,
   AccessLevel,
   Module,
-  ExamStatus,
+  ServiceStatus,
 } from "../../../types/pemissions/permissions";
 import { Save, X } from "lucide-react";
 
@@ -31,15 +31,14 @@ const PERMISSION_LEVELS: Record<AccessLevel, string> = {
 };
 
 const MODULES: Module[] = ["client", "exam"];
-const STAGES: ExamStatus[] = [
-  "planned",
-  "waiting",
-  "started",
-  "onhold",
-  "completed",
-  "transcription",
-  "revision",
-  "signed",
+const STAGES: ServiceStatus[] = [
+  "PLANNED",
+  "WAITING",
+  "STARTED",
+  "ONHOLD",
+  "COMPLETED",
+  "TRANSCRIPTION",
+  "SIGNED",
 ];
 
 // Função para fornecer descrições padrão para os stages
@@ -103,7 +102,7 @@ export function RoleModal({
     }));
   };
 
-  const handleStageChange = (stage: ExamStatus, access: AccessLevel) => {
+  const handleStageChange = (stage: ServiceStatus, access: AccessLevel) => {
     setFormData((prev) => ({
       ...prev,
       examStages: prev.examStages.map((examStage) =>

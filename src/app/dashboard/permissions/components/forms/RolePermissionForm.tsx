@@ -51,15 +51,8 @@ export default function RolePermissionForm({
           { module: "exam", access: "none" },
         ],
         examStages: [
-          { stage: "planned", access: "none", description: "" },
-          { stage: "waiting", access: "none", description: "" },
-          { stage: "started", access: "none", description: "" },
-          { stage: "onhold", access: "none", description: "" },
-          { stage: "completed", access: "none", description: "" },
-          { stage: "transcription", access: "none", description: "" },
-          { stage: "revision", access: "none", description: "" },
-          { stage: "signed", access: "none", description: "" },
-        ],
+
+        ]
       }
     );
   });
@@ -97,8 +90,8 @@ export default function RolePermissionForm({
               {mode === "create"
                 ? "Criar nova permissão"
                 : mode === "edit"
-                ? "Editar permissão"
-                : "Visualizar permissão"}
+                  ? "Editar permissão"
+                  : "Visualizar permissão"}
             </Typography>
             <Box className="flex items-center gap-2">
               <Chip

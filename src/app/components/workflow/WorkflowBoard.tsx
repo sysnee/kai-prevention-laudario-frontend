@@ -107,7 +107,7 @@ export function WorkflowBoard({
 
   useEffect(() => {
     setServiceRequests(
-      new Array().concat(
+      [].concat(
         planned,
         waiting,
         started,

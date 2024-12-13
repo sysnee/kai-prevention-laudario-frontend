@@ -9,7 +9,7 @@ import {
   Typography,
   Divider,
 } from "@mui/material";
-import { RolePermissions } from "../../../types/pemissions/permissions";
+import { RolePermissions, ServiceStatus } from "../../../types/pemissions/permissions";
 import { useTheme } from "@mui/material/styles";
 import AccessChip from "./AccessChip";
 import ActionButtons from "./ActionButtons";
@@ -40,10 +40,9 @@ const TRANSLATIONS = {
   },
 } as const;
 
-type StageKey = keyof typeof TRANSLATIONS.stages;
 type AccessLevelKey = keyof typeof TRANSLATIONS.accessLevels;
 
-const translateStage = (stage: StageKey): string =>
+const translateStage = (stage: ServiceStatus): string =>
   TRANSLATIONS.stages[stage] || stage;
 
 const translateAccess = (access: AccessLevelKey): string =>

@@ -10,9 +10,9 @@ interface AppointmentFormProps {
   selectedExam?: any;
 }
 
-export function AppointmentForm({ 
-  onSubmit, 
-  onCancel, 
+export function AppointmentForm({
+  onSubmit,
+  onCancel,
   isLoading = false,
   selectedExam: initialExam
 }: AppointmentFormProps) {
@@ -43,7 +43,7 @@ export function AppointmentForm({
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6">
       <h3 className="text-lg font-semibold mb-4">Dados do Agendamento</h3>
-      
+
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Tipo de Exame
@@ -51,8 +51,8 @@ export function AppointmentForm({
         {selectedExam ? (
           <div className="p-4 bg-blue-50 rounded-lg">
             <div className="flex items-start">
-              <img 
-                src={selectedExam.image} 
+              <img
+                src={selectedExam.image}
                 alt={selectedExam.name}
                 className="w-20 h-20 object-cover rounded-lg"
               />

@@ -48,6 +48,7 @@ export function ExamStatus({
           <span className="text-sm text-gray-500 mr-4">Sala:</span>
           <input
             type="text"
+            readOnly
             value={room}
             onChange={(e) => onRoomChange(examId, e.target.value)}
             placeholder="Informe a sala"

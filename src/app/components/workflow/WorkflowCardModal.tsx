@@ -7,7 +7,6 @@ import { TimelineSection } from './card/TimelineSection';
 import { DocumentSection } from './card/DocumentSection';
 import { ExamStatus } from './card/ExamStatus';
 import { ActionButtons } from './card/ActionButtons';
-import { NotesSection } from './card/NotesSection';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTheme } from '@mui/material';
