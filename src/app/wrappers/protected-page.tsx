@@ -15,7 +15,7 @@ export default function ProtectedPage({ children }: { children: React.ReactNode,
       <div className="flex justify-center items-center" style={{ height: '100vh' }}>
         <Stack className="text-center" spacing={3}>
           <div className="items-center">
-            <CircularProgress />
+            <CircularProgress color="primary" />
           </div>
           <Stack>
             <h1 className='text-2xl'>Radiological Information System</h1>

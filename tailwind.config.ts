@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        primary: '#FF8046',
         'pure-white': 'rgb(255, 255, 255)',
         'warm-white': 'rgb(254, 255, 252)',
         'mint-white': 'rgb(253, 255, 254)',
