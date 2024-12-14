@@ -17,13 +17,13 @@ export function WorkflowColumn({ title, icon: Icon, color, description, children
 
   return (
     <div 
-      className="bg-gradient-to-b from-pure-white to-frost-white rounded-xl shadow-lg h-full"
+      className="rounded-xl shadow-lg h-full"
       style={{
         border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
       }}
     >
       <div 
-        className="p-4 bg-gradient-to-r from-pure-white to-ice-white"
+        className="p-4 bg-gradient-to-r"
         style={{
           borderBottom: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
         }}

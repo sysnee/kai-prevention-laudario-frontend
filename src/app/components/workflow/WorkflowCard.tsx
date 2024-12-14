@@ -39,7 +39,7 @@ export function WorkflowCard({ exam, index }: WorkflowCardProps) {
         >
           <div className={"rounded-lg p-4"}
             style={{
-              color: theme.palette.text.primary,
+              backgroundColor: theme.palette.background.default,
               border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
               borderLeft: hasDocumentsPending && exam.stage !== 'started' ? '4px solid #F59E0B'
                 : (theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)")
