@@ -15,7 +15,7 @@ import {
   Typography
 } from '@mui/material'
 import { Eye, Edit2, Trash2 } from 'lucide-react'
-import { Role, PermissionType, ResourceType } from '../../../types/types'
+import { Role, PermissionType, ResourceType } from '../../../types/permissions'
 
 const PERMISSION_TRANSLATIONS = {
   [PermissionType.CREATE]: 'Criar',

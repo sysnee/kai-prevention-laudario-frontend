@@ -16,17 +16,18 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton,
-  Chip
+  IconButton
 } from '@mui/material'
 import { User } from '../../types/user'
+import { Role } from '../../types/permissions'
+import { TABLE_HEADERS, USER_MANAGEMENT, getProfessionalTypeName } from '../../constants/translations'
 
 export default function UserManagement() {
-  const [users, setUsers] = useState<UserType[]>([])
+  const [users, setUsers] = useState<User[]>([])
   const [roles, setRoles] = useState<Role[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [showUserForm, setShowUserForm] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<UserType | null>(null)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -54,11 +55,6 @@ export default function UserManagement() {
     }
   }
 
-  const getRolePermissions = (roleName: string) => {
-    const role = roles.find(r => r.name === roleName)
-    return role?.permissions || []
-  }
-
   const filteredUsers = users.filter(
     user =>
       user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -72,29 +68,27 @@ export default function UserManagement() {
       } else {
         await api.post('/users', user)
       }
-      fetchUsers() // Refresh the users list
+      fetchUsers()
       setShowUserForm(false)
       setSelectedUser(null)
     } catch (error) {
       console.error('Error saving user:', error)
-      // Handle error (show notification, etc.)
     }
   }
 
   const handleDelete = async (userId: number) => {
     try {
       await api.delete(`/users/${userId}`)
-      fetchUsers() // Refresh the users list
+      fetchUsers()
     } catch (error) {
       console.error('Error deleting user:', error)
-      // Handle error (show notification, etc.)
     }
   }
 
   return (
     <Box sx={{ width: '100%', boxSizing: 'border-box' }}>
       <Typography variant='h4' component='h1' sx={{ fontWeight: 'bold', marginBottom: 3 }}>
-        Gerenciamento de Usuários
+        {USER_MANAGEMENT.title}
       </Typography>
 
       <Box
@@ -108,7 +102,7 @@ export default function UserManagement() {
         }}>
         <TextField
           variant='outlined'
-          placeholder='Buscar usuários...'
+          placeholder={USER_MANAGEMENT.searchPlaceholder}
           size='medium'
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
@@ -124,7 +118,7 @@ export default function UserManagement() {
             setShowUserForm(true)
           }}
           startIcon={<Plus />}>
-          Novo Usuário
+          {USER_MANAGEMENT.newUser}
         </Button>
       </Box>
 
@@ -132,81 +126,66 @@ export default function UserManagement() {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ width: '40%' }}>Usuário</TableCell>
-              <TableCell sx={{ width: '20%' }}>Perfil</TableCell>
-              <TableCell sx={{ width: '25%' }}>Permissões</TableCell>
+              <TableCell sx={{ width: '25%' }}>{TABLE_HEADERS.name}</TableCell>
+              <TableCell sx={{ width: '25%' }}>{TABLE_HEADERS.email}</TableCell>
+              <TableCell sx={{ width: '20%' }}>{TABLE_HEADERS.profile}</TableCell>
+              <TableCell sx={{ width: '15%' }}>{TABLE_HEADERS.profession}</TableCell>
               <TableCell sx={{ width: '15%' }} align='right'>
-                Ações
+                {TABLE_HEADERS.actions}
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={4} align='center'>
-                  Carregando...
+                <TableCell colSpan={5} align='center'>
+                  {USER_MANAGEMENT.loading}
                 </TableCell>
               </TableRow>
             ) : (
-              filteredUsers.map(user => {
-                const userPermissions = getRolePermissions(user.role)
-                return (
-                  <TableRow key={user.id}>
-                    <TableCell>
-                      <Typography variant='subtitle1'>{user.name}</Typography>
-                      <Typography variant='body2' color='text.secondary'>
-                        {user.email}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Shield className='text-primary' size={16} />
-                        <span>{user.role.name}</span>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant='body2' color='text.secondary'>
-                        {userPermissions.length} permissões
-                      </Typography>
-                      <Typography variant='caption' color='text.secondary'>
-                        {userPermissions.slice(0, 2).map(p => (
-                          <Chip
-                            key={p.id}
-                            label={`${p.permission}:${p.resource}`}
-                            size='small'
-                            sx={{ mr: 0.5, mb: 0.5 }}
-                          />
-                        ))}
-                        {userPermissions.length > 2 && '...'}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align='right'>
-                      <IconButton
-                        onClick={() => {
-                          setSelectedUser(user)
-                          setShowUserForm(true)
-                        }}
-                        color='primary'
-                        size='small'>
-                        <Edit2 />
-                      </IconButton>
-                      <IconButton color='warning' size='small'>
-                        <Key />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => {
-                          if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
-                            handleDelete(user.id)
-                          }
-                        }}
-                        color='error'
-                        size='small'>
-                        <Trash2 />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                )
-              })
+              filteredUsers.map(user => (
+                <TableRow key={user.id}>
+                  <TableCell>
+                    <Typography variant='subtitle1'>{user.fullName}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant='body2'>{user.email}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Shield className='text-primary' size={16} />
+                      <span>{user.role.name}</span>
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant='body2'>{getProfessionalTypeName(user.professionalType)}</Typography>
+                  </TableCell>
+                  <TableCell align='right'>
+                    <IconButton
+                      onClick={() => {
+                        setSelectedUser(user)
+                        setShowUserForm(true)
+                      }}
+                      color='primary'
+                      size='small'>
+                      <Edit2 />
+                    </IconButton>
+                    <IconButton color='warning' size='small'>
+                      <Key />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => {
+                        if (window.confirm(USER_MANAGEMENT.deleteConfirmation)) {
+                          handleDelete(user.id)
+                        }
+                      }}
+                      color='error'
+                      size='small'>
+                      <Trash2 />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
             )}
           </TableBody>
         </Table>

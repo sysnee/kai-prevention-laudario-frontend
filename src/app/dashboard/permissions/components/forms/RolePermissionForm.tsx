@@ -21,31 +21,18 @@ import {
   FormGroup,
   FormControlLabel
 } from '@mui/material'
-import { Role, Permission, PermissionType, ResourceType } from '../../../../../app/types/types'
 import { X } from 'lucide-react'
 import api from '../../../../../lib/api'
+import { PermissionType } from '@/src/app/types/permissions'
 
-const PERMISSION_TRANSLATIONS = {
-  [PermissionType.CREATE]: 'Criar',
-  [PermissionType.READ]: 'Visualizar',
-  [PermissionType.UPDATE]: 'Editar',
-  [PermissionType.DELETE]: 'Excluir'
-} as const
-
-const RESOURCE_TRANSLATIONS = {
-  [ResourceType.LAUDARIO]: 'Laudário',
-  [ResourceType.USER]: 'Usuário',
-  [ResourceType.ROLES]: 'Perfis',
-  [ResourceType.AGENDA]: 'Agenda',
-  [ResourceType.CLIENTS]: 'Clientes',
-  [ResourceType.WORKFLOW_PLANNED]: 'Workflow - Planejado',
-  [ResourceType.WORKFLOW_WAITING]: 'Workflow - Aguardando',
-  [ResourceType.WORKFLOW_STARTED]: 'Workflow - Iniciado',
-  [ResourceType.WORKFLOW_ONHOLD]: 'Workflow - Em Espera',
-  [ResourceType.WORKFLOW_COMPLETED]: 'Workflow - Concluído',
-  [ResourceType.WORKFLOW_TRANSCRIPTION]: 'Workflow - Transcrição',
-  [ResourceType.WORKFLOW_SIGNED]: 'Workflow - Assinado'
-} as const
+import {
+  PERMISSION_TRANSLATIONS,
+  RESOURCE_TRANSLATIONS,
+  TABLE_HEADERS,
+  USER_MANAGEMENT,
+  getProfessionalTypeName
+} from '@/src/app/constants/translations'
+import { ResourceType } from '@/src/app/types/permissions'
 
 interface RoleFormData {
   name: string
