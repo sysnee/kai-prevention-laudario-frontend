@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Clock, User, AlertCircle } from 'lucide-react';
+import { Clock, User, AlertCircle, CalendarX } from 'lucide-react';
 import api from '@/src/lib/api';
 import { CircularProgress } from '@mui/material';
 
 interface CalendarViewProps {
   date: Date;
-  onDateSelect: (date: Date) => void;
 }
 
 interface Appointment {
@@ -19,9 +18,26 @@ interface Appointment {
   createdAt: string;
 }
 
-export function CalendarView({ date, onDateSelect }: CalendarViewProps) {
+export function CalendarView({ date }: CalendarViewProps) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const translateStatus = (status: string): string => {
+    const translations: { [key: string]: string } = {
+      PLANNED: "Planejado",
+      CONFIRMED: "Confirmado",
+      CANCELED: "Cancelado",
+    };
+    return translations[status] || status;
+  };
+
+  // Função para formatar a data
+  const formatDate = (date: Date): string => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   const fetchAppointments = async () => {
     setLoading(true);
@@ -37,7 +53,7 @@ export function CalendarView({ date, onDateSelect }: CalendarViewProps) {
 
   useEffect(() => {
     fetchAppointments();
-  }, []);
+  }, [date]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -52,39 +68,46 @@ export function CalendarView({ date, onDateSelect }: CalendarViewProps) {
     }
   };
 
+  const formattedDate = formatDate(date);
+
+  const filteredAppointments = appointments?.filter(
+    (appointment) =>
+      appointment.dateTime.startsWith(formattedDate)
+  ) || [];
+
   if (loading) {
     return <CircularProgress />;
   }
 
-  const formatTime = (dateTime: string) => {
-    const date = new Date(dateTime);
-    return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-  };
 
-  const appointmentsByTime = appointments?.filter(apt => {
-    const appointmentDate = new Date(apt.dateTime);
-    const selectedDate = new Date(date);
-    return appointmentDate.getDate() === selectedDate.getDate() &&
-      appointmentDate.getMonth() === selectedDate.getMonth() &&
-      appointmentDate.getFullYear() === selectedDate.getFullYear();
-  }) || [];
+  if (filteredAppointments.length === 0) {
+    return (
+      <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+        <CalendarX className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+        <h3 className="text-lg font-medium text-gray-900 mb-2">
+          Nenhum agendamento encontrado
+        </h3>
+        <p className="text-gray-500">
+          Não há agendamentos para esta data ou filtro aplicado.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg border border-gray-200">
       <div className="grid grid-cols-1 divide-y divide-gray-200">
-        {appointmentsByTime.map((appointment) => {
-          const appointmentTime = formatTime(appointment.dateTime);
-          const isCurrentTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) === appointmentTime;
+        {filteredAppointments.map((appointment) => {
 
           return (
             <div
               key={appointment.id}
-              className={`min-h-[80px] grid grid-cols-[120px,1fr] ${isCurrentTime ? 'bg-blue-50' : ''}`}
+              className={`min-h-[80px] grid grid-cols-[120px,1fr]`}
             >
               <div className="p-4 border-r border-gray-200 flex items-center">
-                <Clock className={`w-4 h-4 mr-2 ${isCurrentTime ? 'text-blue-600' : 'text-gray-400'}`} />
-                <span className={`font-medium ${isCurrentTime ? 'text-blue-600' : 'text-gray-600'}`}>
-                  {appointmentTime}
+                <Clock className={`w-4 h-4 mr-2 'text-gray-400'}`} />
+                <span className={`font-medium 'text-gray-600'}`}>
+                  {appointment.dateTime.split(', ')[1]}
                 </span>
               </div>
               <div className="p-2">
@@ -98,7 +121,7 @@ export function CalendarView({ date, onDateSelect }: CalendarViewProps) {
                       </div>
                     </div>
                     <span className="text-xs font-medium px-2 py-1 rounded-full bg-white bg-opacity-50">
-                      {appointment.status}
+                      {translateStatus(appointment.status)}
                     </span>
                   </div>
                   {appointment.questionnaireIsPending && (

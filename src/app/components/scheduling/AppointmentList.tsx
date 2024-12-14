@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Clock, User, MoreVertical, Edit2, Trash2, CalendarX } from 'lucide-react';
-import { CircularProgress } from '@mui/material';
+import { Clock, User, Edit2, Trash2, CalendarX } from 'lucide-react';
+import { CircularProgress, Box } from '@mui/material';
+import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import api from '@/src/lib/api';
 
 // Interface do componente
 interface AppointmentListProps {
   date: Date;
-  searchQuery: string;
 }
 
 // Interface para os dados do agendamento
@@ -21,10 +21,20 @@ interface Appointment {
   createdAt: string;
 }
 
-export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
+export function AppointmentList({ date }: AppointmentListProps) {
   // Estado para armazenar os agendamentos e o status de carregamento
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Função para traduzir status
+  const translateStatus = (status: string): string => {
+    const translations: { [key: string]: string } = {
+      PLANNED: "PLANEJADO",
+      CONFIRMED: "CONFIRMADO",
+      CANCELED: "CANCELADO",
+    };
+    return translations[status] || status;
+  };
 
   // Função para formatar a data
   const formatDate = (date: Date): string => {
@@ -34,12 +44,12 @@ export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
     return `${day}/${month}/${year}`;
   };
 
-  // Função que simula a obtenção dos agendamentos (mocando os dados)
+  // Função de busca de agendamentos na API
   const fetchAppointments = async () => {
     setLoading(true);
     try {
       const { data } = await api.get("service-requests");
-      setAppointments(data)
+      setAppointments(data);
     } catch (err) {
       console.error("Erro ao buscar os dados:", err);
     } finally {
@@ -47,19 +57,17 @@ export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
     }
   };
 
-  // Usando useEffect para rodar a função de busca (simulação)
+  // Usando useEffect para rodar a função de busca
   useEffect(() => {
     fetchAppointments();
-  }, []);
+  }, [date]);
 
   // Formatação da data selecionada
   const formattedDate = formatDate(date);
 
+  // Filtrando os agendamentos pela data
   const filteredAppointments = appointments?.filter(
-    (appointment) =>
-      appointment.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      appointment.examType.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      appointment.dateTime.startsWith(formattedDate)
+    (appointment) => appointment.dateTime.startsWith(formattedDate)
   ) || [];
 
   // Caso os dados estejam carregando, mostra o spinner
@@ -82,70 +90,100 @@ export function AppointmentList({ date, searchQuery }: AppointmentListProps) {
     );
   }
 
-  return (
-    <div className="bg-white rounded-lg border border-gray-200">
-      <div className="grid grid-cols-6 gap-4 p-4 font-medium text-gray-500 border-b border-gray-200">
-        <div>Horário</div>
-        <div className="col-span-2">Paciente</div>
-        <div>Exame</div>
-        <div>Status</div>
-        <div className="text-right">Ações</div>
-      </div>
+  // Definindo as colunas do DataGrid
+  const columns: GridColDef[] = [
+    { field: 'dateTime', headerName: 'Horário', minWidth: 100, flex: 0.4 },
+    {
+      field: 'clientName',
+      headerName: 'Paciente',
+      renderCell: (params) => (
+        <div className="col-span-2 flex items-center">
+          <User className="w-8 h-8 text-gray-400 mr-3" />
+          {params.row.clientName}
+        </div>
+      ),
+      minWidth: 400,
+      flex: 0.4
+    },
+    { field: 'examType', headerName: 'Exame', minWidth: 150, flex: 0.4 },
+    {
+      field: 'status',
+      headerName: 'Status',
+      renderCell: (params) => (
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${params.row.status === 'CONFIRMADO'
+          ? 'bg-green-100 text-green-800'
+          : params.row.status === 'PLANEJADO'
+            ? 'bg-yellow-100 text-yellow-800'
+            : 'bg-red-100 text-red-800'
+          }`}>
+          {params.row.status}
+        </span>
+      ),
+      minWidth: 150,
+      flex: 0.4
+    },
+    {
+      field: 'actions',
+      headerName: 'Ações',
+      renderCell: (params) => (
+        <div className="flex">
+          <button className="p-2 text-gray-400 hover:text-kai-primary rounded-lg hover:bg-kai-primary/10">
+            <Edit2 className="w-5 h-5" />
+          </button>
+          <button className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50">
+            <Trash2 className="w-5 h-5" />
+          </button>
+        </div>
+      ),
+      minWidth: 200,
+      flex: 0.4
+    },
+  ];
 
-      <div className="divide-y divide-gray-200">
-        {filteredAppointments.map((appointment) => (
-          <div
-            key={appointment.id}
-            className="grid grid-cols-6 gap-4 p-4 items-center hover:bg-gray-50"
-          >
-            <div className="flex items-center text-gray-900">
-              <Clock className="w-4 h-4 mr-2 text-gray-400" />
-              {appointment.dateTime.split(', ')[1]}
-            </div>
-            <div className="col-span-2 flex items-center">
-              <User className="w-8 h-8 text-gray-400 mr-3" />
-              <div>
-                <div className="font-medium text-gray-900">
-                  {appointment.clientName}
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className="text-sm text-gray-900">{appointment.examType}</div>
-            </div>
-            <div>
-              <span
-                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${appointment.status === 'PLANNED'
-                  ? 'bg-yellow-100 text-yellow-800'
-                  : appointment.status === 'CONFIRMED'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-red-100 text-red-800'
-                  }`}
-              >
-                {appointment.status.charAt(0).toUpperCase() +
-                  appointment.status.slice(1)}
-              </span>
-            </div>
-            <div className="flex justify-end space-x-2">
-              <button
-                className="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50"
-              >
-                <Edit2 className="w-5 h-5" />
-              </button>
-              <button
-                className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50"
-              >
-                <Trash2 className="w-5 h-5" />
-              </button>
-              <button
-                className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50"
-              >
-                <MoreVertical className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+  // Preparando as linhas do DataGrid
+  const rows: GridRowsProp = filteredAppointments.map((appointment) => ({
+    id: appointment.id,
+    dateTime: appointment.dateTime.split(', ')[1], // Formata para exibir só o horário
+    clientName: appointment.clientName,
+    examType: appointment.examType,
+    status: translateStatus(appointment.status),
+  }));
+
+  const labelDisplayedRows = ({ from, to, count }: any) => {
+    return `${from}–${to} de ${count !== -1 ? count : `mais que ${to}`}`;
+  };
+
+  return (
+    <div className="rounded-md">
+      <Box>
+        <DataGrid
+          sx={{
+            '.MuiDataGrid-columnHeaders': {
+              fontSize: '15px',
+            },
+            '.MuiDataGrid-footerContainer': {
+              backgroundColor: 'transparent !important',
+              fontSize: '15px',
+            },
+            '.MuiDataGrid-cell': {
+              fontSize: '15px',
+            },
+          }}
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 10 } },
+          }}
+          pageSizeOptions={[5, 10, 20]}
+          disableRowSelectionOnClick
+          localeText={{
+            MuiTablePagination: {
+              labelDisplayedRows,
+              labelRowsPerPage: "Linhas por página",
+            },
+          }}
+        />
+      </Box>
     </div>
   );
 }
