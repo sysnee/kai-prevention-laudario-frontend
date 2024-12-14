@@ -1,31 +1,16 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { ListIcon, PlusIcon, Search, Grid } from 'lucide-react'
-import { DeleteConfirmationModal } from './components/DeleteConfirmationModal'
-import { Role, Permission, PermissionType, ResourceType } from '../../types/types'
+import { PlusIcon, Search } from 'lucide-react'
+import { Role } from '../../types/permissions'
 import AccessCard from './components/AccessCard'
-import {
-  Button,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Divider,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Chip
-} from '@mui/material'
+import { Button, CircularProgress, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import RolesTable from './components/RolesTable'
 import RolePermissionForm from './components/forms/RolePermissionForm'
 import api from '../../../lib/api'
+import { ConfirmationModal } from '../../components/shared/ConfirmationModal'
+import { showToast } from '@/src/lib/toast'
 
 export default function PermissionsManagement() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')
@@ -77,6 +62,7 @@ export default function PermissionsManagement() {
       await fetchRoles() // Refresh the roles list
       setDeleteModalOpen(false)
       setRoleToDelete(null)
+      showToast.success('Perfil deletado com sucesso')
     } catch (error) {
       console.error('Error deleting role:', error)
       // Handle error (show notification, etc.)
@@ -159,7 +145,9 @@ export default function PermissionsManagement() {
       </Box>
 
       {isLoading ? (
-        <Box sx={{ textAlign: 'center', py: 3 }}>Carregando...</Box>
+        <Box sx={{ textAlign: 'center', py: 3 }}>
+          <CircularProgress />
+        </Box>
       ) : viewMode === 'list' ? (
         <Box sx={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
           <RolesTable roles={filteredRoles} onView={handleView} onEdit={handleEdit} onDelete={handleDeleteClick} />
@@ -201,14 +189,15 @@ export default function PermissionsManagement() {
         />
       )}
 
-      <DeleteConfirmationModal
+      <ConfirmationModal
         isOpen={deleteModalOpen}
         onClose={() => {
           setDeleteModalOpen(false)
           setRoleToDelete(null)
         }}
         onConfirm={handleDeleteConfirm}
-        roleName={roleToDelete?.name || ''}
+        itemName={roleToDelete?.name || ''}
+        itemType='permissão'
       />
     </Box>
   )

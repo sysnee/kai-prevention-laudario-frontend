@@ -239,5 +239,12 @@ export const dataDisplayCustomizations: Components<Theme> = {
         ]
       }
     }
+  },
+  MuiButtonBase: {
+    styleOverrides: {
+      root: {
+        cursor: 'pointer'
+      }
+    }
   }
 }

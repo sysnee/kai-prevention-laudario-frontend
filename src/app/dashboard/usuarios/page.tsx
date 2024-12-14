@@ -21,6 +21,7 @@ import {
 import { User } from '../../types/user'
 import { Role } from '../../types/permissions'
 import { TABLE_HEADERS, USER_MANAGEMENT, getProfessionalTypeName } from '../../constants/translations'
+import { showToast } from '../../../lib/toast'
 
 export default function UserManagement() {
   const [users, setUsers] = useState<User[]>([])
@@ -68,6 +69,8 @@ export default function UserManagement() {
       } else {
         await api.post('/users', user)
       }
+
+      showToast.success('Usuário salvo com sucesso')
       fetchUsers()
       setShowUserForm(false)
       setSelectedUser(null)
@@ -79,6 +82,7 @@ export default function UserManagement() {
   const handleDelete = async (userId: number) => {
     try {
       await api.delete(`/users/${userId}`)
+      showToast.success('Usuário deletado com sucesso')
       fetchUsers()
     } catch (error) {
       console.error('Error deleting user:', error)

@@ -12,7 +12,7 @@ import {
   MenuItem,
   FormControlLabel,
   Checkbox,
-  Grid,
+  Stack,
   Box,
   FormHelperText
 } from '@mui/material'
@@ -145,8 +145,8 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
         <DialogTitle>{user ? 'Editar Usuário' : 'Novo Usuário'}</DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
+            <Stack spacing={2}>
+              <Box sx={{ display: 'flex', gap: 2 }}>
                 <Controller
                   name='fullName'
                   control={control}
@@ -154,9 +154,7 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                     <TextField {...field} label='Nome Completo' fullWidth error={!!error} helperText={error?.message} />
                   )}
                 />
-              </Grid>
 
-              <Grid item xs={12} md={6}>
                 <Controller
                   name='email'
                   control={control}
@@ -164,9 +162,9 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                     <TextField {...field} label='Email' fullWidth error={!!error} helperText={error?.message} />
                   )}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={12} md={6}>
+              <Box sx={{ display: 'flex', gap: 2 }}>
                 <Controller
                   name='birthDate'
                   control={control}
@@ -182,9 +180,7 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                     />
                   )}
                 />
-              </Grid>
 
-              <Grid item xs={12} md={6}>
                 <Controller
                   name='gender'
                   control={control}
@@ -199,9 +195,9 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                     </FormControl>
                   )}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={12} md={6}>
+              <Box sx={{ display: 'flex', gap: 2 }}>
                 <Controller
                   name='cpf'
                   control={control}
@@ -217,15 +213,11 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                       fullWidth
                       error={!!error}
                       helperText={error?.message}
-                      inputProps={{
-                        maxLength: 14 // 999.999.999-99
-                      }}
+                      inputProps={{ maxLength: 14 }}
                     />
                   )}
                 />
-              </Grid>
 
-              <Grid item xs={12} md={6}>
                 <Controller
                   name='phone'
                   control={control}
@@ -241,15 +233,13 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                       fullWidth
                       error={!!error}
                       helperText={error?.message}
-                      inputProps={{
-                        maxLength: 15 // (99) 99999-9999
-                      }}
+                      inputProps={{ maxLength: 15 }}
                     />
                   )}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={12} md={6}>
+              <Box sx={{ display: 'flex', gap: 2 }}>
                 <Controller
                   name='status'
                   control={control}
@@ -263,9 +253,7 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                     </FormControl>
                   )}
                 />
-              </Grid>
 
-              <Grid item xs={12} md={6}>
                 <Controller
                   name='roleId'
                   control={control}
@@ -286,9 +274,9 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                     </FormControl>
                   )}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={12}>
+              <Box sx={{ display: 'flex', gap: 2 }}>
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -309,49 +297,10 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                   }
                   label='Outro Profissional'
                 />
-              </Grid>
+              </Box>
 
               {isHealthcareProfessional && (
-                <>
-                  <Grid item xs={12} md={6}>
-                    <Controller
-                      name='professionalType'
-                      control={control}
-                      render={({ field }) => (
-                        <FormControl fullWidth>
-                          <InputLabel>Tipo de Profissional</InputLabel>
-                          <Select {...field}>
-                            {PROFESSIONAL_TYPES.map(type => (
-                              <MenuItem key={type.id} value={type.id}>
-                                {type.name}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      )}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} md={6}>
-                    <Controller
-                      name='registrationNumber'
-                      control={control}
-                      render={({ field, fieldState: { error } }) => (
-                        <TextField
-                          {...field}
-                          label='Número de Registro'
-                          fullWidth
-                          error={!!error}
-                          helperText={error?.message}
-                        />
-                      )}
-                    />
-                  </Grid>
-                </>
-              )}
-
-              {isOtherProfessional && (
-                <Grid item xs={12} md={6}>
+                <Box sx={{ display: 'flex', gap: 2 }}>
                   <Controller
                     name='professionalType'
                     control={control}
@@ -359,7 +308,7 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                       <FormControl fullWidth>
                         <InputLabel>Tipo de Profissional</InputLabel>
                         <Select {...field}>
-                          {OTHER_PROFESSIONAL_ROLES.map(type => (
+                          {PROFESSIONAL_TYPES.map(type => (
                             <MenuItem key={type.id} value={type.id}>
                               {type.name}
                             </MenuItem>
@@ -368,9 +317,42 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                       </FormControl>
                     )}
                   />
-                </Grid>
+
+                  <Controller
+                    name='registrationNumber'
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <TextField
+                        {...field}
+                        label='Número de Registro'
+                        fullWidth
+                        error={!!error}
+                        helperText={error?.message}
+                      />
+                    )}
+                  />
+                </Box>
               )}
-            </Grid>
+
+              {isOtherProfessional && (
+                <Controller
+                  name='professionalType'
+                  control={control}
+                  render={({ field }) => (
+                    <FormControl fullWidth>
+                      <InputLabel>Tipo de Profissional</InputLabel>
+                      <Select {...field}>
+                        {OTHER_PROFESSIONAL_ROLES.map(type => (
+                          <MenuItem key={type.id} value={type.id}>
+                            {type.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  )}
+                />
+              )}
+            </Stack>
           </Box>
         </DialogContent>
         <DialogActions>

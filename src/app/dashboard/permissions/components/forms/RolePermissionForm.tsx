@@ -23,15 +23,10 @@ import {
 } from '@mui/material'
 import { X } from 'lucide-react'
 import api from '../../../../../lib/api'
+import { Role } from '@/src/app/types/permissions'
 import { PermissionType } from '@/src/app/types/permissions'
-
-import {
-  PERMISSION_TRANSLATIONS,
-  RESOURCE_TRANSLATIONS,
-  TABLE_HEADERS,
-  USER_MANAGEMENT,
-  getProfessionalTypeName
-} from '@/src/app/constants/translations'
+import { showToast } from '@/src/lib/toast'
+import { PERMISSION_TRANSLATIONS, RESOURCE_TRANSLATIONS } from '@/src/app/constants/translations'
 import { ResourceType } from '@/src/app/types/permissions'
 
 interface RoleFormData {
@@ -110,6 +105,8 @@ export default function RolePermissionForm({ open, onClose, role, mode, onSave }
       } else if (mode === 'edit' && role) {
         await api.patch(`/roles/${role.id}`, payload)
       }
+
+      showToast.success('Perfil salvo com sucesso')
 
       onSave(formData)
       onClose()

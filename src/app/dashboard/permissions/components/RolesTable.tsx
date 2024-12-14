@@ -71,8 +71,8 @@ export default function RolesTable({ roles, onView, onEdit, onDelete }: RolesTab
         <TableBody>
           {roles.map(role => (
             <TableRow key={role.id} hover>
-              <TableCell sx={{ verticalAlign: 'top', width: '200px' }}>
-                <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
+              <TableCell sx={{ width: '200px' }}>
+                <Typography variant='subtitle1' fontSize={16}>
                   {role.name}
                 </Typography>
               </TableCell>

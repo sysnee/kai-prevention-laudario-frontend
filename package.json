@@ -47,6 +47,7 @@
     "react-hook-form": "^7.54.1",
     "react-hot-toast": "^2.4.1",
     "react-input-mask": "^2.0.4",
+    "sonner": "^1.7.1",
     "survey-core": "^1.12.11",
     "survey-react-ui": "^1.12.11",
     "zod": "^3.24.1",

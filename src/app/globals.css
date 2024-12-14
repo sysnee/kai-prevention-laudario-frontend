@@ -21,7 +21,7 @@
   }
 
   button {
-    @apply focus:outline-none focus:ring-2 focus:ring-kai-primary focus:ring-opacity-50;
+    @apply cursor-pointer;
   }
 
   /* input,
