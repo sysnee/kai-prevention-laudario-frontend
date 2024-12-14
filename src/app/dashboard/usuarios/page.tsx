@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react'
 import { Plus, Search, Edit2, Trash2, Key, Shield } from 'lucide-react'
 import api from '../../../lib/api'
-import { User as UserType, Role } from '../../../app/types/types'
 import { UserForm } from './components/user-form'
 import {
   Box,
@@ -20,6 +19,7 @@ import {
   IconButton,
   Chip
 } from '@mui/material'
+import { User } from '../../types/user'
 
 export default function UserManagement() {
   const [users, setUsers] = useState<UserType[]>([])
@@ -61,11 +61,11 @@ export default function UserManagement() {
 
   const filteredUsers = users.filter(
     user =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const handleSave = async (user: UserType) => {
+  const handleSave = async (user: User) => {
     try {
       if (selectedUser) {
         await api.put(`/users/${selectedUser.id}`, user)
@@ -161,7 +161,7 @@ export default function UserManagement() {
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <Shield className='text-primary' size={16} />
-                        <span>{user.role}</span>
+                        <span>{user.role.name}</span>
                       </Box>
                     </TableCell>
                     <TableCell>

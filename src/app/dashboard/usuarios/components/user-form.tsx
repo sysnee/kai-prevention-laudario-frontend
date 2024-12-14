@@ -13,21 +13,16 @@ import {
   FormControlLabel,
   Checkbox,
   Grid,
-  Typography,
   Box,
   FormHelperText
 } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import {
-  User,
-  HealthcareProfessional,
-  OtherProfessional,
-  RegularUser,
-  PROFESSIONAL_TYPES,
-  Role
-} from '../../../types/types'
+
+import { OTHER_PROFESSIONAL_ROLES, PROFESSIONAL_TYPES, User } from '@/src/app/types/user'
+import { Role } from '@/src/app/types/permissions'
+import { maskCPF, maskPhone } from '@/src/app/utils/format'
 
 interface UserFormProps {
   user: User | null
@@ -40,8 +35,14 @@ const userFormSchema = z.object({
   fullName: z.string().min(1, 'Nome é obrigatório'),
   birthDate: z.string().min(1, 'Data de nascimento é obrigatória'),
   gender: z.enum(['male', 'female', 'other']),
-  cpf: z.string().min(11, 'CPF inválido'),
-  phone: z.string().min(1, 'Telefone é obrigatório'),
+  cpf: z
+    .string()
+    .min(14, 'CPF inválido')
+    .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido'),
+  phone: z
+    .string()
+    .min(15, 'Telefone inválido')
+    .regex(/^\(\d{2}\)\s\d{5}-\d{4}$/, 'Telefone inválido'),
   email: z.string().email('Email inválido'),
   status: z.enum(['active', 'inactive']),
   professionalType: z.string().optional(),
@@ -80,27 +81,25 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
 
   const onSubmit = async (data: UserFormData) => {
     try {
-      console.log('Form data:', data)
-      console.log('Form errors:', errors)
       const baseUser = {
-        id: user?.id || Date.now().toString(),
+        id: user?.id,
         fullName: data.fullName,
         birthDate: data.birthDate,
         gender: data.gender,
         cpf: data.cpf,
-        contact: {
-          phone: data.phone,
-          email: data.email
-        },
+
+        phone: data.phone,
+        email: data.email,
+
         status: data.status,
-        lastAccess: new Date().toISOString(),
-        roleId: data.roleId
+        roleId: data.roleId,
+        role: data.role as Role
       }
 
       let finalUser: User
 
       if (isHealthcareProfessional) {
-        const professionalType = PROFESSIONAL_TYPES.find(type => type.id === data.professionalType)
+        const professionalType = PROFESSIONAL_TYPES.find(type => type.id === data.professionalType).id
         if (!professionalType) throw new Error('Professional type not found')
 
         finalUser = {
@@ -108,20 +107,19 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
           isHealthcareProfessional: true,
           professionalType,
           registrationNumber: data.registrationNumber
-        } as HealthcareProfessional
+        }
       } else if (isOtherProfessional) {
         finalUser = {
           ...baseUser,
           isHealthcareProfessional: false,
-          isOtherProfessional: true,
-          role: data.role
-        } as OtherProfessional
+          professionalType: OTHER_PROFESSIONAL_ROLES.find(type => type.id === data.professionalType).id
+        }
       } else {
         finalUser = {
           ...baseUser,
           isHealthcareProfessional: false,
-          isOtherProfessional: false
-        } as RegularUser
+          professionalType: null
+        }
       }
 
       await onSave(finalUser)
@@ -129,8 +127,6 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
       console.error('Error submitting form:', error)
     }
   }
-
-  console.log('Form Errors:', errors)
 
   function handleProfessionalTypeChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { checked, name } = e.target
@@ -209,8 +205,22 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                 <Controller
                   name='cpf'
                   control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <TextField {...field} label='CPF' fullWidth error={!!error} helperText={error?.message} />
+                  render={({ field: { onChange, value, ...field }, fieldState: { error } }) => (
+                    <TextField
+                      {...field}
+                      value={value}
+                      onChange={e => {
+                        const maskedValue = maskCPF(e.target.value)
+                        onChange(maskedValue)
+                      }}
+                      label='CPF'
+                      fullWidth
+                      error={!!error}
+                      helperText={error?.message}
+                      inputProps={{
+                        maxLength: 14 // 999.999.999-99
+                      }}
+                    />
                   )}
                 />
               </Grid>
@@ -219,8 +229,22 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                 <Controller
                   name='phone'
                   control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <TextField {...field} label='Telefone' fullWidth error={!!error} helperText={error?.message} />
+                  render={({ field: { onChange, value, ...field }, fieldState: { error } }) => (
+                    <TextField
+                      {...field}
+                      value={value}
+                      onChange={e => {
+                        const maskedValue = maskPhone(e.target.value)
+                        onChange(maskedValue)
+                      }}
+                      label='Telefone'
+                      fullWidth
+                      error={!!error}
+                      helperText={error?.message}
+                      inputProps={{
+                        maxLength: 15 // (99) 99999-9999
+                      }}
+                    />
                   )}
                 />
               </Grid>
@@ -329,10 +353,19 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
               {isOtherProfessional && (
                 <Grid item xs={12} md={6}>
                   <Controller
-                    name='role'
+                    name='professionalType'
                     control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <TextField {...field} label='Função' fullWidth error={!!error} helperText={error?.message} />
+                    render={({ field }) => (
+                      <FormControl fullWidth>
+                        <InputLabel>Tipo de Profissional</InputLabel>
+                        <Select {...field}>
+                          {OTHER_PROFESSIONAL_ROLES.map(type => (
+                            <MenuItem key={type.id} value={type.id}>
+                              {type.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                     )}
                   />
                 </Grid>

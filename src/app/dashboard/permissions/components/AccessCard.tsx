@@ -4,7 +4,7 @@ import React from 'react'
 import { Card, CardContent, Typography, IconButton, Box, Divider, Chip } from '@mui/material'
 
 import { Eye, Edit2, Trash2 } from 'lucide-react'
-import { PermissionType, ResourceType } from '@/src/app/types/types'
+import { PermissionType, Role, ResourceType } from '@/src/app/types/types'
 
 const PERMISSION_TRANSLATIONS = {
   [PermissionType.CREATE]: 'Criar',
