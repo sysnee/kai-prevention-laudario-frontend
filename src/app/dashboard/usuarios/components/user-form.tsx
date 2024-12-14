@@ -46,20 +46,23 @@ const userFormSchema = z.object({
   email: z.string().email('Email inválido'),
   status: z.enum(['active', 'inactive']),
   professionalType: z.string().optional(),
+  isHealthcareProfessional: z.boolean().optional(),
+  isOtherProfessional: z.boolean().optional(),
   registrationNumber: z.string().optional(),
-  role: z.string().optional(),
-  roleId: z.union([z.string(), z.number()]).transform(val => String(val))
+  roleId: z.string().optional()
 })
 
 type UserFormData = z.infer<typeof userFormSchema>
 
 export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
-  const [isHealthcareProfessional, setIsHealthcareProfessional] = useState(false)
-  const [isOtherProfessional, setIsOtherProfessional] = useState(false)
+  const [isHealthcareProfessional, setIsHealthcareProfessional] = useState(user?.isHealthcareProfessional ?? false)
+  const [isOtherProfessional, setIsOtherProfessional] = useState(!user?.isHealthcareProfessional || false)
 
   const {
     control,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors, isSubmitting }
   } = useForm<UserFormData>({
     resolver: zodResolver(userFormSchema),
@@ -71,10 +74,11 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
       phone: user?.phone ?? '',
       email: user?.email ?? '',
       status: user?.status ?? 'active',
-      professionalType: user?.isHealthcareProfessional ? user.professionalType.id : '',
-      registrationNumber: user?.isHealthcareProfessional ? user.registrationNumber : '',
-      role: '',
-      roleId: user?.roleId ? String(user.roleId) : ''
+      isHealthcareProfessional: user?.isHealthcareProfessional ?? false,
+      isOtherProfessional: !!user?.isHealthcareProfessional,
+      professionalType: user?.professionalType || '',
+      registrationNumber: user?.registrationNumber ?? '',
+      roleId: user?.role?.id ? String(user.role.id) : ''
     },
     mode: 'onBlur'
   })
@@ -82,47 +86,20 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
   const onSubmit = async (data: UserFormData) => {
     try {
       const baseUser = {
-        id: user?.id,
         fullName: data.fullName,
         birthDate: data.birthDate,
         gender: data.gender,
         cpf: data.cpf,
-
         phone: data.phone,
         email: data.email,
-
         status: data.status,
-        roleId: data.roleId,
-        role: data.role as Role
+        roleId: +data.roleId,
+        isHealthcareProfessional,
+        professionalType: data.professionalType,
+        registrationNumber: data.registrationNumber
       }
 
-      let finalUser: User
-
-      if (isHealthcareProfessional) {
-        const professionalType = PROFESSIONAL_TYPES.find(type => type.id === data.professionalType).id
-        if (!professionalType) throw new Error('Professional type not found')
-
-        finalUser = {
-          ...baseUser,
-          isHealthcareProfessional: true,
-          professionalType,
-          registrationNumber: data.registrationNumber
-        }
-      } else if (isOtherProfessional) {
-        finalUser = {
-          ...baseUser,
-          isHealthcareProfessional: false,
-          professionalType: OTHER_PROFESSIONAL_ROLES.find(type => type.id === data.professionalType).id
-        }
-      } else {
-        finalUser = {
-          ...baseUser,
-          isHealthcareProfessional: false,
-          professionalType: null
-        }
-      }
-
-      await onSave(finalUser)
+      await onSave(baseUser)
     } catch (error) {
       console.error('Error submitting form:', error)
     }
@@ -132,10 +109,18 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
     const { checked, name } = e.target
     if (name === 'isHealthcareProfessional') {
       setIsHealthcareProfessional(checked)
-      if (checked) setIsOtherProfessional(false)
+      if (checked) {
+        setIsOtherProfessional(false)
+        setValue('professionalType', '')
+        setValue('registrationNumber', '')
+      }
     } else if (name === 'isOtherProfessional') {
       setIsOtherProfessional(checked)
-      if (checked) setIsHealthcareProfessional(false)
+      if (checked) {
+        setIsHealthcareProfessional(false)
+        setValue('professionalType', '')
+        setValue('registrationNumber', '')
+      }
     }
   }
 
@@ -307,7 +292,13 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                     render={({ field }) => (
                       <FormControl fullWidth>
                         <InputLabel>Tipo de Profissional</InputLabel>
-                        <Select {...field}>
+                        <Select
+                          {...field}
+                          value={field.value || ''}
+                          defaultValue={field.value || ''}
+                          onChange={e => {
+                            field.onChange(e)
+                          }}>
                           {PROFESSIONAL_TYPES.map(type => (
                             <MenuItem key={type.id} value={type.id}>
                               {type.name}
@@ -341,7 +332,13 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
                   render={({ field }) => (
                     <FormControl fullWidth>
                       <InputLabel>Tipo de Profissional</InputLabel>
-                      <Select {...field}>
+                      <Select
+                        {...field}
+                        value={field.value || ''}
+                        defaultValue={field.value || ''}
+                        onChange={e => {
+                          field.onChange(e)
+                        }}>
                         {OTHER_PROFESSIONAL_ROLES.map(type => (
                           <MenuItem key={type.id} value={type.id}>
                             {type.name}
