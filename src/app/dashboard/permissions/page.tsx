@@ -3,11 +3,27 @@
 import React, { useState, useEffect } from 'react'
 import { ListIcon, PlusIcon, Search, Grid } from 'lucide-react'
 import { DeleteConfirmationModal } from './components/DeleteConfirmationModal'
-import { Role } from '../../types/types'
+import { Role, Permission, PermissionType, ResourceType } from '../../types/types'
 import AccessCard from './components/AccessCard'
-import { Button, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
+import {
+  Button,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Divider,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Chip
+} from '@mui/material'
 import { Box } from '@mui/system'
-import PermissionsList from './components/PermissionsList'
+import RolesTable from './components/RolesTable'
 import RolePermissionForm from './components/forms/RolePermissionForm'
 import api from '../../../lib/api'
 
@@ -20,6 +36,7 @@ export default function PermissionsManagement() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [roleToDelete, setRoleToDelete] = useState<Role | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     fetchRoles()
@@ -39,32 +56,32 @@ export default function PermissionsManagement() {
   const filteredRoles = roles.filter(role => role.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
   const handleSave = async (updatedRole: Role) => {
+    if (isSaving) return
+
     try {
-      if (modalMode === 'create') {
-        await api.post('/roles', updatedRole)
-      } else {
-        await api.put(`/roles/${updatedRole.id}`, updatedRole)
-      }
-      fetchRoles() // Refresh the roles list
-      setModalMode(null)
-      setSelectedRole(null)
+      await fetchRoles() // Refresh the roles list
     } catch (error) {
       console.error('Error saving role:', error)
       // Handle error (show notification, etc.)
+    } finally {
+      setIsSaving(false)
     }
   }
 
   const handleDeleteConfirm = async () => {
-    if (roleToDelete) {
-      try {
-        await api.delete(`/roles/${roleToDelete.id}`)
-        fetchRoles() // Refresh the roles list
-        setDeleteModalOpen(false)
-        setRoleToDelete(null)
-      } catch (error) {
-        console.error('Error deleting role:', error)
-        // Handle error (show notification, etc.)
-      }
+    if (!roleToDelete || isSaving) return
+
+    try {
+      setIsSaving(true)
+      await api.delete(`/roles/${roleToDelete.id}`)
+      await fetchRoles() // Refresh the roles list
+      setDeleteModalOpen(false)
+      setRoleToDelete(null)
+    } catch (error) {
+      console.error('Error deleting role:', error)
+      // Handle error (show notification, etc.)
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -88,7 +105,7 @@ export default function PermissionsManagement() {
   }
 
   return (
-    <Box sx={{ padding: 3, width: '100%', boxSizing: 'border-box' }}>
+    <Box sx={{ width: '100%', boxSizing: 'border-box' }}>
       <Typography variant='h4' component='h1' sx={{ fontWeight: 'bold', marginBottom: 3 }}>
         Gerenciamento de Permissões
       </Typography>
@@ -120,14 +137,14 @@ export default function PermissionsManagement() {
             gap: 1,
             flexWrap: 'wrap'
           }}>
-          <ToggleButtonGroup value={viewMode} exclusive onChange={handleViewModeChange} size='small'>
+          {/* <ToggleButtonGroup value={viewMode} exclusive onChange={handleViewModeChange} size='small'>
             <ToggleButton value='list'>
               <ListIcon size={20} />
             </ToggleButton>
             <ToggleButton value='grid'>
               <Grid size={20} />
             </ToggleButton>
-          </ToggleButtonGroup>
+          </ToggleButtonGroup> */}
           <Button
             variant='contained'
             color='primary'
@@ -144,13 +161,8 @@ export default function PermissionsManagement() {
       {isLoading ? (
         <Box sx={{ textAlign: 'center', py: 3 }}>Carregando...</Box>
       ) : viewMode === 'list' ? (
-        <Box
-          sx={{
-            width: '100%',
-            maxWidth: '100%',
-            boxSizing: 'border-box'
-          }}>
-          <PermissionsList roles={filteredRoles} onView={handleView} onEdit={handleEdit} onDelete={handleDeleteClick} />
+        <Box sx={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+          <RolesTable roles={filteredRoles} onView={handleView} onEdit={handleEdit} onDelete={handleDeleteClick} />
         </Box>
       ) : (
         <Box

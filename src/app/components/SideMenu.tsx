@@ -1,80 +1,72 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Drawer, { drawerClasses } from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import MenuContent from '../dashboard/components/MenuContent';
-import CardAlert from '../dashboard/components/CardAlert';
-import OptionsMenu from '../dashboard/components/OptionsMenu';
-import { useSession } from 'next-auth/react';
+'use client'
 
-// const Drawer = styled(MuiDrawer)({
-//   width: drawerWidth,
-//   flexShrink: 0,
-//   boxSizing: 'border-box',
-//   mt: 10,
-//   [`& .${drawerClasses.paper}`]: {
-//     width: drawerWidth,
-//     boxSizing: 'border-box',
-//   },
-// });
+import * as React from 'react'
+import { Drawer, Box, Divider, Stack, Typography, Avatar, useMediaQuery, Theme } from '@mui/material'
+import MenuContent from '../dashboard/components/MenuContent'
+import OptionsMenu from '../dashboard/components/OptionsMenu'
+import { useSession } from 'next-auth/react'
 
-export default function SideMenu() {
+interface SideMenuProps {
+  drawerWidth: number
+}
+
+function SideMenu({ drawerWidth }: SideMenuProps) {
   const { data } = useSession()
+  const isLargeScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'))
+
   return (
     <Drawer
-      variant="permanent"
+      variant={isLargeScreen ? 'permanent' : 'temporary'}
       sx={{
-        display: { xs: 'none', lg: 'block' },
-        [`& .${drawerClasses.paper}`]: {
-          backgroundColor: 'background.paper',
-          position: 'fixed'
-        },
-      }}
-    >
+        width: drawerWidth,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: drawerWidth,
+          boxSizing: 'border-box',
+          border: theme => `1px solid ${theme.palette.divider}`,
+          backgroundColor: 'background.paper'
+        }
+      }}>
       <Box
         sx={{
-          // display: 'flex',
           mt: 'calc(var(--template-frame-height, 0px) + 4px)',
           p: 1.5,
-        }}
-      >
-        {/* <h1>KAI PREVENTION CERTER</h1> */}
-        <h1 className='text-2xl'>RI System</h1>
-        <h2 className='text-sm opacity-75'>KAI Prevention Center</h2>
-        {/* <SelectContent /> */}
+          flexShrink: 0
+        }}>
+        <Typography variant='h5'>RI System</Typography>
+        <Typography variant='subtitle2' color='text.secondary'>
+          KAI Prevention Center
+        </Typography>
       </Box>
+
       <Divider />
-      <MenuContent />
-      {/* <CardAlert /> */}
+
+      <Box sx={{ flex: 1, overflowY: 'auto' }}>
+        <MenuContent />
+      </Box>
+
+      <Divider />
+
       <Stack
-        direction="row"
+        direction='row'
         sx={{
           p: 2,
           gap: 1,
-          alignItems: 'center',
-          borderTop: '1px solid',
-          borderColor: 'divider',
-        }}
-      >
-        <Avatar
-          sizes="small"
-          alt={data?.user?.name as string}
-          src="/static/images/avatar/7.jpg"
-          sx={{ width: 36, height: 36 }}
-        />
-        <Box sx={{ mr: 'auto' }}>
-          <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
-            {data?.user?.name as string}
+          alignItems: 'center'
+        }}>
+        <Avatar alt={data?.user?.name ?? ''} src='/static/images/avatar/7.jpg' sx={{ width: 36, height: 36 }} />
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography variant='body2' noWrap sx={{ fontWeight: 500 }}>
+            {data?.user?.name ?? ''}
           </Typography>
-          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-            {data?.user?.email as string}
+          <Typography variant='caption' noWrap color='text.secondary'>
+            {data?.user?.email ?? ''}
           </Typography>
         </Box>
         <OptionsMenu />
       </Stack>
     </Drawer>
-  );
+  )
 }
+
+export default SideMenu

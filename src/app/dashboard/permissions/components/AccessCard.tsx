@@ -1,178 +1,136 @@
 'use client'
 
 import React from 'react'
-import { Card, CardContent, Chip, Tooltip, Typography, Divider, IconButton, Box } from '@mui/material'
-import { RolePermissions, ServiceStatus } from '../../../types/pemissions/permissions'
-import { useTheme } from '@mui/material/styles'
-import AccessChip from './AccessChip'
-import ActionButtons from './ActionButtons'
+import { Card, CardContent, Typography, IconButton, Box, Divider, Chip } from '@mui/material'
+
 import { Eye, Edit2, Trash2 } from 'lucide-react'
-import { Role } from '../../../types/types'
+import { PermissionType, ResourceType } from '@/src/app/types/types'
 
-interface AccessCardProps {
-  rolePermission: RolePermissions
-  onView: (role: RolePermissions) => void
-  onEdit: (role: RolePermissions) => void
-  onDelete: (role: RolePermissions) => void
-}
-
-const TRANSLATIONS = {
-  stages: {
-    planned: 'Planejado',
-    waiting: 'Aguardando',
-    started: 'Iniciado',
-    onhold: 'Pausado',
-    completed: 'Concluído',
-    transcription: 'Transcrição',
-    revision: 'Revisão',
-    signed: 'Assinado'
-  },
-  accessLevels: {
-    none: 'Nulo',
-    read: 'Visualizar',
-    write: 'Modificar',
-    full: 'Completo'
-  }
+const PERMISSION_TRANSLATIONS = {
+  [PermissionType.CREATE]: 'Criar',
+  [PermissionType.READ]: 'Visualizar',
+  [PermissionType.UPDATE]: 'Editar',
+  [PermissionType.DELETE]: 'Excluir'
 } as const
 
-type AccessLevelKey = keyof typeof TRANSLATIONS.accessLevels
+const RESOURCE_TRANSLATIONS = {
+  [ResourceType.LAUDARIO]: 'Laudário',
+  [ResourceType.USER]: 'Usuário',
+  [ResourceType.ROLES]: 'Perfis',
+  [ResourceType.AGENDA]: 'Agenda',
+  [ResourceType.CLIENTS]: 'Clientes',
+  [ResourceType.WORKFLOW_PLANNED]: 'Workflow - Planejado',
+  [ResourceType.WORKFLOW_WAITING]: 'Workflow - Aguardando',
+  [ResourceType.WORKFLOW_STARTED]: 'Workflow - Iniciado',
+  [ResourceType.WORKFLOW_ONHOLD]: 'Workflow - Em Espera',
+  [ResourceType.WORKFLOW_COMPLETED]: 'Workflow - Concluído',
+  [ResourceType.WORKFLOW_TRANSCRIPTION]: 'Workflow - Transcrição',
+  [ResourceType.WORKFLOW_SIGNED]: 'Workflow - Assinado'
+} as const
 
-const translateStage = (stage: ServiceStatus): string => TRANSLATIONS.stages[stage] || stage
+interface AccessCardProps {
+  role: Role
+  onView: () => void
+  onEdit: () => void
+  onDelete: () => void
+}
 
-const translateAccess = (access: AccessLevelKey): string => TRANSLATIONS.accessLevels[access] || access
+const groupPermissionsByResource = (permissions: Role['permissions']) => {
+  const grouped = new Map<ResourceType, PermissionType[]>()
+  permissions.forEach(({ resource, permission }) => {
+    const existing = grouped.get(resource) || []
+    grouped.set(resource, [...existing, permission])
+  })
+  return grouped
+}
 
-export default function AccessCard({ rolePermission: role, onView, onEdit, onDelete }: AccessCardProps) {
-  const theme = useTheme()
+export default function AccessCard({ role, onView, onEdit, onDelete }: AccessCardProps) {
+  if (!role) {
+    return (
+      <Card sx={{ height: '100%' }}>
+        <CardContent>
+          <Typography variant='body2' color='text.secondary'>
+            Dados do perfil não disponíveis
+          </Typography>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
-    <Card
-      sx={{
-        backgroundColor: 'white',
-        border: `1px solid ${theme.palette.divider}`,
-        padding: 2,
-        minWidth: 350
-      }}>
-      {/* Cabeçalho */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: theme.spacing(2)
-        }}>
-        <Typography variant='h6' component='h3' sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
-          {role.name}
-        </Typography>
-        <Chip
-          label={role.isActive ? 'Ativo' : 'Inativo'}
-          size='small'
-          sx={{
-            backgroundColor: role.isActive ? theme.palette.success.light : theme.palette.grey[300],
-            color: role.isActive ? theme.palette.success.dark : theme.palette.text.secondary
-          }}
-        />
-      </div>
-
-      {/* Divisória */}
-      <Divider sx={{ marginBottom: theme.spacing(2) }} />
-
-      {/* Conteúdo Principal */}
-      <CardContent sx={{ padding: 0 }}>
-        <div style={{ marginBottom: theme.spacing(2) }}>
-          <Typography
-            variant='subtitle2'
-            sx={{
-              color: theme.palette.text.primary,
-              fontWeight: 600,
-              marginBottom: theme.spacing(1)
-            }}>
-            Módulo de Clientes
+    <Card sx={{ height: '100%' }}>
+      <CardContent>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+          <Typography variant='h6' component='h2'>
+            {role.name}
           </Typography>
-          <Tooltip
-            title={`Módulo de Pacientes: ${translateAccess(
-              (role.permissions.find(p => p.module === 'client')?.access as AccessLevelKey) || 'none'
-            )}`}
-            arrow>
-            <div
-              style={{
+          <Box>
+            <IconButton size='small' onClick={onView}>
+              <Eye size={20} />
+            </IconButton>
+            <IconButton size='small' onClick={onEdit}>
+              <Edit2 size={20} />
+            </IconButton>
+            <IconButton size='small' onClick={onDelete}>
+              <Trash2 size={20} />
+            </IconButton>
+          </Box>
+        </Box>
+
+        <Divider sx={{ mb: 2 }} />
+
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          {Array.from(groupPermissionsByResource(role.permissions || [])).map(([resource, permissions]) => (
+            <Box
+              key={resource}
+              sx={{
                 display: 'flex',
-                justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: theme.spacing(1),
-                border: `1px solid ${theme.palette.divider}`,
-                borderRadius: theme.shape.borderRadius
+                gap: 1,
+                p: 1,
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: 1
               }}>
-              <Typography variant='body2' sx={{ color: theme.palette.text.secondary }}>
-                Clientes
+              <Typography variant='subtitle2' sx={{ minWidth: 200, fontWeight: 600 }}>
+                {RESOURCE_TRANSLATIONS[resource]}:
               </Typography>
-              <AccessChip
-                access={role.permissions.find(p => p.module === 'client')?.access || 'none'}
-                description={translateAccess(
-                  (role.permissions.find(p => p.module === 'client')?.access as AccessLevelKey) || 'none'
-                )}
-              />
-            </div>
-          </Tooltip>
-        </div>
-
-        <div>
-          <Typography
-            variant='subtitle2'
-            sx={{
-              color: theme.palette.text.primary,
-              fontWeight: 600,
-              marginBottom: theme.spacing(1)
-            }}>
-            Etapas do Exame
-          </Typography>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: theme.spacing(1)
-            }}>
-            {role.examStages.map(stage => (
-              <Tooltip
-                key={stage.stage}
-                title={`${translateStage(stage.stage)}: ${translateAccess(stage.access as AccessLevelKey)}`}
-                arrow>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: theme.spacing(1),
-                    border: `1px solid ${theme.palette.divider}`,
-                    borderRadius: theme.shape.borderRadius
-                  }}>
-                  <Typography variant='body2' sx={{ color: theme.palette.text.secondary, fontSize: '0.8rem' }}>
-                    {translateStage(stage.stage)}
-                  </Typography>
-                  <AccessChip access={stage.access} description={translateAccess(stage.access as AccessLevelKey)} />
-                </div>
-              </Tooltip>
-            ))}
-          </div>
-        </div>
+              <Box sx={{ flex: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                {permissions.map(permission => (
+                  <Chip
+                    key={`${resource}-${permission}`}
+                    label={PERMISSION_TRANSLATIONS[permission]}
+                    size='small'
+                    sx={{
+                      fontSize: '0.75rem',
+                      backgroundColor: theme => {
+                        switch (permission) {
+                          case PermissionType.CREATE:
+                            return theme.palette.success.light
+                          case PermissionType.READ:
+                            return theme.palette.info.light
+                          case PermissionType.UPDATE:
+                            return theme.palette.warning.light
+                          case PermissionType.DELETE:
+                            return theme.palette.error.light
+                          default:
+                            return theme.palette.grey[300]
+                        }
+                      },
+                      color: 'white'
+                    }}
+                  />
+                ))}
+              </Box>
+            </Box>
+          ))}
+          {(!role.permissions || role.permissions.length === 0) && (
+            <Typography color='text.secondary' variant='body2'>
+              Nenhuma permissão adicionada
+            </Typography>
+          )}
+        </Box>
       </CardContent>
-
-      {/* Divisória */}
-      <Divider sx={{ marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }} />
-
-      {/* Footer */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          gap: theme.spacing(1)
-        }}>
-        <ActionButtons
-          onView={() => onView(role)}
-          onEdit={() => onEdit(role)}
-          onDelete={() => onDelete(role)}
-          size='medium'
-        />
-      </div>
     </Card>
   )
 }

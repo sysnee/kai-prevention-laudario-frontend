@@ -68,13 +68,23 @@ export default function MenuContent() {
 
   return (
     <Stack sx={{ flexGrow: 1, p: 1 }} spacing={4}>
-      <List dense>
+      <List>
         {mainListItems.map((item, index) => (
           <React.Fragment key={index}>
             <ListItem disablePadding sx={{ display: 'block' }}>
               {item.subItems ? (
                 <>
-                  <ListItemButton onClick={() => handleClick(index)}>
+                  <ListItemButton
+                    onClick={() => handleClick(index)}
+                    sx={{
+                      py: 1.5,
+                      '& .MuiListItemIcon-root': {
+                        minWidth: 40
+                      },
+                      '& .MuiTypography-root': {
+                        fontSize: '0.95rem'
+                      }
+                    }}>
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     <ListItemText primary={item.text} />
                     {open[index] ? <ExpandLess /> : <ExpandMore />}
@@ -82,7 +92,16 @@ export default function MenuContent() {
                 </>
               ) : (
                 <Link href={item.path || '/'} passHref>
-                  <ListItemButton>
+                  <ListItemButton
+                    sx={{
+                      py: 1.5,
+                      '& .MuiListItemIcon-root': {
+                        minWidth: 40
+                      },
+                      '& .MuiTypography-root': {
+                        fontSize: '0.95rem'
+                      }
+                    }}>
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     <ListItemText primary={item.text} />
                   </ListItemButton>
@@ -95,8 +114,14 @@ export default function MenuContent() {
                 <List component='div' disablePadding sx={{ mb: 1 }}>
                   {item.subItems.map((subItem, subIndex) => (
                     <Link key={subIndex} href={subItem.path} passHref>
-                      <ListItem key={subIndex} sx={{ pl: 2, py: 0, margin: 0 }}>
-                        <ListItemButton>
+                      <ListItem sx={{ pl: 2, py: 0.5 }}>
+                        <ListItemButton
+                          sx={{
+                            py: 1,
+                            '& .MuiTypography-root': {
+                              fontSize: '0.9rem'
+                            }
+                          }}>
                           <ListItemText primary={subItem.text} />
                         </ListItemButton>
                       </ListItem>
@@ -113,15 +138,24 @@ export default function MenuContent() {
 
       {data?.user?.email === 'adm@onlineclinic.com.br' && (
         <Stack>
-          <Stack direction={'row'} spacing={1}>
+          <Stack direction={'row'} spacing={1} sx={{ px: 2, py: 1 }}>
             <SecurityOutlined className='opacity-50' style={{ width: '20px' }} />
             <p className='opacity-75'>ADMINISTRATIVO</p>
           </Stack>
-          <List dense>
+          <List>
             {secondaryListItems.map((item, index) => (
               <Link key={index} href={item.path}>
-                <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-                  <ListItemButton>
+                <ListItem disablePadding sx={{ display: 'block' }}>
+                  <ListItemButton
+                    sx={{
+                      py: 1.5,
+                      '& .MuiListItemIcon-root': {
+                        minWidth: 40
+                      },
+                      '& .MuiTypography-root': {
+                        fontSize: '0.95rem'
+                      }
+                    }}>
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     <ListItemText primary={item.text} />
                   </ListItemButton>

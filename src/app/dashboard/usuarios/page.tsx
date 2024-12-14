@@ -1,10 +1,25 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Plus, Search, Edit2, Trash2, Key, User, Shield } from 'lucide-react'
+import { Plus, Search, Edit2, Trash2, Key, Shield } from 'lucide-react'
 import api from '../../../lib/api'
 import { User as UserType, Role } from '../../../app/types/types'
 import { UserForm } from './components/user-form'
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Chip
+} from '@mui/material'
 
 export default function UserManagement() {
   const [users, setUsers] = useState<UserType[]>([])
@@ -77,92 +92,125 @@ export default function UserManagement() {
   }
 
   return (
-    <div>
-      <div className='flex justify-between items-center mb-6'>
-        <div className='relative flex-1 max-w-md'>
-          <input
-            type='text'
-            placeholder='Buscar usuários...'
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className='w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-          />
-          <Search className='w-5 h-5 text-gray-400 absolute left-3 top-2.5' />
-        </div>
-        <button
+    <Box sx={{ width: '100%', boxSizing: 'border-box' }}>
+      <Typography variant='h4' component='h1' sx={{ fontWeight: 'bold', marginBottom: 3 }}>
+        Gerenciamento de Usuários
+      </Typography>
+
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 2,
+          marginBottom: 3,
+          flexWrap: 'wrap'
+        }}>
+        <TextField
+          variant='outlined'
+          placeholder='Buscar usuários...'
+          size='medium'
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          InputProps={{
+            startAdornment: <Search size={18} style={{ marginRight: 8 }} />
+          }}
+        />
+        <Button
+          variant='contained'
+          color='primary'
           onClick={() => {
             setSelectedUser(null)
             setShowUserForm(true)
           }}
-          className='ml-4 px-4 py-2 bg-kai-primary text-white rounded-lg hover:bg-kai-primary/90 flex items-center'>
-          <Plus className='w-5 h-5 mr-2' />
+          startIcon={<Plus />}>
           Novo Usuário
-        </button>
-      </div>
+        </Button>
+      </Box>
 
-      <div className='bg-white rounded-lg border border-gray-200'>
-        <div className='grid grid-cols-5 gap-4 p-4 font-medium text-gray-500 border-b border-gray-200'>
-          <div className='col-span-2'>Usuário</div>
-          <div>Perfil</div>
-          <div>Permissões</div>
-          <div className='text-right'>Ações</div>
-        </div>
-
-        <div className='divide-y divide-gray-200'>
-          {isLoading ? (
-            <div className='p-4 text-center'>Carregando...</div>
-          ) : (
-            filteredUsers.map(user => {
-              const userPermissions = getRolePermissions(user.role)
-              return (
-                <div key={user.id} className='grid grid-cols-5 gap-4 p-4 items-center'>
-                  <div className='col-span-2'>
-                    <div className='font-medium text-gray-900'>{user.name}</div>
-                    <div className='text-sm text-gray-500'>{user.email}</div>
-                  </div>
-                  <div className='flex items-center'>
-                    <Shield className='w-4 h-4 mr-2 text-kai-primary' />
-                    <span>{user.role}</span>
-                  </div>
-                  <div>
-                    <div className='text-sm text-gray-500'>{userPermissions.length} permissões</div>
-                    <div className='text-xs text-gray-400'>
-                      {userPermissions.slice(0, 2).map(p => (
-                        <span key={p.id} className='mr-1'>
-                          {p.permission}:{p.resource},
-                        </span>
-                      ))}
-                      {userPermissions.length > 2 && '...'}
-                    </div>
-                  </div>
-                  <div className='flex justify-end space-x-2'>
-                    <button
-                      onClick={() => {
-                        setSelectedUser(user)
-                        setShowUserForm(true)
-                      }}
-                      className='p-2 text-gray-400 hover:text-kai-primary rounded-lg hover:bg-kai-gray-50'>
-                      <Edit2 className='w-5 h-5' />
-                    </button>
-                    <button className='p-2 text-gray-400 hover:text-yellow-600 rounded-lg hover:bg-yellow-50'>
-                      <Key className='w-5 h-5' />
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
-                          handleDelete(user.id)
-                        }
-                      }}
-                      className='p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50'>
-                      <Trash2 className='w-5 h-5' />
-                    </button>
-                  </div>
-                </div>
-              )
-            })
-          )}
-        </div>
-      </div>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ width: '40%' }}>Usuário</TableCell>
+              <TableCell sx={{ width: '20%' }}>Perfil</TableCell>
+              <TableCell sx={{ width: '25%' }}>Permissões</TableCell>
+              <TableCell sx={{ width: '15%' }} align='right'>
+                Ações
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={4} align='center'>
+                  Carregando...
+                </TableCell>
+              </TableRow>
+            ) : (
+              filteredUsers.map(user => {
+                const userPermissions = getRolePermissions(user.role)
+                return (
+                  <TableRow key={user.id}>
+                    <TableCell>
+                      <Typography variant='subtitle1'>{user.name}</Typography>
+                      <Typography variant='body2' color='text.secondary'>
+                        {user.email}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Shield className='text-primary' size={16} />
+                        <span>{user.role}</span>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant='body2' color='text.secondary'>
+                        {userPermissions.length} permissões
+                      </Typography>
+                      <Typography variant='caption' color='text.secondary'>
+                        {userPermissions.slice(0, 2).map(p => (
+                          <Chip
+                            key={p.id}
+                            label={`${p.permission}:${p.resource}`}
+                            size='small'
+                            sx={{ mr: 0.5, mb: 0.5 }}
+                          />
+                        ))}
+                        {userPermissions.length > 2 && '...'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align='right'>
+                      <IconButton
+                        onClick={() => {
+                          setSelectedUser(user)
+                          setShowUserForm(true)
+                        }}
+                        color='primary'
+                        size='small'>
+                        <Edit2 />
+                      </IconButton>
+                      <IconButton color='warning' size='small'>
+                        <Key />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
+                            handleDelete(user.id)
+                          }
+                        }}
+                        color='error'
+                        size='small'>
+                        <Trash2 />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                )
+              })
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       {showUserForm && (
         <UserForm
@@ -175,6 +223,6 @@ export default function UserManagement() {
           }}
         />
       )}
-    </div>
+    </Box>
   )
 }

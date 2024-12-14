@@ -1,128 +1,138 @@
-import React, { useState, useEffect } from 'react'
-import { X, Save, Info } from 'lucide-react'
+import React, { useState } from 'react'
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  Typography,
+  Box,
+  FormHelperText
+} from '@mui/material'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import {
   User,
   HealthcareProfessional,
   OtherProfessional,
   RegularUser,
   PROFESSIONAL_TYPES,
-  OTHER_PROFESSIONAL_ROLES
+  Role
 } from '../../../types/types'
 
 interface UserFormProps {
   user: User | null
   onSave: (user: User) => void
   onCancel: () => void
+  roles: Role[]
 }
 
-// Mock roles - replace with actual roles from your permission store
-const mockRoles = [
-  { id: '1', name: 'Administrador', type: 'system' },
-  { id: '2', name: 'Médico', type: 'healthcare' },
-  { id: '3', name: 'Recepcionista', type: 'custom' },
-  { id: '4', name: 'Técnico', type: 'custom' },
-  { id: '5', name: 'Supervisor', type: 'custom' }
-]
+const userFormSchema = z.object({
+  fullName: z.string().min(1, 'Nome é obrigatório'),
+  birthDate: z.string().min(1, 'Data de nascimento é obrigatória'),
+  gender: z.enum(['male', 'female', 'other']),
+  cpf: z.string().min(11, 'CPF inválido'),
+  phone: z.string().min(1, 'Telefone é obrigatório'),
+  email: z.string().email('Email inválido'),
+  status: z.enum(['active', 'inactive']),
+  professionalType: z.string().optional(),
+  registrationNumber: z.string().optional(),
+  role: z.string().optional(),
+  roleId: z.union([z.string(), z.number()]).transform(val => String(val))
+})
 
-export function UserForm({ user, onSave, onCancel }: UserFormProps) {
+type UserFormData = z.infer<typeof userFormSchema>
+
+export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
   const [isHealthcareProfessional, setIsHealthcareProfessional] = useState(false)
   const [isOtherProfessional, setIsOtherProfessional] = useState(false)
-  const [formData, setFormData] = useState({
-    fullName: '',
-    birthDate: '',
-    gender: 'male',
-    cpf: '',
-    phone: '',
-    email: '',
-    address: '',
-    status: 'active',
-    professionalType: '',
-    registrationNumber: '',
-    role: '' as (typeof OTHER_PROFESSIONAL_ROLES)[number],
-    roleId: ''
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm<UserFormData>({
+    resolver: zodResolver(userFormSchema),
+    defaultValues: {
+      fullName: user?.fullName ?? '',
+      birthDate: user?.birthDate ?? '',
+      gender: user?.gender ?? 'male',
+      cpf: user?.cpf ?? '',
+      phone: user?.phone ?? '',
+      email: user?.email ?? '',
+      status: user?.status ?? 'active',
+      professionalType: user?.isHealthcareProfessional ? user.professionalType.id : '',
+      registrationNumber: user?.isHealthcareProfessional ? user.registrationNumber : '',
+      role: '',
+      roleId: user?.roleId ? String(user.roleId) : ''
+    },
+    mode: 'onBlur'
   })
 
-  const selectedProfessionalType = PROFESSIONAL_TYPES.find(type => type.id === formData.professionalType)
+  const onSubmit = async (data: UserFormData) => {
+    try {
+      console.log('Form data:', data)
+      console.log('Form errors:', errors)
+      const baseUser = {
+        id: user?.id || Date.now().toString(),
+        fullName: data.fullName,
+        birthDate: data.birthDate,
+        gender: data.gender,
+        cpf: data.cpf,
+        contact: {
+          phone: data.phone,
+          email: data.email
+        },
+        status: data.status,
+        lastAccess: new Date().toISOString(),
+        roleId: data.roleId
+      }
 
-  useEffect(() => {
-    if (user) {
-      setIsHealthcareProfessional(user.isHealthcareProfessional)
-      setIsOtherProfessional('isOtherProfessional' in user && user.isOtherProfessional)
-      setFormData({
-        fullName: user.fullName,
-        birthDate: user.birthDate,
-        gender: user.gender,
-        cpf: user.cpf,
-        phone: user.contact.phone,
-        email: user.contact.email,
-        address: user.address,
-        status: user.status,
-        professionalType: user.isHealthcareProfessional ? user.professionalType.id : '',
-        registrationNumber: user.isHealthcareProfessional ? user.registrationNumber : '',
-        role: 'isOtherProfessional' in user ? user.role : ('' as (typeof OTHER_PROFESSIONAL_ROLES)[number]),
-        roleId: user.roleId
-      })
+      let finalUser: User
+
+      if (isHealthcareProfessional) {
+        const professionalType = PROFESSIONAL_TYPES.find(type => type.id === data.professionalType)
+        if (!professionalType) throw new Error('Professional type not found')
+
+        finalUser = {
+          ...baseUser,
+          isHealthcareProfessional: true,
+          professionalType,
+          registrationNumber: data.registrationNumber
+        } as HealthcareProfessional
+      } else if (isOtherProfessional) {
+        finalUser = {
+          ...baseUser,
+          isHealthcareProfessional: false,
+          isOtherProfessional: true,
+          role: data.role
+        } as OtherProfessional
+      } else {
+        finalUser = {
+          ...baseUser,
+          isHealthcareProfessional: false,
+          isOtherProfessional: false
+        } as RegularUser
+      }
+
+      await onSave(finalUser)
+    } catch (error) {
+      console.error('Error submitting form:', error)
     }
-  }, [user])
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const baseUser = {
-      id: user?.id || Date.now().toString(),
-      fullName: formData.fullName,
-      birthDate: formData.birthDate,
-      gender: formData.gender as 'male' | 'female' | 'other',
-      cpf: formData.cpf,
-      contact: {
-        phone: formData.phone,
-        email: formData.email
-      },
-      address: formData.address,
-      status: formData.status as 'active' | 'inactive',
-      lastAccess: new Date().toISOString(),
-      roleId: formData.roleId
-    }
-
-    let finalUser: User
-
-    if (isHealthcareProfessional) {
-      const professionalType = PROFESSIONAL_TYPES.find(type => type.id === formData.professionalType)
-      if (!professionalType) throw new Error('Professional type not found')
-
-      finalUser = {
-        ...baseUser,
-        isHealthcareProfessional: true,
-        professionalType,
-        registrationNumber: formData.registrationNumber
-      } as HealthcareProfessional
-    } else if (isOtherProfessional) {
-      finalUser = {
-        ...baseUser,
-        isHealthcareProfessional: false,
-        isOtherProfessional: true,
-        role: formData.role
-      } as OtherProfessional
-    } else {
-      finalUser = {
-        ...baseUser,
-        isHealthcareProfessional: false,
-        isOtherProfessional: false
-      } as RegularUser
-    }
-
-    onSave(finalUser)
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-  }
+  console.log('Form Errors:', errors)
 
-  const handleProfessionalTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function handleProfessionalTypeChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { checked, name } = e.target
     if (name === 'isHealthcareProfessional') {
       setIsHealthcareProfessional(checked)
@@ -133,261 +143,212 @@ export function UserForm({ user, onSave, onCancel }: UserFormProps) {
     }
   }
 
-  // Filter roles based on user type
-  const availableRoles = mockRoles.filter(role => {
-    if (isHealthcareProfessional) {
-      return role.type === 'healthcare'
-    }
-    if (isOtherProfessional) {
-      return role.type === 'custom'
-    }
-    return role.type !== 'healthcare'
-  })
-
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-      <div className='bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto'>
-        <div className='flex justify-between items-center mb-6'>
-          <h3 className='text-lg font-semibold'>{user ? 'Editar Usuário' : 'Novo Usuário'}</h3>
-          <button onClick={onCancel} className='p-2 hover:bg-gray-100 rounded-full'>
-            <X className='w-5 h-5' />
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className='space-y-6'>
-          <div className='grid grid-cols-2 gap-4'>
-            <div className='col-span-2'>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>Nome Completo</label>
-              <input
-                type='text'
-                name='fullName'
-                value={formData.fullName}
-                onChange={handleChange}
-                required
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-              />
-            </div>
-
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>Data de Nascimento</label>
-              <input
-                type='date'
-                name='birthDate'
-                value={formData.birthDate}
-                onChange={handleChange}
-                required
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-              />
-            </div>
-
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>Gênero</label>
-              <select
-                name='gender'
-                value={formData.gender}
-                onChange={handleChange}
-                required
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'>
-                <option value='male'>Masculino</option>
-                <option value='female'>Feminino</option>
-                <option value='other'>Outro</option>
-              </select>
-            </div>
-
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>CPF</label>
-              <input
-                type='text'
-                name='cpf'
-                value={formData.cpf}
-                onChange={handleChange}
-                required
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-              />
-            </div>
-
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>Telefone</label>
-              <input
-                type='tel'
-                name='phone'
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-              />
-            </div>
-
-            <div className='col-span-2'>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>E-mail</label>
-              <input
-                type='email'
-                name='email'
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-              />
-            </div>
-
-            <div className='col-span-2'>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>Endereço</label>
-              <input
-                type='text'
-                name='address'
-                value={formData.address}
-                onChange={handleChange}
-                required
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'
-              />
-            </div>
-
-            <div className='col-span-2 space-y-2'>
-              <label className='flex items-center'>
-                <input
-                  type='checkbox'
-                  name='isHealthcareProfessional'
-                  checked={isHealthcareProfessional}
-                  onChange={handleProfessionalTypeChange}
-                  className='h-4 w-4 text-kai-primary border-gray-300 rounded focus:ring-kai-primary'
+    <Dialog open onClose={onCancel} maxWidth='md' fullWidth>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <DialogTitle>{user ? 'Editar Usuário' : 'Novo Usuário'}</DialogTitle>
+        <DialogContent>
+          <Box sx={{ mt: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Controller
+                  name='fullName'
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField {...field} label='Nome Completo' fullWidth error={!!error} helperText={error?.message} />
+                  )}
                 />
-                <span className='ml-2 text-sm text-gray-700'>Profissional de Saúde</span>
-              </label>
+              </Grid>
 
-              <label className='flex items-center'>
-                <input
-                  type='checkbox'
-                  name='isOtherProfessional'
-                  checked={isOtherProfessional}
-                  onChange={handleProfessionalTypeChange}
-                  className='h-4 w-4 text-kai-primary border-gray-300 rounded focus:ring-kai-primary'
+              <Grid item xs={12} md={6}>
+                <Controller
+                  name='email'
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField {...field} label='Email' fullWidth error={!!error} helperText={error?.message} />
+                  )}
                 />
-                <span className='ml-2 text-sm text-gray-700'>Outros Profissionais</span>
-              </label>
-            </div>
+              </Grid>
 
-            {isHealthcareProfessional && (
-              <>
-                <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-1'>Tipo de Profissional</label>
-                  <select
-                    name='professionalType'
-                    value={formData.professionalType}
-                    onChange={handleChange}
-                    required
-                    className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'>
-                    <option value=''>Selecione</option>
-                    {PROFESSIONAL_TYPES.map(type => (
-                      <option key={type.id} value={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-1'>Número de Registro</label>
-                  <div className='relative'>
-                    <input
-                      type='text'
-                      name='registrationNumber'
-                      value={formData.registrationNumber}
-                      onChange={handleChange}
-                      required
-                      placeholder={selectedProfessionalType?.councilCode}
-                      className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'
+              <Grid item xs={12} md={6}>
+                <Controller
+                  name='birthDate'
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField
+                      {...field}
+                      type='date'
+                      label='Data de Nascimento'
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                      error={!!error}
+                      helperText={error?.message}
                     />
-                    {selectedProfessionalType && (
-                      <div className='absolute right-0 top-0 bottom-0 flex items-center pr-3'>
-                        <div className='text-sm text-gray-500'>{selectedProfessionalType.councilCode}</div>
-                      </div>
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Controller
+                  name='gender'
+                  control={control}
+                  render={({ field }) => (
+                    <FormControl fullWidth>
+                      <InputLabel>Gênero</InputLabel>
+                      <Select {...field}>
+                        <MenuItem value='male'>Masculino</MenuItem>
+                        <MenuItem value='female'>Feminino</MenuItem>
+                        <MenuItem value='other'>Outro</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Controller
+                  name='cpf'
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField {...field} label='CPF' fullWidth error={!!error} helperText={error?.message} />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Controller
+                  name='phone'
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField {...field} label='Telefone' fullWidth error={!!error} helperText={error?.message} />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Controller
+                  name='status'
+                  control={control}
+                  render={({ field }) => (
+                    <FormControl fullWidth>
+                      <InputLabel>Status</InputLabel>
+                      <Select {...field}>
+                        <MenuItem value='active'>Ativo</MenuItem>
+                        <MenuItem value='inactive'>Inativo</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Controller
+                  name='roleId'
+                  control={control}
+                  render={({ field }) => (
+                    <FormControl fullWidth error={!!errors.roleId}>
+                      <InputLabel>Função</InputLabel>
+                      <Select
+                        {...field}
+                        value={field.value || ''}
+                        onChange={e => field.onChange(String(e.target.value))}>
+                        {roles.map(role => (
+                          <MenuItem key={role.id} value={String(role.id)}>
+                            {role.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {errors.roleId && <FormHelperText>{errors.roleId.message}</FormHelperText>}
+                    </FormControl>
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={isHealthcareProfessional}
+                      onChange={handleProfessionalTypeChange}
+                      name='isHealthcareProfessional'
+                    />
+                  }
+                  label='Profissional de Saúde'
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={isOtherProfessional}
+                      onChange={handleProfessionalTypeChange}
+                      name='isOtherProfessional'
+                    />
+                  }
+                  label='Outro Profissional'
+                />
+              </Grid>
+
+              {isHealthcareProfessional && (
+                <>
+                  <Grid item xs={12} md={6}>
+                    <Controller
+                      name='professionalType'
+                      control={control}
+                      render={({ field }) => (
+                        <FormControl fullWidth>
+                          <InputLabel>Tipo de Profissional</InputLabel>
+                          <Select {...field}>
+                            {PROFESSIONAL_TYPES.map(type => (
+                              <MenuItem key={type.id} value={type.id}>
+                                {type.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      )}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Controller
+                      name='registrationNumber'
+                      control={control}
+                      render={({ field, fieldState: { error } }) => (
+                        <TextField
+                          {...field}
+                          label='Número de Registro'
+                          fullWidth
+                          error={!!error}
+                          helperText={error?.message}
+                        />
+                      )}
+                    />
+                  </Grid>
+                </>
+              )}
+
+              {isOtherProfessional && (
+                <Grid item xs={12} md={6}>
+                  <Controller
+                    name='role'
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <TextField {...field} label='Função' fullWidth error={!!error} helperText={error?.message} />
                     )}
-                  </div>
-                </div>
-
-                {selectedProfessionalType && (
-                  <div className='col-span-2 bg-blue-50 p-4 rounded-lg flex items-start'>
-                    <Info className='w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0' />
-                    <div className='ml-3'>
-                      <p className='text-sm text-blue-900'>
-                        <strong>{selectedProfessionalType.federalCouncil}</strong> -{' '}
-                        {selectedProfessionalType.description}
-                      </p>
-                      <p className='text-sm text-blue-700 mt-1'>
-                        Registro profissional: {selectedProfessionalType.councilCode}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-
-            {isOtherProfessional && (
-              <div className='col-span-2'>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>Função</label>
-                <select
-                  name='role'
-                  value={formData.role}
-                  onChange={handleChange}
-                  required
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'>
-                  <option value=''>Selecione a função</option>
-                  {OTHER_PROFESSIONAL_ROLES.map(role => (
-                    <option key={role} value={role}>
-                      {role}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-
-            <div className='col-span-2'>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>Perfil de Acesso</label>
-              <select
-                name='roleId'
-                value={formData.roleId}
-                onChange={handleChange}
-                required
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'>
-                <option value=''>Selecione um perfil</option>
-                {availableRoles.map(role => (
-                  <option key={role.id} value={role.id}>
-                    {role.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>Status</label>
-              <select
-                name='status'
-                value={formData.status}
-                onChange={handleChange}
-                required
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-kai-primary focus:border-transparent'>
-                <option value='active'>Ativo</option>
-                <option value='inactive'>Inativo</option>
-              </select>
-            </div>
-          </div>
-
-          <div className='flex justify-end space-x-3'>
-            <button
-              type='button'
-              onClick={onCancel}
-              className='px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200'>
-              Cancelar
-            </button>
-            <button
-              type='submit'
-              className='px-4 py-2 text-sm font-medium text-white bg-kai-primary rounded-md hover:bg-kai-primary/90 flex items-center'>
-              <Save className='w-4 h-4 mr-2' />
-              Salvar
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+                  />
+                </Grid>
+              )}
+            </Grid>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onCancel} disabled={isSubmitting}>
+            Cancelar
+          </Button>
+          <Button type='submit' variant='contained' color='primary' disabled={isSubmitting}>
+            {isSubmitting ? 'Salvando...' : 'Salvar'}
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
   )
 }

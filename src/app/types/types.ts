@@ -2,7 +2,16 @@ export type User = {
   id: number
   name: string
   email: string
-  role: string
+  fullName: string
+  birthDate: string
+  gender: 'male' | 'female' | 'other'
+  cpf: string
+  phone: string
+  status: 'active' | 'inactive'
+  professionalType: ProfessionalType
+  registrationNumber: string
+  role: Role
+  roleId: string
 }
 
 export type Estudo = {
