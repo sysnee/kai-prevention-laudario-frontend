@@ -21,14 +21,14 @@
   }
 
   button {
-    @apply focus:outline-none focus:ring-2 focus:ring-kai-primary focus:ring-opacity-50;
+    @apply cursor-pointer;
   }
 
-  input,
+  /* input,
   select,
   textarea {
     @apply bg-pure-white border-kai-border focus:border-kai-primary focus:ring-2 focus:ring-kai-primary/20;
-  }
+  } */
 
   /* Custom Scrollbar - Global */
   ::-webkit-scrollbar {
@@ -102,7 +102,7 @@
   }
 
   .table-header {
-    @apply bg-kai-surface text-kai-text-primary font-medium px-4 py-2;
+    @apply bg-kai-surface text-kai-text-primary font-bold px-4 py-2;
   }
 
   .table-cell {

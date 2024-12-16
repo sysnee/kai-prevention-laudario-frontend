@@ -1,191 +1,297 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
-  Switch,
   Button,
   Box,
   Typography,
   Divider,
-  Chip,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-} from "@mui/material";
-import ExamStagePermissions from "./ExamStagePermissions";
-import {
-  AccessLevel,
-  Role,
-  RolePermissions,
-} from "@/src/app/types/pemissions/permissions";
+  Chip,
+  Alert,
+  Checkbox,
+  FormGroup,
+  FormControlLabel
+} from '@mui/material'
+import { X } from 'lucide-react'
+import api from '../../../../../lib/api'
+import { Role } from '@/src/app/types/permissions'
+import { PermissionType } from '@/src/app/types/permissions'
+import { showToast } from '@/src/lib/toast'
+import { PERMISSION_TRANSLATIONS, RESOURCE_TRANSLATIONS } from '@/src/app/constants/translations'
+import { ResourceType } from '@/src/app/types/permissions'
 
-interface RolePermissionFormProps {
-  open: boolean;
-  onClose: () => void;
-  rolePermissions: RolePermissions | null;
-  mode: "create" | "edit" | "view";
-  onSave?: (role: RolePermissions) => void;
+interface RoleFormData {
+  name: string
+  permissions: {
+    permission: PermissionType
+    resource: ResourceType
+  }[]
 }
 
-export default function RolePermissionForm({
-  open,
-  onClose,
-  rolePermissions,
-  mode,
-  onSave,
-}: RolePermissionFormProps) {
-  const [formData, setFormData] = useState<RolePermissions>(() => {
-    return (
-      rolePermissions || {
-        id: crypto.randomUUID(),
-        name: undefined,
-        isActive: true,
-        permissions: [
-          { module: "client", access: "none" },
-          { module: "exam", access: "none" },
-        ],
-        examStages: [
+interface RolePermissionFormProps {
+  open: boolean
+  onClose: () => void
+  role: Role | null
+  mode: 'create' | 'edit' | 'view'
+  onSave: (role: RoleFormData) => void
+}
 
-        ]
-      }
-    );
-  });
+export default function RolePermissionForm({ open, onClose, role, mode, onSave }: RolePermissionFormProps) {
+  const [formData, setFormData] = useState<RoleFormData>({
+    name: '',
+    permissions: []
+  })
+  const [error, setError] = useState<string | null>(null)
+  const [selectedResource, setSelectedResource] = useState<ResourceType | ''>('')
+  const [selectedPermissions, setSelectedPermissions] = useState<PermissionType[]>([])
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    if (rolePermissions) {
-      setFormData(rolePermissions);
+    if (role) {
+      setFormData({
+        name: role.name,
+        permissions: role.permissions.map(p => ({
+          permission: p.permission,
+          resource: p.resource
+        }))
+      })
+    } else {
+      setFormData({
+        name: '',
+        permissions: []
+      })
     }
-  }, [rolePermissions]);
+  }, [role])
 
-  const isViewMode = mode === "view";
+  const isViewMode = mode === 'view'
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave?.(formData);
-    onClose();
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitted(true)
+    setError(null)
 
-  // Atualiza o valor de acesso para o módulo de pacientes
-  const handlePatientAccessChange = (access: AccessLevel) => {
-    setFormData((prev) => ({
+    if (!formData.name) {
+      setError('Nome do perfil é obrigatório')
+      return
+    }
+    if (formData.permissions.length === 0) {
+      setError('Adicione pelo menos uma permissão')
+      return
+    }
+
+    try {
+      setIsLoading(true)
+
+      const payload = {
+        name: formData.name,
+        permissions: formData.permissions.map(p => ({
+          permission: p.permission.toLowerCase(),
+          resource: p.resource.toLowerCase()
+        }))
+      }
+
+      if (mode === 'create') {
+        await api.post('/roles', payload)
+      } else if (mode === 'edit' && role) {
+        await api.patch(`/roles/${role.id}`, payload)
+      }
+
+      showToast.success('Perfil salvo com sucesso')
+
+      onSave(formData)
+      onClose()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao salvar o perfil')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleAddPermissions = () => {
+    if (selectedResource && selectedPermissions.length > 0) {
+      const newPermissions = selectedPermissions.map(permission => ({
+        permission,
+        resource: selectedResource
+      }))
+
+      // Filter out any existing permissions for this resource
+      const filteredPermissions = formData.permissions.filter(p => p.resource !== selectedResource)
+
+      setFormData(prev => ({
+        ...prev,
+        permissions: [...filteredPermissions, ...newPermissions]
+      }))
+      setSelectedResource('')
+      setSelectedPermissions([])
+      setError(null)
+    }
+  }
+
+  const handlePermissionChange = (permission: PermissionType) => {
+    setSelectedPermissions(prev =>
+      prev.includes(permission) ? prev.filter(p => p !== permission) : [...prev, permission]
+    )
+  }
+
+  const handleRemoveResourcePermissions = (resource: ResourceType) => {
+    setFormData(prev => ({
       ...prev,
-      permissions: prev.permissions.map((permission) =>
-        permission.module === "client" ? { ...permission, access } : permission
-      ),
-    }));
-  };
+      permissions: prev.permissions.filter(p => p.resource !== resource)
+    }))
+  }
+
+  const groupPermissionsByResource = (permissions: RoleFormData['permissions']) => {
+    const grouped = new Map<ResourceType, PermissionType[]>()
+    permissions.forEach(({ resource, permission }) => {
+      const existing = grouped.get(resource) || []
+      grouped.set(resource, [...existing, permission])
+    })
+    return grouped
+  }
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth='md' fullWidth>
       <form onSubmit={handleSubmit}>
         <DialogTitle>
-          <Box className="flex justify-between items-center">
-            <Typography variant="h6">
-              {mode === "create"
-                ? "Criar nova permissão"
-                : mode === "edit"
-                  ? "Editar permissão"
-                  : "Visualizar permissão"}
-            </Typography>
-            <Box className="flex items-center gap-2">
-              <Chip
-                label={formData.isActive ? "Ativo" : "Inativo"}
-                color={formData.isActive ? "success" : "default"}
-                size="small"
-              />
-              <Switch
-                checked={formData.isActive}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    isActive: e.target.checked,
-                  }))
-                }
-                disabled={isViewMode}
-                size="small"
-              />
-            </Box>
-          </Box>
+          <Typography variant='h6'>
+            {mode === 'create' ? 'Criar novo perfil' : mode === 'edit' ? 'Editar perfil' : 'Visualizar perfil'}
+          </Typography>
         </DialogTitle>
 
         <DialogContent>
-          <Box className="space-y-6 py-4">
-            <Box className="space-y-4">
-              <TextField
-                label="Nome do perfil"
-                fullWidth
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    name: e.target.value as Role,
-                  }))
-                }
-                disabled={isViewMode}
-              />
-            </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, py: 2 }}>
+            {error && <Alert severity='error'>{error}</Alert>}
+
+            <TextField
+              label='Nome do perfil'
+              fullWidth
+              value={formData.name}
+              onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              disabled={isViewMode}
+              required
+              error={isSubmitted && !formData.name}
+              helperText={isSubmitted && !formData.name ? 'Nome é obrigatório' : ''}
+            />
 
             <Divider />
 
-            <Box className="space-y-4">
-              <Typography variant="subtitle1" className="font-semibold">
-                Módulo de Clientes
+            <Box>
+              <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 600 }}>
+                Permissões
               </Typography>
-              <FormControl fullWidth>
-                <InputLabel>Nível de acesso</InputLabel>
-                <Select
-                  value={
-                    formData.permissions.find((p) => p.module === "client")
-                      ?.access || "none"
-                  }
-                  label="Nível de Acesso"
-                  onChange={(e) =>
-                    handlePatientAccessChange(e.target.value as AccessLevel)
-                  }
-                  disabled={isViewMode}
-                >
-                  <MenuItem value="none">Nenhum</MenuItem>
-                  <MenuItem value="read">Visualizar</MenuItem>
-                  <MenuItem value="write">Modificar</MenuItem>
-                  <MenuItem value="full">Completo</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
 
-            <Divider />
+              {!isViewMode && (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 2 }}>
+                  <FormControl fullWidth>
+                    <InputLabel>Recurso</InputLabel>
+                    <Select
+                      value={selectedResource}
+                      label='Recurso'
+                      onChange={e => setSelectedResource(e.target.value as ResourceType)}>
+                      {Object.entries(RESOURCE_TRANSLATIONS).map(([resource, translation]) => (
+                        <MenuItem key={resource} value={resource}>
+                          {translation}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
 
-            <Box className="space-y-4">
-              <Typography variant="subtitle1" className="font-semibold">
-                Módulo de Exames
-              </Typography>
-              <ExamStagePermissions
-                stages={formData.examStages}
-                onChange={(newStages) =>
-                  setFormData((prev) => ({ ...prev, examStages: newStages }))
-                }
-                disabled={isViewMode}
-              />
+                  {selectedResource && (
+                    <>
+                      <FormGroup row>
+                        {Object.entries(PERMISSION_TRANSLATIONS).map(([permission, translation]) => (
+                          <FormControlLabel
+                            key={permission}
+                            control={
+                              <Checkbox
+                                checked={selectedPermissions.includes(permission as PermissionType)}
+                                onChange={() => handlePermissionChange(permission as PermissionType)}
+                              />
+                            }
+                            label={translation}
+                          />
+                        ))}
+                      </FormGroup>
+
+                      <Button
+                        variant='contained'
+                        onClick={handleAddPermissions}
+                        color='primary'
+                        disabled={selectedPermissions.length === 0}>
+                        Adicionar Permissões
+                      </Button>
+                    </>
+                  )}
+                </Box>
+              )}
+
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                {Array.from(groupPermissionsByResource(formData.permissions)).map(([resource, permissions]) => (
+                  <Box
+                    key={resource}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      p: 1,
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      borderRadius: 1
+                    }}>
+                    <Typography variant='subtitle2' sx={{ minWidth: 200 }}>
+                      {RESOURCE_TRANSLATIONS[resource]}:
+                    </Typography>
+                    <Box sx={{ flex: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {permissions.map(permission => (
+                        <Chip
+                          key={`${resource}-${permission}`}
+                          label={PERMISSION_TRANSLATIONS[permission]}
+                          size='small'
+                        />
+                      ))}
+                    </Box>
+                    {!isViewMode && (
+                      <Button
+                        size='small'
+                        color='error'
+                        onClick={() => handleRemoveResourcePermissions(resource)}
+                        startIcon={<X size={16} />}>
+                        Remover
+                      </Button>
+                    )}
+                  </Box>
+                ))}
+                {formData.permissions.length === 0 && (
+                  <Typography color='text.secondary' variant='body2'>
+                    Nenhuma permissão adicionada
+                  </Typography>
+                )}
+              </Box>
             </Box>
           </Box>
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={onClose}>
-            {isViewMode ? "Fechar" : "Cancelar"}
+          <Button onClick={onClose} disabled={isLoading}>
+            {isViewMode ? 'Fechar' : 'Cancelar'}
           </Button>
           {!isViewMode && (
-            <Button type="submit" variant="contained" color="primary">
-              {mode === "create" ? "Criar" : "Salvar"}
+            <Button type='submit' variant='contained' color='primary' disabled={isLoading}>
+              {isLoading ? 'Salvando...' : mode === 'create' ? 'Criar' : 'Salvar'}
             </Button>
           )}
         </DialogActions>
       </form>
     </Dialog>
-  );
+  )
 }
