@@ -129,7 +129,6 @@ export function Scheduling() {
 
       // Redirect to confirmation page or list
       window.location.href = '/dashboard/agendamentos';
-      // redirect('')
     } catch (error) {
       console.error('Error creating appointment:', error);
       toast.error('Erro ao criar agendamento. Tente novamente.');
