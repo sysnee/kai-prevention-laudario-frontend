@@ -65,7 +65,7 @@ export default function UserManagement() {
   const handleSave = async (user: User) => {
     try {
       if (selectedUser) {
-        await api.put(`/users/${selectedUser.id}`, user)
+        await api.patch(`/users/${selectedUser.id}`, user)
       } else {
         await api.post('/users', user)
       }
@@ -86,6 +86,29 @@ export default function UserManagement() {
       fetchUsers()
     } catch (error) {
       console.error('Error deleting user:', error)
+    }
+  }
+
+  const onSubmit = async (data: User) => {
+    try {
+      const submitData = {
+        fullName: data.fullName,
+        birthDate: data.birthDate,
+        gender: data.gender,
+        cpf: data.cpf,
+        phone: data.phone,
+        email: data.email,
+        status: data.status,
+        roleId: parseInt(data.roleId),
+        isHealthcareProfessional: data.isHealthcareProfessional,
+        professionalType: data.professionalType,
+        registrationNumber: data.isHealthcareProfessional ? data.registrationNumber : null
+      }
+
+      debugger
+      await handleSave(submitData)
+    } catch (error) {
+      console.error('Error submitting form:', error)
     }
   }
 
@@ -174,9 +197,6 @@ export default function UserManagement() {
                       size='small'>
                       <Edit2 />
                     </IconButton>
-                    <IconButton color='warning' size='small'>
-                      <Key />
-                    </IconButton>
                     <IconButton
                       onClick={() => {
                         if (window.confirm(USER_MANAGEMENT.deleteConfirmation)) {
@@ -204,6 +224,7 @@ export default function UserManagement() {
             setShowUserForm(false)
             setSelectedUser(null)
           }}
+          onSubmit={onSubmit}
         />
       )}
     </Box>

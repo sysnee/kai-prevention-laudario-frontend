@@ -1,7 +1,7 @@
 import { Role } from './permissions'
 
 export interface User {
-  id: number
+  id?: number
   fullName: string
   email: string
   birthDate: string
@@ -9,7 +9,7 @@ export interface User {
   cpf: string
   phone: string
   status: 'active' | 'inactive'
-  role: Role
+  role?: Role
   roleId: string
   isHealthcareProfessional: boolean
   professionalType: ProfessionalType | OtherProfessionalType
