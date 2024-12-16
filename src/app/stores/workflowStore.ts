@@ -4,6 +4,17 @@ import toast from 'react-hot-toast';
 import { WorkflowNote, WorkflowTransition } from '../types/workflow/workflow';
 import { ServiceStatus } from '../types/pemissions/permissions';
 
+interface Appointment {
+  id: string;
+  clientCpf: string;
+  clientName: string;
+  dateTime: string;
+  examType: string;
+  status: string;
+  questionnaireIsPending: boolean;
+  createdAt: string;
+}
+
 export interface ServiceRequest {
   id: string;
   code: number;
@@ -43,6 +54,7 @@ export interface ServiceRequest {
 
 interface WorkflowStore {
   serviceRequests: ServiceRequest[];
+  appointment: Appointment | null;
   setServiceRequests: (serviceRequests: any[]) => void
   addExam: (exam: ServiceRequest) => void;
   updateExam: (examId: string, data: Partial<ServiceRequest>) => void;
@@ -50,10 +62,21 @@ interface WorkflowStore {
   addWorkflowNote: (examId: string, note: Omit<WorkflowNote, 'id' | 'createdAt'>) => void;
   cancelExam: (examId: string, reason: string) => void;
   rescheduleExam: (examId: string, newDate: Date, newTime: string, reason: string) => void;
+  setSelectedAppointment: (appointment: Appointment) => void;
+  clearAppointment: () => void;
 }
 
 export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
   serviceRequests: [],
+  appointment: null,
+
+  setSelectedAppointment: (appointment: Appointment) => {
+    set({ appointment });
+  },
+
+  clearAppointment: () => {
+    set({ appointment: null });
+  },
 
   setServiceRequests: (sr) => set((state) => ({
     serviceRequests: sr
