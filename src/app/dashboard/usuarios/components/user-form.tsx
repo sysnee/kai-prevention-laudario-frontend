@@ -29,6 +29,7 @@ interface UserFormProps {
   onSave: (user: User) => void
   onCancel: () => void
   roles: Role[]
+  onSubmit: (data: User) => Promise<void>
 }
 
 const userFormSchema = z.object({
@@ -49,7 +50,7 @@ const userFormSchema = z.object({
   isHealthcareProfessional: z.boolean().optional(),
   isOtherProfessional: z.boolean().optional(),
   registrationNumber: z.string().optional(),
-  roleId: z.string().optional()
+  roleId: z.number().optional()
 })
 
 type UserFormData = z.infer<typeof userFormSchema>
@@ -76,9 +77,9 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
       status: user?.status ?? 'active',
       isHealthcareProfessional: user?.isHealthcareProfessional ?? false,
       isOtherProfessional: !!user?.isHealthcareProfessional,
-      professionalType: user?.professionalType || '',
+      professionalType: user?.professionalType,
       registrationNumber: user?.registrationNumber ?? '',
-      roleId: user?.role?.id ? String(user.role.id) : ''
+      roleId: user?.role?.id
     },
     mode: 'onBlur'
   })

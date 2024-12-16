@@ -10,13 +10,13 @@ export interface User {
   phone: string
   status: 'active' | 'inactive'
   role?: Role
-  roleId: string
+  roleId: number
   isHealthcareProfessional: boolean
-  professionalType: ProfessionalType | OtherProfessionalType
+  professionalType: any
   registrationNumber?: string
 }
 
-export interface ProfessionalType {
+interface ProfessionalType {
   id: string
   name: string
 }

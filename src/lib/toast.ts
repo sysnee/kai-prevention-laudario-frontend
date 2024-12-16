@@ -25,6 +25,6 @@ export const showToast = {
     },
     options?: ToastOptions
   ) => {
-    return toast.promise(promise, messages, options)
+    return toast.promise(promise, messages)
   }
 }

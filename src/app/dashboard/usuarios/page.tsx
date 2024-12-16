@@ -99,7 +99,7 @@ export default function UserManagement() {
         phone: data.phone,
         email: data.email,
         status: data.status,
-        roleId: parseInt(data.roleId),
+        roleId: data.roleId,
         isHealthcareProfessional: data.isHealthcareProfessional,
         professionalType: data.professionalType,
         registrationNumber: data.isHealthcareProfessional ? data.registrationNumber : null
