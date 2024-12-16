@@ -1,14 +1,18 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Calendar as CalendarIcon, Search, Filter, CalendarPlus, ChevronLeft, ChevronRight, LayoutList } from 'lucide-react';
+import { Calendar as CalendarIcon, Search, Filter, CalendarPlus, ChevronLeft, ChevronRight, LayoutList, PlusIcon } from 'lucide-react';
 import { AppointmentList } from '../../components/scheduling/AppointmentList';
 import { AppointmentDashboard } from '../../components/scheduling/AppointmentDashboard';
 import { CalendarView } from '../../components/scheduling/CalendarView';
+import { Button } from '@mui/material';
+import { useTheme } from '@mui/system';
 
 export default function SchedulingList() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [view, setView] = useState<'list' | 'calendar'>('list');
+
+    const theme = useTheme()
 
     const handlePrevDay = () => {
         const newDate = new Date(selectedDate);
@@ -28,6 +32,15 @@ export default function SchedulingList() {
                 <h1 className="text-3xl font-bold text-kai-gray-900">
                     Consulta de Agendamentos
                 </h1>
+
+                <Button
+                    href='/dashboard/agendamentos/novo'
+                    className={`flex items-center px-4 py-2 rounded-lg text-white
+              ${theme.palette.mode === 'light' ? 'bg-kai-primary hover:bg-kai-primary/40' : 'bg-gray-600 hover:bg-gray-700'}
+            `}
+                    startIcon={<PlusIcon />}>
+                    Novo Agendamento
+                </Button>
             </div>
 
             <AppointmentDashboard date={selectedDate} />

@@ -1,13 +1,12 @@
 export const examsList = [
   {
     id: 'raio-x-torax',
-    name: 'Raio-X de Tórax',
-    description: 'Exame de imagem que permite visualizar estruturas do tórax, incluindo pulmões, coração e ossos.',
-    price: 150.00,
-    duration: '15-20 min',
+    name: 'HI-LIGHT',
+    description: 'Experiência de diagnóstico completa e cuidado personalizado para sua saúde..',
+    price: 0,
+    duration: 'MR',
     preparation: 'Não é necessário jejum',
     category: 'radiologia',
-    image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800',
     requirements: ['Documento com foto', 'Pedido médico'],
     instructions: [
       'Retire colares, brincos e objetos metálicos',
@@ -17,10 +16,10 @@ export const examsList = [
   },
   {
     id: 'ressonancia-cranio',
-    name: 'Ressonância Magnética de Crânio',
-    description: 'Exame detalhado do cérebro e estruturas do crânio utilizando campo magnético.',
-    price: 800.00,
-    duration: '40-60 min',
+    name: 'HI-AEROS',
+    description: 'Prioridade e serviço personalizado com exames médicos e consultas com especialistas.',
+    price: 0,
+    duration: 'MR, TC',
     preparation: 'Jejum de 4 horas',
     category: 'ressonancia',
     image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800',
@@ -33,10 +32,26 @@ export const examsList = [
   },
   {
     id: 'ultrassom-abdomen',
-    name: 'Ultrassom de Abdômen Total',
-    description: 'Exame por ultrassom que avalia órgãos abdominais como fígado, vesícula, rins e pâncreas.',
-    price: 250.00,
-    duration: '30 min',
+    name: 'HI-FOCUS',
+    description: 'Exames de ponta e cuidado excepcional para uma avaliação completa da saúde corporativa.',
+    price: 0,
+    duration: 'TC, US, MG',
+    preparation: 'Jejum de 6 horas',
+    category: 'ultrassom',
+    image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800',
+    requirements: ['Documento com foto', 'Pedido médico'],
+    instructions: [
+      'Jejum absoluto de 6 horas',
+      'Tomar 6 copos de água 1 hora antes',
+      'Não urinar 1 hora antes do exame'
+    ]
+  },
+  {
+    id: 'HI-DEEP',
+    name: 'HI-DEEP',
+    description: 'Exames de ponta e cuidado excepcional para uma avaliação completa da sua saúde.',
+    price: 0,
+    duration: 'MR, TC, US, MG',
     preparation: 'Jejum de 6 horas',
     category: 'ultrassom',
     image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800',

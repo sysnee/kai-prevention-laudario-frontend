@@ -22,6 +22,7 @@ import { User } from '../../types/user'
 import { Role } from '../../types/permissions'
 import { TABLE_HEADERS, USER_MANAGEMENT, getProfessionalTypeName } from '../../constants/translations'
 import { showToast } from '../../../lib/toast'
+import { useTheme } from '@mui/system'
 
 export default function UserManagement() {
   const [users, setUsers] = useState<User[]>([])
@@ -35,6 +36,8 @@ export default function UserManagement() {
     fetchUsers()
     fetchRoles()
   }, [])
+
+  const theme = useTheme()
 
   const fetchUsers = async () => {
     try {
@@ -138,12 +141,13 @@ export default function UserManagement() {
           }}
         />
         <Button
-          variant='contained'
-          color='primary'
           onClick={() => {
             setSelectedUser(null)
             setShowUserForm(true)
           }}
+          className={`flex items-center px-4 py-2 rounded-lg text-white
+            ${theme.palette.mode === 'light' ? 'bg-kai-primary hover:bg-kai-primary/40' : 'bg-gray-600 hover:bg-gray-700'}
+          `}
           startIcon={<Plus />}>
           {USER_MANAGEMENT.newUser}
         </Button>

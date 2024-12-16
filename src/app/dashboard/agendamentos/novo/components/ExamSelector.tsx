@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Search, Clock, AlertCircle, Info } from 'lucide-react';
-import { formatCurrency } from '../../utils/format';
-import { examsList } from '../../data/exams';
+import { Search, Clock, AlertCircle, Info, AlertTriangleIcon } from 'lucide-react';
+import { examsList } from '@/src/app/data/exams';
+import { formatCurrency } from '@/src/app/utils/format';
 
 interface ExamSelectorProps {
   selectedExam: any;
@@ -27,7 +27,7 @@ export function ExamSelector({ selectedExam, onExamSelect }: ExamSelectorProps) 
         <div className="relative flex-1">
           <input
             type="text"
-            placeholder="Buscar exames"
+            placeholder="Buscar exames..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -41,7 +41,7 @@ export function ExamSelector({ selectedExam, onExamSelect }: ExamSelectorProps) 
             className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">Todas as categorias</option>
-            {categories.map((category: string) => (
+            {categories.map(category => (
               <option key={category} value={category}>
                 {category.charAt(0).toUpperCase() + category.slice(1)}
               </option>
@@ -61,11 +61,11 @@ export function ExamSelector({ selectedExam, onExamSelect }: ExamSelectorProps) 
               }`}
           >
             <div className="flex items-start">
-              <img
+              {/* <img
                 src={exam.image}
                 alt={exam.name}
                 className="w-20 h-20 object-cover rounded-lg"
-              />
+              /> */}
               <div className="ml-4 flex-1">
                 <h3 className="font-medium text-gray-900">{exam.name}</h3>
                 <p className="text-sm text-gray-500 mt-1 line-clamp-2">
@@ -73,11 +73,11 @@ export function ExamSelector({ selectedExam, onExamSelect }: ExamSelectorProps) 
                 </p>
                 <div className="mt-2 flex items-center justify-between">
                   <div className="flex items-center text-sm text-gray-600">
-                    <Clock className="w-4 h-4 mr-1" />
-                    {exam.duration}
+                    <AlertTriangleIcon className="w-4 h-4 mr-1" />
+                    Requer preparação prévia
                   </div>
                   <span className="font-medium text-blue-600">
-                    {formatCurrency(exam.price)}
+                    R$ ---,--
                   </span>
                 </div>
               </div>
@@ -85,7 +85,7 @@ export function ExamSelector({ selectedExam, onExamSelect }: ExamSelectorProps) 
             {exam.preparation && (
               <div className="mt-3 flex items-start text-sm text-gray-600 bg-gray-50 rounded-lg p-3">
                 <AlertCircle className="w-5 h-5 text-blue-500 mr-2 flex-shrink-0" />
-                <p>Requer preparação prévia</p>
+                <p>Modalidades: {exam.duration}</p>
               </div>
             )}
           </button>
