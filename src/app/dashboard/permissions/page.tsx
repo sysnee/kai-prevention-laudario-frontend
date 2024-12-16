@@ -5,7 +5,7 @@ import { PlusIcon, Search } from 'lucide-react'
 import { Role } from '../../types/permissions'
 import AccessCard from './components/AccessCard'
 import { Button, CircularProgress, TextField, Typography } from '@mui/material'
-import { Box } from '@mui/system'
+import { Box, useTheme } from '@mui/system'
 import RolesTable from './components/RolesTable'
 import RolePermissionForm from './components/forms/RolePermissionForm'
 import api from '../../../lib/api'
@@ -22,6 +22,8 @@ export default function PermissionsManagement() {
   const [roleToDelete, setRoleToDelete] = useState<Role | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+
+  const theme = useTheme()
 
   useEffect(() => {
     fetchRoles()
@@ -132,12 +134,13 @@ export default function PermissionsManagement() {
             </ToggleButton>
           </ToggleButtonGroup> */}
           <Button
-            variant='contained'
-            color='primary'
             onClick={() => {
               setSelectedRole(null)
               setModalMode('create')
             }}
+            className={`flex items-center px-4 py-2 rounded-lg text-white
+              ${theme.palette.mode === 'light' ? 'bg-kai-primary hover:bg-kai-primary/40' : 'bg-gray-600 hover:bg-gray-700'}
+            `}
             startIcon={<PlusIcon />}>
             Novo Perfil
           </Button>
