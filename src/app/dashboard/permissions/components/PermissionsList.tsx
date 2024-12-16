@@ -14,7 +14,7 @@ import {
   Box
 } from '@mui/material'
 import { Eye, Edit2, Trash2 } from 'lucide-react'
-import { Role } from '../../../types/types'
+import { Role } from '@/src/app/types/permissions'
 
 interface PermissionsListProps {
   roles: Role[]
