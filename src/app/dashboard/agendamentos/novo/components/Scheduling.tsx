@@ -9,6 +9,7 @@ import { generateTimeSlots } from '@/src/app/utils/temp';
 import { createAppointment, ExamTypeEnum } from '@/src/lib/appoinment';
 import { TimeSlotPicker } from '@/src/app/components/scheduling/TimeSlotPicker';
 import { PatientForm } from '@/src/app/components/scheduling/PatientForm';
+import { redirect } from 'next/navigation';
 
 type Step = 'exam' | 'date' | 'time' | 'patient' | 'confirmation';
 
@@ -99,33 +100,36 @@ export function Scheduling() {
 
     setIsLoading(true);
     try {
-      // const response = await createAppointment({
-      //   examType: ExamTypeEnum.HI_AEROS,
-      //   date: '',
-      //   hour: 8,
-      //   minute: 0,
-      // });
+      const response = await createAppointment({
+        examType: selectedExam.name,
+        date: selectedDate.toISOString().split('T')[0],
+        hour: Number(selectedTime.split(':')[0]),
+        minute: 0,
+        name: patientData.name,
+        birthdate: patientData.birthDate,
+        gender: patientData.gender,
+        cpf: patientData.cpf,
+        email: patientData.email,
+        phone: patientData.phone,
+        zipcode: patientData.address.cep,
+        street: patientData.address.street,
+        number: patientData.address.number,
+        complement: patientData.address.complement,
+        neighborhood: patientData.address.neighborhood,
+        city: patientData.address.city,
+        state: patientData.address.state
+      });
 
-      // if (!response.success) {
-      //   throw new Error('Falha ao criar agendamento');
-      // }
-
-      // Send confirmation email with links to anamnesis and consent forms
-      // await sendConfirmationEmail({
-      //   email: patientData.email,
-      //   name: patientData.name,
-      //   examName: selectedExam.name,
-      //   date: selectedDate,
-      //   time: selectedTime,
-      //   anamnesisLink: `https://your-domain.com/anamnesis/${response.appointmentId}`,
-      //   consentLink: `https://your-domain.com/consent/${response.appointmentId}`
-      // });
+      if (!response) {
+        throw new Error('Falha ao criar agendamento');
+      }
 
       // Show success message
-      toast.success('Agendamento realizado com sucesso! Verifique seu email para preencher os formulários necessários.');
+      toast.success('Agendamento realizado com sucesso!');
 
       // Redirect to confirmation page or list
       // window.location.href = '/agendamento-consulta';
+      redirect('/dashboard/agendamentos')
     } catch (error) {
       console.error('Error creating appointment:', error);
       toast.error('Erro ao criar agendamento. Tente novamente.');
@@ -183,7 +187,7 @@ export function Scheduling() {
             <h3 className="text-lg font-medium text-gray-900 mb-4">Resumo do Agendamento</h3>
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-gray-500">Exame</p>
+                <p className="text-sm text-gray-500">Pacote</p>
                 <p className="font-medium">{selectedExam?.name}</p>
               </div>
               <div>
@@ -200,12 +204,12 @@ export function Scheduling() {
               </div>
               <div className="bg-blue-50 p-4 rounded-lg">
                 <p className="text-sm text-blue-800">
-                  Após a confirmação, você receberá um email com links para preencher:
+                  Após a confirmação, o cliente receberá um email de confirmação com o link para responder um questionário.
                 </p>
-                <ul className="mt-2 text-sm text-blue-700 list-disc list-inside">
+                {/* <ul className="mt-2 text-sm text-blue-700 list-disc list-inside">
                   <li>Questionário de Anamnese</li>
                   <li>Termo de Consentimento</li>
-                </ul>
+                </ul> */}
               </div>
             </div>
             <button

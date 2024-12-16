@@ -33,6 +33,7 @@ export function PatientForm({ onSubmit }: PatientFormProps) {
       state: ''
     }
   });
+  const [done, setDone] = useState(false)
 
   const [isLoadingCep, setIsLoadingCep] = useState(false);
   const [cepError, setCepError] = useState('');
@@ -107,6 +108,7 @@ export function PatientForm({ onSubmit }: PatientFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setDone(true)
     onSubmit(formData);
   };
 
@@ -168,9 +170,9 @@ export function PatientForm({ onSubmit }: PatientFormProps) {
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
             >
               <option value="">Selecione</option>
-              <option value="M">Masculino</option>
-              <option value="F">Feminino</option>
-              <option value="O">Outro</option>
+              <option value="male">Masculino</option>
+              <option value="female">Feminino</option>
+              <option value="other">Outro</option>
             </select>
           </div>
 
@@ -333,10 +335,11 @@ export function PatientForm({ onSubmit }: PatientFormProps) {
 
         <div className="flex justify-end">
           <button
+            disabled={done}
             type="submit"
             className="px-4 py-2 bg-kai-primary text-white rounded-lg hover:bg-kai-primary/90"
           >
-            Continuar
+            {done ? 'Salvo!' : 'Salvar'}
           </button>
         </div>
       </form>

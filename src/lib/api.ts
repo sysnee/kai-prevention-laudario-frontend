@@ -61,9 +61,9 @@ const apiCall = async (url: string, options: RequestOptions & { body?: any; para
 }
 
 export default {
-  get: async (url: string, params?: any) => apiCall(url, { method: 'GET', params }),
-  post: async (url: string, body?: any, params?: any) => apiCall(url, { method: 'POST', body, params }),
-  put: async (url: string, body?: any, params?: any) => apiCall(url, { method: 'PUT', body, params }),
-  delete: async (url: string, params?: any) => apiCall(url, { method: 'DELETE', params }),
-  patch: async (url: string, body?: any, params?: any) => apiCall(url, { method: 'PATCH', body, params })
+  get: async (url: string, options?: any) => apiCall(url, { method: 'GET', ...options }),
+  post: async (url: string, body?: any, options?: any) => apiCall(url, { method: 'POST', body, ...options, }),
+  put: async (url: string, body?: any, options?: any) => apiCall(url, { method: 'PUT', body, ...options }),
+  delete: async (url: string, options?: any) => apiCall(url, { method: 'DELETE', ...options }),
+  patch: async (url: string, body?: any, options?: any) => apiCall(url, { method: 'PATCH', body, ...options })
 }

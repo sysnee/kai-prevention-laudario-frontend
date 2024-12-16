@@ -32,7 +32,7 @@ export default function Clients() {
   const getClients = async () => {
     try {
       const clientesResponse = await api.get('clients')
-      const clientesData = clientesResponse.data.data
+      const clientesData = clientesResponse.data
       setClientes(clientesData)
     } catch (err) {
       console.error('Erro ao buscar os dados:', err)
@@ -209,7 +209,7 @@ export default function Clients() {
 
       {loading ? (
         <CircularProgress />
-      ) : clientes.length != 0 ? (
+      ) : clientes?.length !== 0 ? (
         <ClientsGrid
           clientes={clientes}
           onView={handleView}

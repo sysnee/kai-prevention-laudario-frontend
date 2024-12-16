@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import api from "./api";
 
 export enum ExamTypeEnum {
@@ -31,5 +32,10 @@ export interface CreateAppointmentBody {
 }
 
 export async function createAppointment(data: CreateAppointmentBody) {
-    await api.post('service-requests', data)
+    const response = await api.post('service-requests', data, {
+        headers: {
+            'api-key': 'AcN55Gg1Hfe30LMtZ2'
+        }
+    })
+    return response
 }

@@ -8,11 +8,11 @@ import BirthdateInput from './BirthdateInput';
 interface ClientFormProps {
   client?: any;
   onCreate: (data: any) => void;
-  onEdit: (data: any) => void;
-  onCancel: () => void;
+  onEdit?: (data: any) => void;
+  onCancel?: () => void;
   readOnly?: boolean;
-  cpfError: string;
-  emailError: string;
+  cpfError?: string;
+  emailError?: string;
 }
 
 export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = false, cpfError, emailError }: ClientFormProps) {
@@ -195,8 +195,8 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
               <div
                 key={questionnaire.id}
                 className={`p-4 rounded-lg border ${questionnaire.status === 'completed'
-                    ? 'border-green-200 bg-green-50'
-                    : 'border-amber-200 bg-amber-50'
+                  ? 'border-green-200 bg-green-50'
+                  : 'border-amber-200 bg-amber-50'
                   }`}
               >
                 <div className="flex items-center justify-between">

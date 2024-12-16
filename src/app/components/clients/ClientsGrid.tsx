@@ -30,7 +30,7 @@ export default function ClientsGrid({ clientes, searchQuery, onView, onEdit, onD
 
     React.useEffect(() => {
         const lowerCaseQuery = searchQuery.toLowerCase();
-        const filtered = rows.filter(
+        const filtered = rows?.filter(
             (row) =>
                 row.name.toLowerCase().includes(lowerCaseQuery) ||
                 row.cpf.toLowerCase().includes(lowerCaseQuery) ||
