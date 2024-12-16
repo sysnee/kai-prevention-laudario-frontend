@@ -100,34 +100,53 @@ export function Scheduling() {
 
     setIsLoading(true);
     try {
-      const response = await createAppointment({
+      const appointmentData = {
         examType: selectedExam.name,
         date: selectedDate.toISOString().split('T')[0],
         hour: Number(selectedTime.split(':')[0]),
         minute: 0,
-        name: patientData.name,
-        birthdate: patientData.birthDate,
-        gender: patientData.gender,
-        cpf: patientData.cpf,
-        email: patientData.email,
-        phone: patientData.phone,
-        zipcode: patientData.address.cep,
-        street: patientData.address.street,
-        number: patientData.address.number,
-        complement: patientData.address.complement,
-        neighborhood: patientData.address.neighborhood,
-        city: patientData.address.city,
-        state: patientData.address.state
-      });
+        ...(patientData.id
+          ? {
+            patientId: patientData.id,
+            name: patientData.name,
+            birthdate: patientData.birthDate,
+            gender: patientData.gender,
+            cpf: patientData.cpf,
+            email: patientData.email,
+            phone: patientData.phone,
+            zipcode: patientData.address?.cep || patientData.zipcode,
+            street: patientData.address?.street || patientData.street,
+            number: patientData.address?.number || patientData.number,
+            complement: patientData.address?.complement || patientData.complement,
+            neighborhood: patientData.address?.neighborhood || patientData.neighborhood,
+            city: patientData.address?.city || patientData.city,
+            state: patientData.address?.state || patientData.state
+          }
+          : {
+            name: patientData.name,
+            birthdate: patientData.birthDate,
+            gender: patientData.gender,
+            cpf: patientData.cpf,
+            email: patientData.email,
+            phone: patientData.phone,
+            zipcode: patientData.address.cep,
+            street: patientData.address.street,
+            number: patientData.address.number,
+            complement: patientData.address.complement,
+            neighborhood: patientData.address.neighborhood,
+            city: patientData.address.city,
+            state: patientData.address.state
+          }
+        )
+      };
+
+      const response = await createAppointment(appointmentData);
 
       if (!response) {
         throw new Error('Falha ao criar agendamento');
       }
 
-      // Show success message
       toast.success('Agendamento realizado com sucesso!');
-
-      // Redirect to confirmation page or list
       window.location.href = '/dashboard/agendamentos';
     } catch (error) {
       console.error('Error creating appointment:', error);

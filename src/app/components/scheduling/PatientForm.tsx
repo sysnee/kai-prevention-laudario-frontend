@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { User, Loader2 } from 'lucide-react';
+import { Patient, PatientSelector } from './PatientSelector'
+import { Button, Stack } from '@mui/material'
+import { UserPlus, Users } from 'lucide-react'
 
 interface PatientFormProps {
   onSubmit: (data: any) => void;
+  mode?: 'create' | 'select'
 }
 
 interface AddressData {
@@ -15,7 +19,26 @@ interface AddressData {
   number: string;
 }
 
-export function PatientForm({ onSubmit }: PatientFormProps) {
+interface PatientFormData {
+  id?: string;
+  name: string;
+  birthDate: string;
+  gender: string;
+  cpf: string;
+  email: string;
+  phone: string;
+  address?: {
+    cep: string;
+    street: string;
+    number: string;
+    complement?: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+  };
+}
+
+export function PatientForm({ onSubmit, mode = 'select' }: PatientFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     birthDate: '',
@@ -37,6 +60,9 @@ export function PatientForm({ onSubmit }: PatientFormProps) {
 
   const [isLoadingCep, setIsLoadingCep] = useState(false);
   const [cepError, setCepError] = useState('');
+
+  const [currentMode, setCurrentMode] = useState<'create' | 'select'>(mode)
+  const [showForm, setShowForm] = useState(mode === 'create')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -112,237 +138,301 @@ export function PatientForm({ onSubmit }: PatientFormProps) {
     onSubmit(formData);
   };
 
+  const handleSelectPatient = (patient: Patient) => {
+    // Converter dados do paciente existente para o formato esperado
+    const formattedData: PatientFormData = {
+      id: patient.id,
+      name: patient.name,
+      birthDate: patient.birthdate,
+      gender: patient.gender,
+      cpf: patient.cpf,
+      email: patient.email,
+      phone: patient.phone,
+      address: {
+        cep: patient.zipcode,
+        street: patient.street,
+        number: patient.number,
+        complement: patient.complement,
+        neighborhood: patient.neighborhood,
+        city: patient.city,
+        state: patient.state
+      }
+    }
+    onSubmit(formattedData)
+  }
+
+  const handleCreateNew = () => {
+    setCurrentMode('create')
+    setShowForm(true)
+  }
+
+  const handleSwitchToSelect = () => {
+    setCurrentMode('select')
+    setShowForm(false)
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6 space-y-6">
-        <div className="flex items-center space-x-3 mb-6">
-          <div className="p-2 bg-blue-100 rounded-lg">
-            <User className="w-6 h-6 text-blue-600" />
-          </div>
-          <div>
-            <h3 className="text-lg font-medium text-gray-900">
-              Informações do Paciente
-            </h3>
-            <p className="text-sm text-gray-500">
-              Preencha os dados do paciente para o agendamento
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className="col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nome Completo
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Data de Nascimento
-            </label>
-            <input
-              type="date"
-              name="birthDate"
-              value={formData.birthDate}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Gênero
-            </label>
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            >
-              <option value="">Selecione</option>
-              <option value="male">Masculino</option>
-              <option value="female">Feminino</option>
-              <option value="other">Outro</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              CPF
-            </label>
-            <input
-              type="text"
-              name="cpf"
-              value={formData.cpf}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Telefone
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-
-          <div className="col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              E-mail
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-
-          <div className="col-span-2">
-            <h4 className="text-lg font-medium text-gray-900 mb-4">Endereço</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  CEP
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    name="address.cep"
-                    value={formData.address.cep}
-                    onChange={handleCEPChange}
-                    maxLength={9}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    placeholder="00000-000"
-                  />
-                  {isLoadingCep && (
-                    <div className="absolute right-2 top-2">
-                      <Loader2 className="w-5 h-5 text-gray-400 animate-spin" />
-                    </div>
-                  )}
-                </div>
-                {cepError && (
-                  <p className="mt-1 text-sm text-red-600">{cepError}</p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Número
-                </label>
-                <input
-                  type="text"
-                  name="address.number"
-                  value={formData.address.number}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Rua
-                </label>
-                <input
-                  type="text"
-                  name="address.street"
-                  value={formData.address.street}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Complemento
-                </label>
-                <input
-                  type="text"
-                  name="address.complement"
-                  value={formData.address.complement}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Bairro
-                </label>
-                <input
-                  type="text"
-                  name="address.neighborhood"
-                  value={formData.address.neighborhood}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Cidade
-                </label>
-                <input
-                  type="text"
-                  name="address.city"
-                  value={formData.address.city}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Estado
-                </label>
-                <input
-                  type="text"
-                  name="address.state"
-                  value={formData.address.state}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
+      <div className="bg-white rounded-lg shadow p-6 space-y-6">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <User className="w-6 h-6 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="text-lg font-medium text-gray-900">
+                {currentMode === 'create' ? 'Novo Paciente' : 'Selecionar Paciente'}
+              </h3>
+              <p className="text-sm text-gray-500">
+                {currentMode === 'create'
+                  ? 'Preencha os dados do novo paciente'
+                  : 'Selecione um paciente existente ou cadastre um novo'
+                }
+              </p>
             </div>
           </div>
+
+          <Stack direction="row" spacing={1}>
+            <Button
+              variant={currentMode === 'select' ? 'contained' : 'outlined'}
+              onClick={handleSwitchToSelect}
+              startIcon={<Users />}
+            >
+              Selecionar
+            </Button>
+            <Button
+              variant={currentMode === 'create' ? 'contained' : 'outlined'}
+              onClick={handleCreateNew}
+              startIcon={<UserPlus />}
+            >
+              Novo
+            </Button>
+          </Stack>
         </div>
 
-        <div className="flex justify-end">
-          <button
-            disabled={done}
-            type="submit"
-            className="px-4 py-2 bg-kai-primary text-white rounded-lg hover:bg-kai-primary/90"
-          >
-            {done ? 'Salvo!' : 'Salvar'}
-          </button>
-        </div>
-      </form>
+        {currentMode === 'select' ? (
+          <PatientSelector
+            onSelectPatient={handleSelectPatient}
+            onCreateNew={handleCreateNew}
+          />
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Nome Completo
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Data de Nascimento
+                </label>
+                <input
+                  type="date"
+                  name="birthDate"
+                  value={formData.birthDate}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Gênero
+                </label>
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="">Selecione</option>
+                  <option value="male">Masculino</option>
+                  <option value="female">Feminino</option>
+                  <option value="other">Outro</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  CPF
+                </label>
+                <input
+                  type="text"
+                  name="cpf"
+                  value={formData.cpf}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Telefone
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div className="col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  E-mail
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div className="col-span-2">
+                <h4 className="text-lg font-medium text-gray-900 mb-4">Endereço</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      CEP
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="address.cep"
+                        value={formData.address.cep}
+                        onChange={handleCEPChange}
+                        maxLength={9}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        placeholder="00000-000"
+                      />
+                      {isLoadingCep && (
+                        <div className="absolute right-2 top-2">
+                          <Loader2 className="w-5 h-5 text-gray-400 animate-spin" />
+                        </div>
+                      )}
+                    </div>
+                    {cepError && (
+                      <p className="mt-1 text-sm text-red-600">{cepError}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Número
+                    </label>
+                    <input
+                      type="text"
+                      name="address.number"
+                      value={formData.address.number}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Rua
+                    </label>
+                    <input
+                      type="text"
+                      name="address.street"
+                      value={formData.address.street}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Complemento
+                    </label>
+                    <input
+                      type="text"
+                      name="address.complement"
+                      value={formData.address.complement}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Bairro
+                    </label>
+                    <input
+                      type="text"
+                      name="address.neighborhood"
+                      value={formData.address.neighborhood}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Cidade
+                    </label>
+                    <input
+                      type="text"
+                      name="address.city"
+                      value={formData.address.city}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Estado
+                    </label>
+                    <input
+                      type="text"
+                      name="address.state"
+                      value={formData.address.state}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={done}
+              >
+                {done ? 'Salvo!' : 'Salvar'}
+              </Button>
+            </div>
+          </form>
+        )}
+      </div>
     </div>
   );
 }
