@@ -50,7 +50,7 @@ const userFormSchema = z.object({
   isHealthcareProfessional: z.boolean().optional(),
   isOtherProfessional: z.boolean().optional(),
   registrationNumber: z.string().optional(),
-  roleId: z.number().optional()
+  roleId: z.string().optional()
 })
 
 type UserFormData = z.infer<typeof userFormSchema>
@@ -79,7 +79,7 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
       isOtherProfessional: !!user?.isHealthcareProfessional,
       professionalType: user?.professionalType,
       registrationNumber: user?.registrationNumber ?? '',
-      roleId: user?.role?.id
+      roleId: String(user?.role?.id || '')
     },
     mode: 'onBlur'
   })
@@ -94,7 +94,7 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
         phone: data.phone,
         email: data.email,
         status: data.status,
-        roleId: +data.roleId,
+        roleId: +Number(data.roleId),
         isHealthcareProfessional,
         professionalType: data.professionalType,
         registrationNumber: data.registrationNumber
