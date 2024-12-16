@@ -133,6 +133,7 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
       onClick={handleBackdropClick}
+      style={{ cursor: 'default' }}
     >
       <div
         className="rounded-lg w-full max-w-4xl mx-4 max-h-[90vh] flex flex-col"
@@ -173,7 +174,8 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
                 consent: Boolean(!exam.questionnaireIsPending)
               }}
               onPrescriptionClick={() => setShowMedicalPrescriptionModal(true)}
-              onQuestionnaireClick={() => toast('Link do questionário será implementado em breve', { icon: '📋' })}
+              exam={exam}
+              // onQuestionnaireClick={() => open}
               onConsentClick={() => toast('Link do termo de consentimento será implementado em breve', { icon: '📄' })}
             />
 

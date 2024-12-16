@@ -49,6 +49,7 @@ export function AppointmentList({ date }: AppointmentListProps) {
     setLoading(true);
     try {
       const { data } = await api.get("service-requests");
+      console.log('appointments', data);
       setAppointments(data);
     } catch (err) {
       console.error("Erro ao buscar os dados:", err);
@@ -84,7 +85,7 @@ export function AppointmentList({ date }: AppointmentListProps) {
           Nenhum agendamento encontrado
         </h3>
         <p className="text-gray-500">
-          Não há agendamentos para esta data ou filtro aplicado.
+          Não há agendamentos para esta data.
         </p>
       </div>
     );

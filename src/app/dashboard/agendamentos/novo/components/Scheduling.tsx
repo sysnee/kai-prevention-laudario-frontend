@@ -128,8 +128,8 @@ export function Scheduling() {
       toast.success('Agendamento realizado com sucesso!');
 
       // Redirect to confirmation page or list
-      // window.location.href = '/agendamento-consulta';
-      redirect('/dashboard/agendamentos')
+      window.location.href = '/dashboard/agendamentos';
+      // redirect('')
     } catch (error) {
       console.error('Error creating appointment:', error);
       toast.error('Erro ao criar agendamento. Tente novamente.');
@@ -206,10 +206,6 @@ export function Scheduling() {
                 <p className="text-sm text-blue-800">
                   Após a confirmação, o cliente receberá um email de confirmação com o link para responder um questionário.
                 </p>
-                {/* <ul className="mt-2 text-sm text-blue-700 list-disc list-inside">
-                  <li>Questionário de Anamnese</li>
-                  <li>Termo de Consentimento</li>
-                </ul> */}
               </div>
             </div>
             <button

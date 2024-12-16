@@ -1,7 +1,8 @@
 import React from 'react';
-import { Upload, Link, FileText } from 'lucide-react';
+import { Upload, LinkIcon, FileText } from 'lucide-react';
 import { DocumentStatus } from './DocumentStatus';
 import { useTheme } from '@mui/material';
+import Link from 'next/link';
 
 interface DocumentSectionProps {
   documents: {
@@ -9,15 +10,16 @@ interface DocumentSectionProps {
     questionnaire: boolean;
     consent: boolean;
   };
+  exam: any
   onPrescriptionClick: () => void;
-  onQuestionnaireClick: () => void;
+  onQuestionnaireClick?: () => void;
   onConsentClick: () => void;
 }
 
 export function DocumentSection({
   documents,
   onPrescriptionClick,
-  onQuestionnaireClick,
+  exam,
   onConsentClick
 }: DocumentSectionProps) {
 
@@ -44,21 +46,24 @@ export function DocumentSection({
         <p className="text-sm text-gray-500 mb-2">Upload e dados do médico</p>
         <DocumentStatus type="prescription" status={documents.prescription} />
       </button>
-
-      <button
-        onClick={onQuestionnaireClick}
-        className="flex-1 p-4 rounded-lg transition-colors"
-        style={{
-          border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
-        }}
-      >
+      <Link className='flex-1 rounded-lg transition-colors p-3' style={{
+        border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
+      }} target="_blank" rel="noopener noreferrer" href={`https://questionario.kaiprevention.com.br/${exam.questionnaireToken}`}>
+        {/* <button
+          className="flex-1 p-4 rounded-lg transition-colors"
+          style={{
+            border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
+          }}
+        > */}
         <div className="flex items-center justify-between mb-2">
-          <span className="font-medium">Questionário</span>
-          <Link className="w-5 h-5 text-gray-400" />
+          <span className="font-medium text-gray-700">Questionário</span>
+          <LinkIcon className="w-5 h-5 text-gray-400" />
         </div>
         <p className="text-sm text-gray-500 mb-2">Acessar questionário</p>
         <DocumentStatus type="questionnaire" status={documents.questionnaire} />
-      </button>
+        {/* </button> */}
+
+      </Link>
 
       <button
         onClick={onConsentClick}
