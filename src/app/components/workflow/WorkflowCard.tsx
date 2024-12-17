@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Clock,
   User,
@@ -7,6 +7,7 @@ import {
 import { WorkflowCardModal } from './WorkflowCardModal';
 import { Draggable } from '@hello-pangea/dnd';
 import { useTheme } from '@mui/material';
+import { useWorkflowStore } from '../../stores/workflowStore';
 
 interface WorkflowCardProps {
   exam: any;
@@ -26,6 +27,13 @@ export function WorkflowCard({ exam, index }: WorkflowCardProps) {
     if (!exam.consentForm) pending.push('Termo de Consentimento');
     return pending;
   };
+  const { appointment, clearAppointment } = useWorkflowStore();
+
+  useEffect(() => {
+    if (appointment && appointment.id === exam.id) {
+      setShowModal(true);
+    }
+  }, [appointment, exam]);
 
   return (
     <Draggable draggableId={exam.id} index={index}>
@@ -88,7 +96,10 @@ export function WorkflowCard({ exam, index }: WorkflowCardProps) {
           {showModal && (
             <WorkflowCardModal
               exam={exam}
-              onClose={() => setShowModal(false)}
+              onClose={() => {
+                setShowModal(false)
+                clearAppointment();
+              }}
             />
           )}
         </div>

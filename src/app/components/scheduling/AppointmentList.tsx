@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Clock, User, Edit2, Trash2, CalendarX } from 'lucide-react';
+import { Clock, User, Edit2, Trash2, CalendarX, Eye } from 'lucide-react';
 import { CircularProgress, Box } from '@mui/material';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import api from '@/src/lib/api';
+import Link from 'next/link';
+import { useWorkflowStore } from '../../stores/workflowStore'
 
 // Interface do componente
 interface AppointmentListProps {
@@ -34,6 +36,12 @@ export function AppointmentList({ date }: AppointmentListProps) {
       CANCELED: "CANCELADO",
     };
     return translations[status] || status;
+  };
+
+  const { setSelectedAppointment } = useWorkflowStore()
+
+  const handleSelectAppointment = (appointment: Appointment) => {
+    setSelectedAppointment(appointment);
   };
 
   // Função para formatar a data
@@ -128,12 +136,14 @@ export function AppointmentList({ date }: AppointmentListProps) {
       headerName: 'Ações',
       renderCell: (params) => (
         <div className="flex">
-          <button className="p-2 text-gray-400 hover:text-kai-primary rounded-lg hover:bg-kai-primary/10">
-            <Edit2 className="w-5 h-5" />
-          </button>
-          <button className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50">
-            <Trash2 className="w-5 h-5" />
-          </button>
+          <Link href='/dashboard/workflow'>
+            <button
+              className="p-2 text-gray-400 hover:text-kai-primary rounded-lg hover:bg-kai-primary/10"
+              onClick={() => handleSelectAppointment(params.row)}
+            >
+              <Eye className="w-5 h-5" />
+            </button>
+          </Link>
         </div>
       ),
       minWidth: 200,
