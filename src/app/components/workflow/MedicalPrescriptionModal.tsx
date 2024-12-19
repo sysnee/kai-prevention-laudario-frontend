@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Upload, Save } from 'lucide-react';
 import { useTheme } from '@mui/material/styles';
+import api from '@/src/lib/api';
 
 interface MedicalPrescriptionModalProps {
   isOpen: boolean;
@@ -9,7 +10,7 @@ interface MedicalPrescriptionModalProps {
     doctorName: string;
     crm: string;
     phone?: string;
-    file?: File;
+    fileUrl?: string;
   }) => void;
 }
 
@@ -20,6 +21,7 @@ export function MedicalPrescriptionModal({ isOpen, onClose, onSave }: MedicalPre
     phone: '',
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const theme = useTheme();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,24 +38,51 @@ export function MedicalPrescriptionModal({ isOpen, onClose, onSave }: MedicalPre
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleUpload = async () => {
+    if (!selectedFile) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('fileName', selectedFile.name);
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload`, {
+        method: 'POST',
+        body: formData,
+        // Não defina o cabeçalho 'Content-Type', o navegador fará isso automaticamente
+      });
+      const data = await response.json();
+      return data.url;
+    } catch (error) {
+      console.error('Erro ao fazer upload do arquivo:', error);
+      return null;
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({
-      ...formData,
-      file: selectedFile || undefined
-    });
+    const fileUrl = await handleUpload();
+    if (fileUrl) {
+      onSave({
+        ...formData,
+        fileUrl,
+      });
+    }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div 
+      <div
         className="rounded-lg p-6 max-w-md w-full mx-4"
         style={{
           backgroundColor: theme.palette.background.default,
@@ -64,12 +93,12 @@ export function MedicalPrescriptionModal({ isOpen, onClose, onSave }: MedicalPre
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-semibold">Pedido Médico</h3>
           <button
-              onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              title="Fechar"
-            >
-              <X className="w-5 h-5 text-gray-500" />
-            </button>
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            title="Fechar"
+          >
+            <X className="w-5 h-5 text-gray-500" />
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -158,9 +187,10 @@ export function MedicalPrescriptionModal({ isOpen, onClose, onSave }: MedicalPre
             <button
               type="submit"
               className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-kai-primary/90 flex items-center"
+              disabled={isUploading}
             >
               <Save className="w-4 h-4 mr-2" />
-              Salvar
+              {isUploading ? 'Salvando...' : 'Salvar'}
             </button>
           </div>
         </form>

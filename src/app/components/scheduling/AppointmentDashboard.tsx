@@ -4,6 +4,7 @@ import { formatCurrency } from '../../utils/format';
 
 interface AppointmentDashboardProps {
   date: Date;
+  totalAppointments: number
 }
 
 // Mock data - replace with actual API integration
@@ -15,7 +16,7 @@ const getStats = (date: Date) => ({
   occupancyRate: 87,
 });
 
-export function AppointmentDashboard({ date }: AppointmentDashboardProps) {
+export function AppointmentDashboard({ date, totalAppointments }: AppointmentDashboardProps) {
   const stats = getStats(date);
 
   return (

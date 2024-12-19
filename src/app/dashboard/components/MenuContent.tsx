@@ -13,10 +13,9 @@ import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import DocumentScannerRounded from '@mui/icons-material/DocumentScannerRounded'
 import { CalendarIcon } from '@mui/x-date-pickers'
-import { MonitorHeart, SecurityOutlined } from '@mui/icons-material'
+import { Groups2, MonitorHeart, SecurityOutlined, VerifiedUser } from '@mui/icons-material'
 import { Divider } from '@mui/material'
 import Link from 'next/link'
-import { User2Icon } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 
 const mainListItems = [
@@ -51,8 +50,8 @@ const mainListItems = [
 ]
 
 const secondaryListItems = [
-  { text: 'Usuários', icon: <User2Icon />, path: '/dashboard/usuarios' },
-  { text: 'Permissões', icon: <SettingsRoundedIcon />, path: '/dashboard/permissions' }
+  { text: 'Usuários', icon: <Groups2 />, path: '/dashboard/usuarios' },
+  { text: 'Permissões', icon: <VerifiedUser />, path: '/dashboard/permissions' }
 ]
 
 export default function MenuContent() {
@@ -77,12 +76,14 @@ export default function MenuContent() {
                   <ListItemButton
                     onClick={() => handleClick(index)}
                     sx={{
-                      py: 1.5,
+                      py: 1,
                       '& .MuiListItemIcon-root': {
-                        minWidth: 40
+                        minWidth: 30,
+                        color: 'orange'
                       },
                       '& .MuiTypography-root': {
-                        fontSize: '0.95rem'
+                        fontSize: '0.95rem',
+                        color: 'gray'
                       }
                     }}>
                     <ListItemIcon>{item.icon}</ListItemIcon>
@@ -94,12 +95,14 @@ export default function MenuContent() {
                 <Link href={item.path || '/'} passHref>
                   <ListItemButton
                     sx={{
-                      py: 1.5,
+                      py: 0,
                       '& .MuiListItemIcon-root': {
-                        minWidth: 40
+                        minWidth: 30,
+                        color: 'orange'
                       },
                       '& .MuiTypography-root': {
-                        fontSize: '0.95rem'
+                        fontSize: '0.95rem',
+                        color: 'gray'
                       }
                     }}>
                     <ListItemIcon>{item.icon}</ListItemIcon>
@@ -119,7 +122,8 @@ export default function MenuContent() {
                           sx={{
                             py: 1,
                             '& .MuiTypography-root': {
-                              fontSize: '0.9rem'
+                              fontSize: '0.9rem',
+                              color: 'gray'
                             }
                           }}>
                           <ListItemText primary={subItem.text} />
@@ -140,7 +144,7 @@ export default function MenuContent() {
         <Stack>
           <Stack direction={'row'} spacing={1} sx={{ px: 2, py: 1 }}>
             <SecurityOutlined className='opacity-50' style={{ width: '20px' }} />
-            <p className='opacity-75'>ADMINISTRATIVO</p>
+            <p className='opacity-75' style={{ color: 'gray' }}>ADMINISTRATIVO</p>
           </Stack>
           <List>
             {secondaryListItems.map((item, index) => (
@@ -150,10 +154,12 @@ export default function MenuContent() {
                     sx={{
                       py: 1.5,
                       '& .MuiListItemIcon-root': {
-                        minWidth: 40
+                        minWidth: 30,
+                        color: 'orange'
                       },
                       '& .MuiTypography-root': {
-                        fontSize: '0.95rem'
+                        fontSize: '0.95rem',
+                        color: 'gray'
                       }
                     }}>
                     <ListItemIcon>{item.icon}</ListItemIcon>
