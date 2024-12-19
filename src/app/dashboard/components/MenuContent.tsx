@@ -27,10 +27,7 @@ const mainListItems = [
   {
     text: 'Agendamento',
     icon: <CalendarIcon />,
-    subItems: [
-      { text: 'Consultar todos', path: '/dashboard/agendamentos' },
-      { text: 'Criar novo', path: '/dashboard/agendamentos/novo' }
-    ]
+    path: '/dashboard/agendamentos'
   },
   {
     text: 'Laudário',
@@ -71,69 +68,28 @@ export default function MenuContent() {
         {mainListItems.map((item, index) => (
           <React.Fragment key={index}>
             <ListItem disablePadding sx={{ display: 'block' }}>
-              {item.subItems ? (
-                <>
-                  <ListItemButton
-                    onClick={() => handleClick(index)}
-                    sx={{
-                      py: 1,
-                      '& .MuiListItemIcon-root': {
-                        minWidth: 30,
-                        color: 'orange'
-                      },
-                      '& .MuiTypography-root': {
-                        fontSize: '0.95rem',
-                        color: 'gray'
-                      }
-                    }}>
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.text} />
-                    {open[index] ? <ExpandLess /> : <ExpandMore />}
-                  </ListItemButton>
-                </>
-              ) : (
-                <Link href={item.path || '/'} passHref>
-                  <ListItemButton
-                    sx={{
-                      py: 0,
-                      '& .MuiListItemIcon-root': {
-                        minWidth: 30,
-                        color: 'orange'
-                      },
-                      '& .MuiTypography-root': {
-                        fontSize: '0.95rem',
-                        color: 'gray'
-                      }
-                    }}>
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.text} />
-                  </ListItemButton>
-                </Link>
-              )}
+
+              <Link href={item.path || '/'} passHref>
+                <ListItemButton
+                  sx={{
+                    py: 0,
+                    '& .MuiListItemIcon-root': {
+                      minWidth: 30,
+                      color: 'orange'
+                    },
+                    '& .MuiTypography-root': {
+                      fontSize: '0.95rem',
+                      color: 'gray'
+                    }
+                  }}>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </Link>
+
             </ListItem>
 
-            {item.subItems && (
-              <Collapse in={open[index]} timeout='auto' unmountOnExit>
-                <List component='div' disablePadding sx={{ mb: 1 }}>
-                  {item.subItems.map((subItem, subIndex) => (
-                    <Link key={subIndex} href={subItem.path} passHref>
-                      <ListItem sx={{ pl: 2, py: 0.5 }}>
-                        <ListItemButton
-                          sx={{
-                            py: 1,
-                            '& .MuiTypography-root': {
-                              fontSize: '0.9rem',
-                              color: 'gray'
-                            }
-                          }}>
-                          <ListItemText primary={subItem.text} />
-                        </ListItemButton>
-                      </ListItem>
-                    </Link>
-                  ))}
-                </List>
-              </Collapse>
-            )}
+
           </React.Fragment>
         ))}
       </List>
