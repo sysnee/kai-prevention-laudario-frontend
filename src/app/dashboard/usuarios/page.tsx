@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Plus, Search } from 'lucide-react'
+
 import api from '../../../lib/api'
 import { UserForm } from './components/user-form'
 import { Box, Typography, TextField, Button, CircularProgress } from '@mui/material'
@@ -11,6 +11,9 @@ import { Role } from '../../types/permissions'
 import { showToast } from '../../../lib/toast'
 import { useTheme } from '@mui/system'
 import { getProfessionalTypeName } from '../../constants/translations'; // Ajuste o caminho conforme necessário
+import ActionButtons from '../permissions/components/ActionButtons'
+import { Plus, Search } from 'lucide-react'
+import { PlusOne } from '@mui/icons-material'
 
 export default function UserManagement() {
   const [users, setUsers] = useState<User[]>([])
@@ -53,6 +56,26 @@ export default function UserManagement() {
       user.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  const handleView = (user: User) => {
+    setSelectedUser(user)
+    setShowUserForm(true)
+  }
+
+  const handleEdit = (user: User) => {
+    setSelectedUser(user)
+    setShowUserForm(true)
+  }
+
+  const handleDelete = async (userId: number) => {
+    try {
+      await api.delete(`/users/${userId}`)
+      showToast.success('Usuário deletado com sucesso')
+      fetchUsers()
+    } catch (error) {
+      console.error('Erro ao deletar usuário:', error)
+    }
+  }
+
   const columns: GridColDef[] = [
     { field: 'fullName', headerName: 'Nome', flex: 0.4, minWidth: 250 },
     { field: 'email', headerName: 'Email', flex: 0.4, minWidth: 250 },
@@ -76,32 +99,28 @@ export default function UserManagement() {
     },
     {
       field: 'actions',
-      headerName: 'Ações',
+      headerName: '',
       flex: 0.4,
       minWidth: 200,
       renderCell: (params: GridRenderCellParams) => (
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <Button onClick={() => handleEdit(params.row)} color='primary' size='small'>Editar</Button>
-          <Button onClick={() => handleDelete(params.row.id)} color='error' size='small'>Excluir</Button>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 1,
+            height: '100%',
+          }}
+        >
+          <ActionButtons
+            onView={() => handleView(params.row)}
+            onEdit={() => handleEdit(params.row)}
+            onDelete={() => handleDelete(params.row.id)}
+          />
         </Box>
       ),
     },
   ]
-
-  const handleEdit = (user: User) => {
-    setSelectedUser(user);
-    setShowUserForm(true);
-  };
-
-  const handleDelete = async (userId: number) => {
-    try {
-      await api.delete(`/users/${userId}`);
-      showToast.success('Usuário deletado com sucesso');
-      fetchUsers();
-    } catch (error) {
-      console.error('Erro ao deletar usuário:', error);
-    }
-  };
 
   const handleSave = async (user: User) => {
     try {
