@@ -11,10 +11,9 @@ interface ClientsGridProps {
     searchQuery: string;
     onView: (cliente: any) => void;
     onEdit: (cliente: any) => void;
-    onDelete: (cliente: any) => void;
 }
 
-export default function ClientsGrid({ clientes, searchQuery, onView, onEdit, onDelete }: ClientsGridProps) {
+export default function ClientsGrid({ clientes, searchQuery, onView, onEdit }: ClientsGridProps) {
     const [rows, setRows] = React.useState<GridRowsProp>([]);
     const [filteredRows, setFilteredRows] = React.useState<GridRowsProp>([]);
 
@@ -48,7 +47,7 @@ export default function ClientsGrid({ clientes, searchQuery, onView, onEdit, onD
         <Box sx={{ height: "100%", width: "100%", paddingBottom: "2em" }}>
             <DataGrid
                 rows={filteredRows}
-                columns={colum(onView, onEdit, onDelete)}
+                columns={colum(onView, onEdit)}
                 pageSizeOptions={[5, 10, 20]}
                 initialState={{
                     pagination: { paginationModel: { pageSize: 10 } },

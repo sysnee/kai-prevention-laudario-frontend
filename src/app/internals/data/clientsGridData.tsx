@@ -1,11 +1,39 @@
 import { GridColDef, GridRowsProp } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
-import ActionButtons from "../../dashboard/permissions/components/ActionButtons";
+import { useTheme } from "@mui/material/styles";
+import { Eye, Edit2 } from "lucide-react";
+
+function ViewEditButtons({ onView, onEdit }: {
+  onView: () => void
+  onEdit: () => void
+}) {
+  const theme = useTheme()
+
+  return (
+    <div className="flex gap-2">
+      <button
+        onClick={onView}
+        className="p-2 rounded-lg bg-kai-primary hover:bg-kai-primary/70"
+      >
+        <Eye className="w-5 h-5" style={{
+          color: theme.palette.mode === 'light' ? "#fff" : "#000"
+        }} />
+      </button>
+      <button
+        onClick={onEdit}
+        className="p-2 rounded-lg bg-kai-primary hover:bg-kai-primary/70"
+      >
+        <Edit2 className="w-5 h-5" style={{
+          color: theme.palette.mode === 'light' ? "#fff" : "#000"
+        }} />
+      </button>
+    </div>
+  )
+}
 
 export const colum = (
   onView: (cliente: any) => void,
   onEdit: (cliente: any) => void,
-  onDelete: (cliente: any) => void
 ): GridColDef[] => [
     {
       field: "name",
@@ -91,10 +119,9 @@ export const colum = (
             boxSizing: "border-box",
           })}
         >
-          <ActionButtons
+          <ViewEditButtons
             onView={() => onView(params.row)}
             onEdit={() => onEdit(params.row)}
-            onDelete={() => onDelete(params.row)}
           />
         </Box>
       ),

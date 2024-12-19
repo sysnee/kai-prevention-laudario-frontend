@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useState } from 'react'
-import { CheckIcon, Plus, Search } from 'lucide-react'
+import { CheckIcon, Plus, Search, Users } from 'lucide-react'
 import { ClientForm } from '../../components/clients/ClientForm'
 import ClientsGrid from '../../components/clients/ClientsGrid'
-import { Alert, AlertColor, CircularProgress, useTheme } from '@mui/material'
+import { Alert, AlertColor, CircularProgress, useTheme, Box, Skeleton } from '@mui/material'
 import api from '@/src/lib/api'
 import { ConfirmationModal } from '../../components/shared/ConfirmationModal'
 
@@ -213,17 +213,40 @@ export default function Clients() {
       </div>
 
       {loading ? (
-        <CircularProgress />
+        <Box>
+          {[...Array(10)].map((_, index) => (
+            <div key={index} className="flex items-center space-x-4 mb-4">
+              <Skeleton variant="rectangular" width="30%" height={40} />
+              <Skeleton variant="rectangular" width="20%" height={40} />
+              <Skeleton variant="rectangular" width="30%" height={40} />
+              <Skeleton variant="rectangular" width="20%" height={40} />
+            </div>
+          ))}
+        </Box>
       ) : clientes?.length !== 0 ? (
         <ClientsGrid
           clientes={clientes}
           onView={handleView}
           onEdit={handleEdit}
-          onDelete={handleDelete}
           searchQuery={searchQuery}
         />
       ) : (
-        <span>Não foram encontrados clientes.</span>
+        <div
+          className="rounded-lg p-12 text-center"
+          style={{
+            border: theme.palette.mode === 'light'
+              ? "1px solid rgba(229,231,235,255)"
+              : "1px solid hsla(220, 20%, 25%, 0.6)"
+          }}
+        >
+          <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-500 mb-2">
+            Nenhum cliente encontrado
+          </h3>
+          <p className="text-gray-500">
+            Não há clientes cadastrados no sistema.
+          </p>
+        </div>
       )}
 
       {showForm && (
