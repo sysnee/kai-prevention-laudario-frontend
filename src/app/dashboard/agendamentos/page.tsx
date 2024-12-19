@@ -1,15 +1,19 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, LayoutList, PlusIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, LayoutList, PlusIcon } from 'lucide-react';
 import { AppointmentList } from '../../components/scheduling/AppointmentList';
 import { AppointmentDashboard } from '../../components/scheduling/AppointmentDashboard';
 import { CalendarView } from '../../components/scheduling/CalendarView';
 import { Button } from '@mui/material';
 import { useTheme } from '@mui/system';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 export default function SchedulingList() {
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([dayjs(), dayjs()]);
     const [view, setView] = useState<'list' | 'calendar'>('list');
     const [loading, setLoading] = useState(true);
 
@@ -21,21 +25,7 @@ export default function SchedulingList() {
         }, 1500);
 
         return () => clearTimeout(timer);
-    }, [selectedDate]);
-
-    const handlePrevDay = () => {
-        const newDate = new Date(selectedDate);
-        newDate.setDate(selectedDate.getDate() - 1);
-        setSelectedDate(newDate);
-        setLoading(true);
-    };
-
-    const handleNextDay = () => {
-        const newDate = new Date(selectedDate);
-        newDate.setDate(selectedDate.getDate() + 1);
-        setSelectedDate(newDate);
-        setLoading(true);
-    };
+    }, [dateRange]);
 
     return (
         <div className="max-w-7xl mx-auto py-8 px-4">
@@ -56,41 +46,67 @@ export default function SchedulingList() {
             </div>
 
             <AppointmentDashboard
-                date={selectedDate}
+                date={dateRange[0]?.toDate() || new Date()}
                 loading={loading}
             />
 
             <div className="mt-8 mb-6">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                        <button
-                            onClick={handlePrevDay}
-                            className="p-2 hover:bg-kai-primary/10 rounded-full"
-                        >
-                            <ChevronLeft className="w-5 h-5 text-kai-primary" />
-                        </button>
-                        <div
-                            className="flex items-center px-4 py-2 rounded-lg"
-                            style={{
-                                border: theme.palette.mode === 'light' ? "1px solid #e5e7eb" : "1px solid #333b4d"
-                            }}
-                        >
-                            <CalendarIcon className="w-5 h-5 text-kai-primary mr-2" />
-                            <span className="font-medium">
-                                {selectedDate.toLocaleDateString('pt-BR', {
-                                    weekday: 'long',
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                })}
-                            </span>
-                        </div>
-                        <button
-                            onClick={handleNextDay}
-                            className="p-2 hover:bg-kai-primary/10 rounded-full"
-                        >
-                            <ChevronRight className="w-5 h-5 text-kai-primary" />
-                        </button>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <div className="flex gap-4">
+                                <DatePicker
+                                    label="Data inicial"
+                                    value={dateRange[0]}
+                                    onChange={(newValue) => {
+                                        setDateRange([newValue, dateRange[1]]);
+                                        setLoading(true);
+                                    }}
+                                    slotProps={{
+                                        textField: { size: 'small' },
+                                        inputAdornment: {
+                                            sx: {
+                                                '& .MuiIconButton-root': {
+                                                    padding: '4px',
+                                                    marginRight: '1px',
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    '& svg': {
+                                                        color: '#FF8046'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }}
+                                    sx={{ width: 200 }}
+                                />
+                                <DatePicker
+                                    label="Data final"
+                                    value={dateRange[1]}
+                                    onChange={(newValue) => {
+                                        setDateRange([dateRange[0], newValue]);
+                                        setLoading(true);
+                                    }}
+                                    slotProps={{
+                                        textField: { size: 'small' },
+                                        inputAdornment: {
+                                            sx: {
+                                                '& .MuiIconButton-root': {
+                                                    padding: '4px',
+                                                    marginRight: '1px',
+                                                    width: '20px',
+                                                    height: '20px',
+                                                    '& svg': {
+                                                        color: '#FF8046'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }}
+                                    sx={{ width: 200 }}
+                                />
+                            </div>
+                        </LocalizationProvider>
                     </div>
 
                     <div className="flex items-center space-x-4">
@@ -127,11 +143,11 @@ export default function SchedulingList() {
 
             {view === 'calendar' ? (
                 <CalendarView
-                    date={selectedDate}
+                    date={dateRange[0]?.toDate() || new Date()}
                 />
             ) : (
                 <AppointmentList
-                    date={selectedDate}
+                    date={dateRange[0]?.toDate() || new Date()}
                 />
             )}
         </div>
