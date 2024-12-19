@@ -14,6 +14,7 @@ export default function Workflow() {
   const [plannedList, setPlannedList] = useState([])
   const [waitingList, setWaitingList] = useState([])
   const [startedList, setStartedList] = useState([])
+  const [pending_approval, setPendingApproval] = useState([])
 
   async function fetchPlannedList() {
     const { data } = await api.get('service-requests?status=PLANNED&limit=20');
@@ -30,10 +31,16 @@ export default function Workflow() {
     setStartedList(data);
   }
 
+  async function fetchPendingApproval() {
+    const { data } = await api.get('service-requests?status=PENDING_APPROVAL&limit=20');
+    setPendingApproval(data);
+  }
+
   React.useEffect(() => {
     fetchPlannedList();
     fetchWaitingList();
     fetchStartedList();
+    fetchPendingApproval();
   }, []);
 
   return (
@@ -78,6 +85,7 @@ export default function Workflow() {
           transcription={[]}
           signed={[]}
           canceled={[]}
+          pending_approval={pending_approval}
           searchQuery={searchQuery}
           selectedStatus={selectedStatus}
           selectedDate={selectedDate}

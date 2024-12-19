@@ -5,12 +5,13 @@ import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, LayoutList, PlusIc
 import { AppointmentList } from '../../components/scheduling/AppointmentList';
 import { AppointmentDashboard } from '../../components/scheduling/AppointmentDashboard';
 import { CalendarView } from '../../components/scheduling/CalendarView';
-import { Button } from '@mui/material';
+import { Button, Skeleton } from '@mui/material';
 import { useTheme } from '@mui/system';
 
 export default function SchedulingList() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [view, setView] = useState<'list' | 'calendar'>('list');
+    const [loading, setLoading] = useState(true);
 
     const theme = useTheme()
 
@@ -43,7 +44,11 @@ export default function SchedulingList() {
                 </Button>
             </div>
 
-            <AppointmentDashboard date={selectedDate} totalAppointments={13} />
+            <AppointmentDashboard
+                date={selectedDate}
+                totalAppointments={13}
+                loading={loading}
+            />
 
             <div className="mt-8 mb-6">
                 <div className="flex items-center justify-between">

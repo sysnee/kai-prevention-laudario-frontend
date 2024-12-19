@@ -13,7 +13,8 @@ import {
   ShieldCheck,
   FileCheck,
   XCircle,
-  AlertOctagon
+  AlertOctagon,
+  ClockIcon
 } from 'lucide-react';
 
 export const WORKFLOW_STAGES = [
@@ -60,6 +61,13 @@ export const WORKFLOW_STAGES = [
     description: 'Em transcrição'
   },
   {
+    id: 'PENDING_APPROVAL',
+    title: 'Aguardando Aprovação',
+    icon: ClockIcon,
+    color: 'text-yellow-500',
+    description: 'Exames em aprovação'
+  },
+  {
     id: 'SIGNED',
     title: 'Laudado',
     icon: FileCheck,
@@ -84,6 +92,7 @@ interface WorkflowBoardProps {
   transcription: any[];
   signed: any[];
   canceled: any[];
+  pending_approval: any[];
   searchQuery: string;
   selectedStatus: string | null;
   selectedDate: Date;
@@ -98,6 +107,7 @@ export function WorkflowBoard({
   transcription,
   signed,
   canceled,
+  pending_approval,
   searchQuery,
   selectedStatus,
   selectedDate
@@ -115,13 +125,15 @@ export function WorkflowBoard({
         completed,
         transcription,
         signed,
-        canceled
+        canceled,
+        pending_approval
       )
     )
   }, [
     planned,
     waiting,
     started,
+    pending_approval
   ])
 
   const handleDragEnd = async (result: any) => {

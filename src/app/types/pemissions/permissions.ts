@@ -11,14 +11,15 @@ export type Role =
 export type Module = "client" | "exam";
 
 export type ServiceStatus =
-  | "PLANNED"
-  | "WAITING"
-  | "STARTED"
-  | "ONHOLD"
-  | "COMPLETED"
-  | "TRANSCRIPTION"
-  | "REVISION"
-  | "SIGNED";
+  | 'PLANNED'
+  | 'WAITING'
+  | 'STARTED'
+  | 'ON_HOLD'
+  | 'COMPLETED'
+  | 'TRANSCRIPTION'
+  | 'SIGNED'
+  | 'CANCELED'
+  | 'PENDING_APPROVAL';
 
 export enum ExamStatusEnum {
   PLANNED = "Planejado",

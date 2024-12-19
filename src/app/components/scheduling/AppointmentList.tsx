@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Clock, User, Edit2, Trash2, CalendarX, Eye } from 'lucide-react';
-import { CircularProgress, Box } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import api from '@/src/lib/api';
 import Link from 'next/link';
@@ -79,9 +79,21 @@ export function AppointmentList({ date }: AppointmentListProps) {
     (appointment) => appointment.dateTime.startsWith(formattedDate)
   ) || [];
 
-  // Caso os dados estejam carregando, mostra o spinner
+  // Caso os dados estejam carregando, mostra o esqueleto
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <Box>
+        {[...Array(5)].map((_, index) => (
+          <div key={index} className="flex items-center space-x-4 mb-4">
+            <Skeleton variant="rectangular" width="10%" height={40} />
+            <Skeleton variant="rectangular" width="30%" height={40} />
+            <Skeleton variant="rectangular" width="20%" height={40} />
+            <Skeleton variant="rectangular" width="20%" height={40} />
+            <Skeleton variant="rectangular" width="20%" height={40} />
+          </div>
+        ))}
+      </Box>
+    );
   }
 
   // Caso não haja agendamentos filtrados, exibe uma mensagem

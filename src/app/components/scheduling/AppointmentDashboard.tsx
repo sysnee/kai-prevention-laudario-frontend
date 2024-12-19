@@ -1,10 +1,12 @@
 import React from 'react';
 import { Calendar, CheckCircle2, Clock, XCircle, AlertCircle, TrendingUp } from 'lucide-react';
 import { formatCurrency } from '../../utils/format';
+import { Skeleton } from '@mui/material';
 
 interface AppointmentDashboardProps {
   date: Date;
-  totalAppointments: number
+  totalAppointments: number;
+  loading?: boolean;
 }
 
 // Mock data - replace with actual API integration
@@ -16,7 +18,43 @@ const getStats = (date: Date) => ({
   occupancyRate: 87,
 });
 
-export function AppointmentDashboard({ date, totalAppointments }: AppointmentDashboardProps) {
+function DashboardSkeleton() {
+  const CardSkeleton = () => (
+    <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="flex items-center">
+        <Skeleton variant="rounded" width={40} height={40} />
+        <div className="ml-4 flex-1">
+          <Skeleton variant="text" width={120} height={20} />
+          <div className="flex items-baseline mt-1">
+            <Skeleton variant="text" width={60} height={32} />
+            <Skeleton variant="text" width={40} height={20} className="ml-2" />
+          </div>
+        </div>
+      </div>
+      <div className="mt-4">
+        <div className="flex items-center justify-between">
+          <Skeleton variant="text" width={100} height={20} />
+          <Skeleton variant="text" width={40} height={20} />
+        </div>
+        <Skeleton variant="rounded" width="100%" height={8} className="mt-1" />
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {[...Array(4)].map((_, index) => (
+        <CardSkeleton key={index} />
+      ))}
+    </div>
+  );
+}
+
+export function AppointmentDashboard({ date, totalAppointments, loading }: AppointmentDashboardProps) {
+  if (loading) {
+    return <DashboardSkeleton />;
+  }
+
   const stats = getStats(date);
 
   return (
