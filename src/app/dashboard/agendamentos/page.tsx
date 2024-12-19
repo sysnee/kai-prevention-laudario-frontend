@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Calendar as CalendarIcon, Search, Filter, CalendarPlus, ChevronLeft, ChevronRight, LayoutList, PlusIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, LayoutList, PlusIcon } from 'lucide-react';
 import { AppointmentList } from '../../components/scheduling/AppointmentList';
 import { AppointmentDashboard } from '../../components/scheduling/AppointmentDashboard';
 import { CalendarView } from '../../components/scheduling/CalendarView';
@@ -43,7 +43,7 @@ export default function SchedulingList() {
                 </Button>
             </div>
 
-            <AppointmentDashboard date={selectedDate} />
+            <AppointmentDashboard date={selectedDate} totalAppointments={13} />
 
             <div className="mt-8 mb-6">
                 <div className="flex items-center justify-between">
