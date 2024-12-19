@@ -4,8 +4,9 @@ import { Box, Skeleton } from '@mui/material';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import api from '@/src/lib/api';
 import Link from 'next/link';
-import { useWorkflowStore } from '../../stores/workflowStore'
+import { ServiceRequest, useWorkflowStore } from '../../stores/workflowStore'
 import { useTheme } from '@mui/material';
+import { useRouter } from 'next/navigation'
 
 // Interface do componente
 interface AppointmentListProps {
@@ -22,6 +23,7 @@ interface Appointment {
   status: string;
   questionnaireIsPending: boolean;
   createdAt: string;
+  code: string;
 }
 
 export function AppointmentList({ date }: AppointmentListProps) {
@@ -29,6 +31,7 @@ export function AppointmentList({ date }: AppointmentListProps) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
+  const router = useRouter()
 
   // Função para traduzir status
   const translateStatus = (status: string): string => {
@@ -42,8 +45,9 @@ export function AppointmentList({ date }: AppointmentListProps) {
 
   const { setSelectedAppointment } = useWorkflowStore()
 
-  const handleSelectAppointment = (appointment: Appointment) => {
-    setSelectedAppointment(appointment);
+  const handleSelectAppointment = (appointment: ServiceRequest) => {
+    setSelectedAppointment(appointment)
+    router.push(`/dashboard/workflow?code=${appointment.code}`)
   };
 
   // Função para formatar a data
@@ -155,14 +159,12 @@ export function AppointmentList({ date }: AppointmentListProps) {
       headerName: 'Ações',
       renderCell: (params) => (
         <div className="flex">
-          <Link href='/dashboard/workflow'>
-            <button
-              className="p-2 mt-1.5 ml-1 bg-kai-primary rounded-lg hover:bg-kai-primary/70"
-              onClick={() => handleSelectAppointment(params.row)}
-            >
-              <Eye className="w-5 h-5" style={{ color: theme.palette.mode === 'light' ? "#fff" : "#000" }} />
-            </button>
-          </Link>
+          <button
+            className="p-2 mt-1.5 ml-1 bg-kai-primary rounded-lg hover:bg-kai-primary/70"
+            onClick={() => handleSelectAppointment(params.row)}
+          >
+            <Eye className="w-5 h-5" style={{ color: theme.palette.mode === 'light' ? "#fff" : "#000" }} />
+          </button>
         </div>
       ),
       minWidth: 200,
@@ -173,7 +175,8 @@ export function AppointmentList({ date }: AppointmentListProps) {
   // Preparando as linhas do DataGrid
   const rows: GridRowsProp = filteredAppointments.map((appointment) => ({
     id: appointment.id,
-    dateTime: appointment.dateTime.split(', ')[1], // Formata para exibir só o horário
+    code: appointment.code,
+    dateTime: appointment.dateTime.split(', ')[1],
     clientName: appointment.clientName,
     examType: appointment.examType,
     status: translateStatus(appointment.status),

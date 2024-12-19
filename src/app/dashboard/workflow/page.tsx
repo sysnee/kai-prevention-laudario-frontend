@@ -1,14 +1,18 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter } from 'lucide-react';
 import { WorkflowMetrics } from '../../components/workflow/WorkflowMetrics';
 import { WorkflowBoard } from '../../components/workflow/WorkflowBoard';
 import WorkflowSkeleton from '@/src/app/components/workflow/WorkflowSkeleton';
 import api from '@/src/lib/api';
 import WorkflowMetricsSkeleton from '@/src/app/components/workflow/WorkflowMetricsSkeleton'
+import { useSearchParams } from 'next/navigation'
+import { useWorkflowStore } from '../../stores/workflowStore'
 
 export default function Workflow() {
+  const searchParams = useSearchParams()
+  const { serviceRequests, setSelectedAppointment } = useWorkflowStore()
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedStatus] = useState<string | null>(null);
@@ -39,9 +43,19 @@ export default function Workflow() {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchWorkflowData()
   }, [])
+
+  useEffect(() => {
+    const codeParam = searchParams.get('code')
+    if (codeParam && serviceRequests.length) {
+      const serviceRequest = serviceRequests.find(sr => sr.code === Number(codeParam))
+      if (serviceRequest) {
+        setSelectedAppointment(serviceRequest)
+      }
+    }
+  }, [searchParams, serviceRequests, setSelectedAppointment])
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4">

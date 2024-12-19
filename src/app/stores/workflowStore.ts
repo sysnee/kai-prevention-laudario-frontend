@@ -55,7 +55,7 @@ export interface ServiceRequest {
 
 interface WorkflowStore {
   serviceRequests: ServiceRequest[];
-  appointment: Appointment | null;
+  appointment: ServiceRequest | null;
   setServiceRequests: (serviceRequests: any[]) => void
   addExam: (exam: ServiceRequest) => void;
   updateExam: (examId: string, data: Partial<ServiceRequest>) => void;
@@ -63,7 +63,7 @@ interface WorkflowStore {
   addWorkflowNote: (examId: string, note: Omit<WorkflowNote, 'id' | 'createdAt'>) => void;
   cancelExam: (examId: string, reason: string) => void;
   rescheduleExam: (examId: string, newDate: Date, newTime: string, reason: string) => void;
-  setSelectedAppointment: (appointment: Appointment) => void;
+  setSelectedAppointment: (appointment: ServiceRequest) => void;
   clearAppointment: () => void;
 }
 
@@ -71,7 +71,7 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
   serviceRequests: [],
   appointment: null,
 
-  setSelectedAppointment: (appointment: Appointment) => {
+  setSelectedAppointment: (appointment: ServiceRequest) => {
     set({ appointment });
   },
 
@@ -126,10 +126,10 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
         serviceRequests: state.serviceRequests.map((e) =>
           e.id === examId
             ? {
-                ...e,
-                status: toStage as ServiceStatus,
-                transitions: updatedTransitions,
-              }
+              ...e,
+              status: toStage as ServiceStatus,
+              transitions: updatedTransitions,
+            }
             : e
         ),
       }));
@@ -155,10 +155,10 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
             serviceRequests: state.serviceRequests.map((e) =>
               e.id === examId
                 ? {
-                    ...e,
-                    status: originalStatus,
-                    transitions: originalTransitions,
-                  }
+                  ...e,
+                  status: originalStatus,
+                  transitions: originalTransitions,
+                }
                 : e
             ),
           }));

@@ -8,6 +8,7 @@ import { WorkflowCardModal } from './WorkflowCardModal';
 import { Draggable } from '@hello-pangea/dnd';
 import { useTheme } from '@mui/material';
 import { useWorkflowStore } from '../../stores/workflowStore';
+import { useRouter, useSearchParams } from 'next/navigation'
 
 interface WorkflowCardProps {
   exam: any;
@@ -15,6 +16,8 @@ interface WorkflowCardProps {
 }
 
 export function WorkflowCard({ exam, index }: WorkflowCardProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [showModal, setShowModal] = useState(false);
   const theme = useTheme();
 
@@ -30,10 +33,23 @@ export function WorkflowCard({ exam, index }: WorkflowCardProps) {
   const { appointment, clearAppointment } = useWorkflowStore();
 
   useEffect(() => {
-    if (appointment && appointment.id === exam.id) {
-      setShowModal(true);
+    // Abre o modal se o code na URL corresponder ao exam.code
+    const codeParam = searchParams.get('code')
+    if ((codeParam && codeParam === String(exam.code)) || (appointment?.id === exam.id)) {
+      setShowModal(true)
     }
-  }, [appointment, exam]);
+  }, [searchParams, exam.code, appointment, exam.id])
+
+  const handleCloseModal = () => {
+    setShowModal(false)
+    clearAppointment()
+
+    // Se o modal foi aberto via URL param, redireciona de volta para agendamentos
+    const codeParam = searchParams.get('code')
+    if (codeParam) {
+      router.push('/dashboard/agendamentos')
+    }
+  }
 
   return (
     <Draggable draggableId={exam.id} index={index}>
@@ -96,10 +112,7 @@ export function WorkflowCard({ exam, index }: WorkflowCardProps) {
           {showModal && (
             <WorkflowCardModal
               exam={exam}
-              onClose={() => {
-                setShowModal(false)
-                clearAppointment();
-              }}
+              onClose={handleCloseModal}
             />
           )}
         </div>
