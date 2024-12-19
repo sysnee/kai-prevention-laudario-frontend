@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import { Search, Filter } from 'lucide-react';
 import { WorkflowMetrics } from '../../components/workflow/WorkflowMetrics';
 import { WorkflowBoard } from '../../components/workflow/WorkflowBoard';
+import WorkflowSkeleton from '@/src/app/components/workflow/WorkflowSkeleton';
 import api from '@/src/lib/api';
-
+import WorkflowMetricsSkeleton from '@/src/app/components/workflow/WorkflowMetricsSkeleton'
 
 export default function Workflow() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,34 +15,33 @@ export default function Workflow() {
   const [plannedList, setPlannedList] = useState([])
   const [waitingList, setWaitingList] = useState([])
   const [startedList, setStartedList] = useState([])
-  const [pending_approval, setPendingApproval] = useState([])
+  const [inRevision, setInRevision] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  async function fetchPlannedList() {
-    const { data } = await api.get('service-requests?status=PLANNED&limit=20');
-    setPlannedList(data);
-  }
+  async function fetchWorkflowData() {
+    try {
+      setIsLoading(true)
+      const [planned, waiting, started, revision] = await Promise.all([
+        api.get('service-requests?status=PLANNED&limit=20'),
+        api.get('service-requests?status=WAITING&limit=20'),
+        api.get('service-requests?status=STARTED&limit=20'),
+        api.get('service-requests?status=IN_REVISION&limit=20')
+      ])
 
-  async function fetchWaitingList() {
-    const { data } = await api.get('service-requests?status=WAITING&limit=20');
-    setWaitingList(data);
-  }
-
-  async function fetchStartedList() {
-    const { data } = await api.get('service-requests?status=STARTED&limit=20');
-    setStartedList(data);
-  }
-
-  async function fetchPendingApproval() {
-    const { data } = await api.get('service-requests?status=PENDING_APPROVAL&limit=20');
-    setPendingApproval(data);
+      setPlannedList(planned.data)
+      setWaitingList(waiting.data)
+      setStartedList(started.data)
+      setInRevision(revision.data)
+    } catch (error) {
+      console.error('Erro ao carregar dados do workflow:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   React.useEffect(() => {
-    fetchPlannedList();
-    fetchWaitingList();
-    fetchStartedList();
-    fetchPendingApproval();
-  }, []);
+    fetchWorkflowData()
+  }, [])
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4">
@@ -75,21 +75,30 @@ export default function Workflow() {
       </div>
 
       <div className="space-y-6">
-        <WorkflowMetrics date={selectedDate} total={plannedList.length} />
-        <WorkflowBoard
-          planned={plannedList}
-          waiting={waitingList}
-          started={startedList}
-          on_hold={[]}
-          completed={[]}
-          transcription={[]}
-          signed={[]}
-          canceled={[]}
-          pending_approval={pending_approval}
-          searchQuery={searchQuery}
-          selectedStatus={selectedStatus}
-          selectedDate={selectedDate}
-        />
+        {isLoading ? (
+          <>
+            <WorkflowMetricsSkeleton />
+            <WorkflowSkeleton />
+          </>
+        ) : (
+          <>
+            <WorkflowMetrics date={selectedDate} total={plannedList.length} />
+            <WorkflowBoard
+              planned={plannedList}
+              waiting={waitingList}
+              started={startedList}
+              on_hold={[]}
+              completed={[]}
+              transcription={[]}
+              signed={[]}
+              canceled={[]}
+              in_revision={inRevision}
+              searchQuery={searchQuery}
+              selectedStatus={selectedStatus}
+              selectedDate={selectedDate}
+            />
+          </>
+        )}
       </div>
     </div>
   );

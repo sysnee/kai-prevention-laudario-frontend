@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, LayoutList, PlusIcon } from 'lucide-react';
 import { AppointmentList } from '../../components/scheduling/AppointmentList';
 import { AppointmentDashboard } from '../../components/scheduling/AppointmentDashboard';
 import { CalendarView } from '../../components/scheduling/CalendarView';
-import { Button, Skeleton } from '@mui/material';
+import { Button } from '@mui/material';
 import { useTheme } from '@mui/system';
 
 export default function SchedulingList() {
@@ -15,16 +15,26 @@ export default function SchedulingList() {
 
     const theme = useTheme()
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1500);
+
+        return () => clearTimeout(timer);
+    }, [selectedDate]);
+
     const handlePrevDay = () => {
         const newDate = new Date(selectedDate);
         newDate.setDate(selectedDate.getDate() - 1);
         setSelectedDate(newDate);
+        setLoading(true);
     };
 
     const handleNextDay = () => {
         const newDate = new Date(selectedDate);
         newDate.setDate(selectedDate.getDate() + 1);
         setSelectedDate(newDate);
+        setLoading(true);
     };
 
     return (
@@ -37,8 +47,8 @@ export default function SchedulingList() {
                 <Button
                     href='/dashboard/agendamentos/novo'
                     className={`flex items-center px-4 py-2 rounded-lg text-white
-              ${theme.palette.mode === 'light' ? 'bg-kai-primary hover:bg-kai-primary/40' : 'bg-gray-600 hover:bg-gray-700'}
-            `}
+                        ${theme.palette.mode === 'light' ? 'bg-kai-primary hover:bg-kai-primary/40' : 'bg-gray-600 hover:bg-gray-700'}
+                    `}
                     startIcon={<PlusIcon />}>
                     Novo Agendamento
                 </Button>
@@ -46,7 +56,6 @@ export default function SchedulingList() {
 
             <AppointmentDashboard
                 date={selectedDate}
-                totalAppointments={13}
                 loading={loading}
             />
 

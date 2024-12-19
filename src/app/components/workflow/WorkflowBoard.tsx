@@ -61,11 +61,11 @@ export const WORKFLOW_STAGES = [
     description: 'Em transcrição'
   },
   {
-    id: 'PENDING_APPROVAL',
-    title: 'Aguardando Aprovação',
+    id: 'IN_REVISION',
+    title: 'Em Revisão',
     icon: ClockIcon,
     color: 'text-yellow-500',
-    description: 'Exames em aprovação'
+    description: 'Exames em revisão'
   },
   {
     id: 'SIGNED',
@@ -92,7 +92,7 @@ interface WorkflowBoardProps {
   transcription: any[];
   signed: any[];
   canceled: any[];
-  pending_approval: any[];
+  in_revision: any[];
   searchQuery: string;
   selectedStatus: string | null;
   selectedDate: Date;
@@ -107,7 +107,7 @@ export function WorkflowBoard({
   transcription,
   signed,
   canceled,
-  pending_approval,
+  in_revision,
   searchQuery,
   selectedStatus,
   selectedDate
@@ -126,14 +126,14 @@ export function WorkflowBoard({
         transcription,
         signed,
         canceled,
-        pending_approval
+        in_revision
       )
     )
   }, [
     planned,
     waiting,
     started,
-    pending_approval
+    in_revision
   ])
 
   const handleDragEnd = async (result: any) => {

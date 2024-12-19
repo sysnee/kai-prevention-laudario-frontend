@@ -5,7 +5,6 @@ import { Skeleton } from '@mui/material';
 
 interface AppointmentDashboardProps {
   date: Date;
-  totalAppointments: number;
   loading?: boolean;
 }
 
@@ -50,7 +49,7 @@ function DashboardSkeleton() {
   );
 }
 
-export function AppointmentDashboard({ date, totalAppointments, loading }: AppointmentDashboardProps) {
+export function AppointmentDashboard({ date, loading }: AppointmentDashboardProps) {
   if (loading) {
     return <DashboardSkeleton />;
   }
@@ -69,7 +68,7 @@ export function AppointmentDashboard({ date, totalAppointments, loading }: Appoi
             <p className="text-sm font-medium text-gray-500">Total de Exames</p>
             <div className="flex items-baseline">
               <h3 className="text-2xl font-bold text-kai-text-primary mr-2">
-                {stats.totalAppointments}
+                --
               </h3>
               <span className="text-sm text-green-600 font-medium">
                 --%
@@ -123,7 +122,7 @@ export function AppointmentDashboard({ date, totalAppointments, loading }: Appoi
           <div className="ml-4">
             <p className="text-sm font-medium text-gray-500">Com Pendências</p>
             <h3 className="text-2xl font-bold text-kai-text-primary">
-              {stats.pendingAppointments}
+              --
             </h3>
           </div>
         </div>
