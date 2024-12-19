@@ -61,10 +61,8 @@ export default function UserManagement() {
       headerName: 'Perfil',
       flex: 0.4,
       minWidth: 150,
-      valueGetter: (params: any) => {
-        if (!params.row) return 'Sem role';
-        const roleName = params.row.role?.name;
-        return roleName ? roleName : '-';
+      renderCell: (params: any) => {
+        return params.row.role?.name
       }
     },
     {
@@ -72,10 +70,8 @@ export default function UserManagement() {
       headerName: 'Profissão',
       flex: 0.4,
       minWidth: 150,
-      valueGetter: (params: any) => {
-        if (!params.row) return '-';
-        const professionalType = params.row.professionalType;
-        return professionalType ? getProfessionalTypeName(professionalType) : '-';
+      renderCell: (params: GridRenderCellParams) => {
+        return getProfessionalTypeName(params.value)
       }
     },
     {
@@ -179,6 +175,7 @@ export default function UserManagement() {
       {isLoading ? (
         <CircularProgress />
       ) : (
+        filteredUsers.length > 0 &&
         <DataGrid
           rows={filteredUsers}
           columns={columns}
