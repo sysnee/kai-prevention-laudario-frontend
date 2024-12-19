@@ -68,3 +68,14 @@ export const serviceExams = {
         }
     ]
 }
+
+export const stages = [
+    { id: 'PLANNED', label: 'Planejado' },
+    { id: 'WAITING', label: 'Aguardando' },
+    { id: 'STARTED', label: 'Iniciado' },
+    { id: 'ON_HOLD', label: 'Pausado' },
+    { id: 'COMPLETED', label: 'Concluído' },
+    { id: 'IN_TRANSCRIPTION', label: 'Em Transcrição' },
+    { id: 'SIGNED', label: 'Laudado' },
+    { id: 'CANCELED', label: 'Cancelado', time: '0min' }
+];

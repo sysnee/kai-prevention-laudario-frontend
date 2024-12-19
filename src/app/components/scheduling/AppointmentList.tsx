@@ -37,8 +37,14 @@ export function AppointmentList({ date }: AppointmentListProps) {
   const translateStatus = (status: string): string => {
     const translations: { [key: string]: string } = {
       PLANNED: "PLANEJADO",
-      CONFIRMED: "CONFIRMADO",
+      WAITING: "AGUARDANDO",
+      STARTED: "INICIADO",
+      ON_HOLD: "PAUSADO",
+      COMPLETED: "CONCLUÍDO",
+      IN_TRANSCRIPTION: "EM TRANSCRIÇÃO",
+      SIGNED: "LAUDADO",
       CANCELED: "CANCELADO",
+      IN_REVISION: "EM REVISÃO"
     };
     return translations[status] || status;
   };
