@@ -69,7 +69,6 @@ export function AppointmentList({ date }: AppointmentListProps) {
     setLoading(true);
     try {
       const { data } = await api.get("service-requests");
-      console.log('appointments', data);
       setAppointments(data);
     } catch (err) {
       console.error("Erro ao buscar os dados:", err);
@@ -83,7 +82,6 @@ export function AppointmentList({ date }: AppointmentListProps) {
     fetchAppointments();
   }, [date]);
 
-  // Formatação da data selecionada
   const formattedDate = formatDate(date);
 
   // Filtrando os agendamentos pela data
@@ -146,7 +144,7 @@ export function AppointmentList({ date }: AppointmentListProps) {
     { field: 'examType', headerName: 'Exame', minWidth: 150, flex: 0.4 },
     {
       field: 'status',
-      headerName: 'Status',
+      headerName: 'Situação',
       renderCell: (params) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${params.row.status === 'CONFIRMADO'
           ? 'bg-green-100 text-green-800'
