@@ -5,6 +5,7 @@ import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import api from '@/src/lib/api';
 import Link from 'next/link';
 import { useWorkflowStore } from '../../stores/workflowStore'
+import { useTheme } from '@mui/material';
 
 // Interface do componente
 interface AppointmentListProps {
@@ -27,6 +28,7 @@ export function AppointmentList({ date }: AppointmentListProps) {
   // Estado para armazenar os agendamentos e o status de carregamento
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
+  const theme = useTheme();
 
   // Função para traduzir status
   const translateStatus = (status: string): string => {
@@ -99,9 +101,14 @@ export function AppointmentList({ date }: AppointmentListProps) {
   // Caso não haja agendamentos filtrados, exibe uma mensagem
   if (filteredAppointments.length === 0) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+      <div
+        className="rounded-lg p-12 text-center"
+        style={{
+          border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+        }}
+      >
         <CalendarX className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <h3 className="text-lg font-medium text-gray-500 mb-2">
           Nenhum agendamento encontrado
         </h3>
         <p className="text-gray-500">
@@ -150,10 +157,10 @@ export function AppointmentList({ date }: AppointmentListProps) {
         <div className="flex">
           <Link href='/dashboard/workflow'>
             <button
-              className="p-2 text-gray-400 hover:text-kai-primary rounded-lg hover:bg-kai-primary/10"
+              className="p-2 mt-1.5 ml-1 bg-kai-primary rounded-lg hover:bg-kai-primary/70"
               onClick={() => handleSelectAppointment(params.row)}
             >
-              <Eye className="w-5 h-5" />
+              <Eye className="w-5 h-5" style={{ color: theme.palette.mode === 'light' ? "#fff" : "#000" }} />
             </button>
           </Link>
         </div>

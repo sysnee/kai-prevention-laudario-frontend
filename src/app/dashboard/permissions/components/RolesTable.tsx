@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useTheme } from '@mui/system';
 import {
   Table,
   TableBody,
@@ -56,6 +57,8 @@ const groupPermissionsByResource = (permissions: Role['permissions']) => {
 }
 
 export default function RolesTable({ roles, onView, onEdit, onDelete }: RolesTableProps) {
+  const theme = useTheme();
+
   return (
     <TableContainer component={Paper} sx={{ boxShadow: 'none' }}>
       <Table>
@@ -114,14 +117,14 @@ export default function RolesTable({ roles, onView, onEdit, onDelete }: RolesTab
               </TableCell>
               <TableCell align='right' sx={{ verticalAlign: 'top', width: '120px' }}>
                 <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-                  <IconButton size='small' onClick={() => onView(role)}>
-                    <Eye size={20} />
+                  <IconButton size='small' onClick={() => onView(role)} className="bg-kai-primary hover:bg-kai-primary/70">
+                    <Eye size={20} style={{ color: theme.palette.mode === 'light' ? '#fff' : '#000' }} />
                   </IconButton>
-                  <IconButton size='small' onClick={() => onEdit(role)}>
-                    <Edit2 size={20} />
+                  <IconButton size='small' onClick={() => onEdit(role)} className="bg-kai-primary hover:bg-kai-primary/70">
+                    <Edit2 size={20} style={{ color: theme.palette.mode === 'light' ? '#fff' : '#000' }} />
                   </IconButton>
-                  <IconButton size='small' onClick={() => onDelete(role)}>
-                    <Trash2 size={20} />
+                  <IconButton size='small' onClick={() => onDelete(role)} className="bg-kai-primary hover:bg-kai-primary/70">
+                    <Trash2 size={20} style={{ color: theme.palette.mode === 'light' ? '#fff' : '#000' }} />
                   </IconButton>
                 </Box>
               </TableCell>

@@ -183,9 +183,10 @@ export default function UserManagement() {
             setSelectedUser(null)
             setShowUserForm(true)
           }}
-          className={`flex items-center px-4 py-2 rounded-lg text-white
-            ${theme.palette.mode === 'light' ? 'bg-kai-primary hover:bg-kai-primary/40' : 'bg-gray-600 hover:bg-gray-700'}
-          `}
+          className="flex items-center px-4 py-2 rounded-lg text-white bg-kai-primary hover:bg-kai-primary/70"
+          style={{
+            color: theme.palette.mode === 'light' ? '#fff' : '#000'
+          }}
           startIcon={<Plus />}>
           Novo Usuário
         </Button>

@@ -1,8 +1,8 @@
 "use client";
 
 import { IconButton, Tooltip } from "@mui/material";
-import { useTheme } from "@mui/system";
 import { Eye, PenLine, Trash2 } from "lucide-react";
+import { useTheme } from "@mui/system";
 
 interface ActionButtonsProps {
   onView: () => void;
@@ -16,44 +16,42 @@ export default function ActionButtons({
   onDelete,
   size = "small",
 }: ActionButtonsProps & { size?: "small" | "medium" | "large" }) {
+
   const theme = useTheme();
+
   return (
     <div className="flex gap-1">
       <Tooltip title="View">
         <IconButton
-          sx={{
-            color: theme.palette.action.active,
-            "&:hover": { color: theme.palette.primary.main },
-          }}
+          className="bg-kai-primary hover:bg-kai-primary/70"
           size={size}
           onClick={onView}
         >
-          <Eye size={18} />
+          <Eye size={18} style={{
+            color: theme.palette.mode === 'light' ? '#fff' : '#000'
+          }} />
         </IconButton>
       </Tooltip>
       <Tooltip title="Edit">
         <IconButton
-          sx={{
-            color: theme.palette.action.active,
-            "&:hover": { color: theme.palette.success.main },
-          }}
+          className="bg-kai-primary hover:bg-kai-primary/70"
           size={size}
           onClick={onEdit}
         >
-          <PenLine size={18} />
+          <PenLine size={18} style={{
+            color: theme.palette.mode === 'light' ? '#fff' : '#000'
+          }} />
         </IconButton>
       </Tooltip>
       <Tooltip title="Delete">
         <IconButton
-          sx={{
-            color: theme.palette.action.active,
-            "&:hover": { color: theme.palette.error.main },
-          }}
+          className="bg-kai-primary hover:bg-kai-primary/70"
           size={size}
-          color="error"
           onClick={onDelete}
         >
-          <Trash2 size={18} />
+          <Trash2 size={18} style={{
+            color: theme.palette.mode === 'light' ? '#fff' : '#000'
+          }} />
         </IconButton>
       </Tooltip>
     </div>

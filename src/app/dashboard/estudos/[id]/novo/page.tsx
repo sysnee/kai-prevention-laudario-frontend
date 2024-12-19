@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Grid2 as Grid } from "@mui/material"
+import { Box, Button, Grid2 as Grid, Typography } from "@mui/material"
 import { KeyboardArrowLeft } from "@mui/icons-material"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react";
@@ -59,17 +59,10 @@ export default function EstudoDetailPage() {
                 }}
             >
                 <Link href={`/`}>
-                    <Button
-                        sx={(theme) => ({
-                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14",
-                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d",
-                        })}
-                    >
-                        <KeyboardArrowLeft
-                            sx={(theme) => ({
-                                color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
-                            })}
-                        />
+                    <Button className="bg-kai-primary hover:bg-kai-primary/70">
+                        <KeyboardArrowLeft sx={(theme) => ({
+                            color: theme.palette.mode === 'light' ? '#fff' : '#000'
+                        })} />
                     </Button>
                 </Link>
 
@@ -159,23 +152,21 @@ export default function EstudoDetailPage() {
                 >
                     <Button
                         sx={(theme) => ({
-                            backgroundColor: "transparent",
-                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d",
-                            color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
+                            backgroundColor: theme.palette.mode === 'light' ? "#fff" : "#0b0e14",
+                            border: "1px solid #e5e7eb"
                         })}
+                        className="text-kai-primary transition-colors hover:bg-kai-primary/10"
                     >
                         Cancelar
                     </Button>
 
                     <Link href={`/dashboard/estudos/${id}/achados`}>
-                        <Button
-                            sx={(theme) => ({
-                                backgroundColor: "transparent",
-                                border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d",
-                                color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
-                            })}
-                        >
-                            Salvar e avançar
+                        <Button className="bg-kai-primary hover:bg-kai-primary/70">
+                            <Typography sx={(theme) => ({
+                                color: theme.palette.mode === 'light' ? '#fff' : '#000'
+                            })}>
+                                Salvar e avançar
+                            </Typography>
                         </Button>
                     </Link>
                 </Box>

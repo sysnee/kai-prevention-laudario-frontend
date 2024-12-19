@@ -46,9 +46,10 @@ export default function SchedulingList() {
 
                 <Button
                     href='/dashboard/agendamentos/novo'
-                    className={`flex items-center px-4 py-2 rounded-lg text-white
-                        ${theme.palette.mode === 'light' ? 'bg-kai-primary hover:bg-kai-primary/40' : 'bg-gray-600 hover:bg-gray-700'}
-                    `}
+                    className="flex items-center px-4 py-2 rounded-lg bg-kai-primary hover:bg-kai-primary/70"
+                    style={{
+                        color: theme.palette.mode === 'light' ? "#fff" : "#000",
+                    }}
                     startIcon={<PlusIcon />}>
                     Novo Agendamento
                 </Button>
@@ -64,12 +65,17 @@ export default function SchedulingList() {
                     <div className="flex items-center space-x-4">
                         <button
                             onClick={handlePrevDay}
-                            className="p-2 hover:bg-gray-100 rounded-full"
+                            className="p-2 hover:bg-kai-primary/10 rounded-full"
                         >
-                            <ChevronLeft className="w-5 h-5" />
+                            <ChevronLeft className="w-5 h-5 text-kai-primary" />
                         </button>
-                        <div className="flex items-center bg-white px-4 py-2 rounded-lg border border-gray-200">
-                            <CalendarIcon className="w-5 h-5 text-gray-400 mr-2" />
+                        <div
+                            className="flex items-center px-4 py-2 rounded-lg"
+                            style={{
+                                border: theme.palette.mode === 'light' ? "1px solid #e5e7eb" : "1px solid #333b4d"
+                            }}
+                        >
+                            <CalendarIcon className="w-5 h-5 text-kai-primary mr-2" />
                             <span className="font-medium">
                                 {selectedDate.toLocaleDateString('pt-BR', {
                                     weekday: 'long',
@@ -81,19 +87,24 @@ export default function SchedulingList() {
                         </div>
                         <button
                             onClick={handleNextDay}
-                            className="p-2 hover:bg-gray-100 rounded-full"
+                            className="p-2 hover:bg-kai-primary/10 rounded-full"
                         >
-                            <ChevronRight className="w-5 h-5" />
+                            <ChevronRight className="w-5 h-5 text-kai-primary" />
                         </button>
                     </div>
 
                     <div className="flex items-center space-x-4">
-                        <div className="flex rounded-lg border border-gray-200 p-1 bg-white">
+                        <div
+                            className="flex rounded-lg p-1 gap-2"
+                            style={{
+                                border: theme.palette.mode === 'light' ? "1px solid #e5e7eb" : "1px solid #333b4d"
+                            }}
+                        >
                             <button
                                 onClick={() => setView('list')}
                                 className={`px-3 py-1 rounded flex items-center ${view === 'list'
                                     ? 'bg-kai-primary/10 text-kai-primary'
-                                    : 'text-gray-600 hover:bg-gray-50'
+                                    : 'text-gray-600 hover:bg-kai-primary/10'
                                     }`}
                             >
                                 <LayoutList className="w-5 h-5 mr-2" />
@@ -103,7 +114,7 @@ export default function SchedulingList() {
                                 onClick={() => setView('calendar')}
                                 className={`px-3 py-1 rounded flex items-center ${view === 'calendar'
                                     ? 'bg-kai-primary/10 text-kai-primary'
-                                    : 'text-gray-600 hover:bg-gray-50'
+                                    : 'text-gray-600 hover:bg-kai-primary/10'
                                     }`}
                             >
                                 <CalendarIcon className="w-5 h-5 mr-2" />

@@ -58,17 +58,10 @@ export default function AchadosPage() {
                 }}
             >
                 <Link href={`/`}>
-                    <Button
-                        sx={(theme) => ({
-                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14",
-                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d",
-                        })}
-                    >
-                        <KeyboardArrowLeft
-                            sx={(theme) => ({
-                                color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
-                            })}
-                        />
+                    <Button className="bg-kai-primary hover:bg-kai-primary/70">
+                        <KeyboardArrowLeft sx={(theme) => ({
+                            color: theme.palette.mode === 'light' ? '#fff' : '#000'
+                        })} />
                     </Button>
                 </Link>
 
@@ -166,26 +159,32 @@ export default function AchadosPage() {
 
                             {isExamNormalChecked ? (
                                 <Button
-                                    sx={(theme) => ({
-                                        color: theme.palette.text.primary,
-                                        fontSize: "12px",
-                                        border: "1px solid #333b4d"
-                                    })}
+                                    className="bg-kai-primary hover:bg-kai-primary/70 flex items-center"
                                 >
-                                    <Check sx={{ fontSize: "17px", marginRight: ".2em" }} />
-                                    Concluir
+                                    <Check sx={(theme) => ({
+                                        color: theme.palette.mode === 'light' ? '#fff' : '#000',
+                                        fontSize: "18px"
+                                    })} />
+                                    <Typography sx={(theme) => ({
+                                        color: theme.palette.mode === 'light' ? '#fff' : '#000'
+                                    })}>
+                                        Concluir
+                                    </Typography>
                                 </Button>
                             ) : (
                                 <Button
                                     onClick={() => setIsFormVisible(true)}
-                                    sx={(theme) => ({
-                                        color: theme.palette.text.primary,
-                                        fontSize: "12px",
-                                        border: "1px solid #333b4d"
-                                    })}
+                                    className="bg-kai-primary hover:bg-kai-primary/70 flex items-center"
                                 >
-                                    <AddIcon sx={{ fontSize: "18px" }} />
-                                    Adicionar achado
+                                    <AddIcon sx={(theme) => ({
+                                        color: theme.palette.mode === 'light' ? '#fff' : '#000',
+                                        fontSize: "18px"
+                                    })} />
+                                    <Typography sx={(theme) => ({
+                                        color: theme.palette.mode === 'light' ? '#fff' : '#000'
+                                    })}>
+                                        Adicionar achado
+                                    </Typography>
                                 </Button>
                             )}
                         </Box>

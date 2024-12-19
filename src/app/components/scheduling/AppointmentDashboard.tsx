@@ -2,6 +2,7 @@ import React from 'react';
 import { Calendar, CheckCircle2, Clock, XCircle, AlertCircle, TrendingUp } from 'lucide-react';
 import { formatCurrency } from '../../utils/format';
 import { Skeleton } from '@mui/material';
+import { useTheme } from '@mui/material';
 
 interface AppointmentDashboardProps {
   date: Date;
@@ -18,8 +19,14 @@ const getStats = (date: Date) => ({
 });
 
 function DashboardSkeleton() {
+  const theme = useTheme();
   const CardSkeleton = () => (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div
+      className="rounded-xl border border-gray-200 p-6"
+      style={{
+        border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+      }}
+    >
       <div className="flex items-center">
         <Skeleton variant="rounded" width={40} height={40} />
         <div className="ml-4 flex-1">
@@ -54,12 +61,18 @@ export function AppointmentDashboard({ date, loading }: AppointmentDashboardProp
     return <DashboardSkeleton />;
   }
 
+  const theme = useTheme();
   const stats = getStats(date);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid bg-transparent grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {/* Total Appointments */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div
+        className="rounded-xl p-6"
+        style={{
+          border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+        }}
+      >
         <div className="flex items-center">
           <div className="p-2 bg-kai-primary/10 to-ka rounded-lg">
             <Calendar className="w-6 h-6 text-kai-primary" />
@@ -91,7 +104,12 @@ export function AppointmentDashboard({ date, loading }: AppointmentDashboardProp
       </div>
 
       {/* Confirmed */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div
+        className="rounded-xl p-6"
+        style={{
+          border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+        }}
+      >
         <div className="flex items-center">
           <div className="p-2 bg-kai-primary/10 rounded-lg">
             <CheckCircle2 className="w-6 h-6 text-kai-primary" />
@@ -114,7 +132,12 @@ export function AppointmentDashboard({ date, loading }: AppointmentDashboardProp
       </div>
 
       {/* Pending */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div
+        className="rounded-xl p-6"
+        style={{
+          border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+        }}
+      >
         <div className="flex items-center">
           <div className="p-2 bg-kai-primary/10 rounded-lg">
             <Clock className="w-6 h-6 text-kai-primary" />
@@ -137,10 +160,15 @@ export function AppointmentDashboard({ date, loading }: AppointmentDashboardProp
       </div>
 
       {/* Canceled */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div
+        className="rounded-xl p-6"
+        style={{
+          border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+        }}
+      >
         <div className="flex items-center">
-          <div className="p-2 bg-red-50 rounded-lg">
-            <XCircle className="w-6 h-6 text-red-600" />
+          <div className="p-2 bg-kai-primary/10 rounded-lg">
+            <XCircle className="w-6 h-6 text-kai-primary" />
           </div>
           <div className="ml-4">
             <p className="text-sm font-medium text-gray-500">Cancelados</p>

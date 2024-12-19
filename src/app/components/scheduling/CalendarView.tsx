@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Clock, User, AlertCircle, CalendarX } from 'lucide-react';
 import api from '@/src/lib/api';
 import { CircularProgress } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 interface CalendarViewProps {
   date: Date;
@@ -21,6 +22,7 @@ interface Appointment {
 export function CalendarView({ date }: CalendarViewProps) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
+  const theme = useTheme();
 
   const translateStatus = (status: string): string => {
     const translations: { [key: string]: string } = {
@@ -82,21 +84,32 @@ export function CalendarView({ date }: CalendarViewProps) {
 
   if (filteredAppointments.length === 0) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+      <div
+        className="rounded-lg p-12 text-center"
+        style={{
+          border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+        }}
+      >
         <CalendarX className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <h3 className="text-lg font-medium text-gray-500 mb-2">
           Nenhum agendamento encontrado
         </h3>
         <p className="text-gray-500">
-          Não há agendamentos para esta data ou filtro aplicado.
+          Não há agendamentos para esta data.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200">
-      <div className="grid grid-cols-1 divide-y divide-gray-200">
+    <div
+      className="rounded-lg"
+      style={{
+        border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+      }}
+    >
+      <div className={`grid grid-cols-1 divide-y ${theme.palette.mode === 'light' ? 'divide-gray-200' : 'divide-gray-800'}`}
+      >
         {filteredAppointments.map((appointment) => {
 
           return (
@@ -104,7 +117,12 @@ export function CalendarView({ date }: CalendarViewProps) {
               key={appointment.id}
               className={`min-h-[80px] grid grid-cols-[120px,1fr]`}
             >
-              <div className="p-4 border-r border-gray-200 flex items-center">
+              <div
+                className="p-4 flex items-center"
+                style={{
+                  borderRight: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)"
+                }}
+              >
                 <Clock className={`w-4 h-4 mr-2 'text-gray-400'}`} />
                 <span className={`font-medium 'text-gray-600'}`}>
                   {appointment.dateTime.split(', ')[1]}
