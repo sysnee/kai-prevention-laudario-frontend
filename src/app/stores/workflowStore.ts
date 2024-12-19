@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 //import { pacsService } from '../services/pacsService';
 import { WorkflowNote, WorkflowTransition } from '../types/workflow/workflow';
 import { ServiceStatus } from '../types/pemissions/permissions';
+import api from '@/src/lib/api';
 
 interface Appointment {
   id: string;
@@ -93,63 +94,85 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
   })),
 
   moveExam: async (examId, fromStage, toStage, reason) => {
-    const exam = get().serviceRequests.find(e => e.id === examId);
+    const exam = get().serviceRequests.find((e) => e.id === examId);
     if (!exam) {
-      toast.error('Exame não encontrado');
+      toast.error("Exame não encontrado");
       return;
     }
 
     try {
-      // If moving to waiting status, send to PACS
-      if (toStage === 'waiting') {
-        try {
-          const pacsData = {
-            id: exam.patientId,
-            name: exam.clientName,
-            birthDate: '1985-06-15', // Mock data
-            gender: 'M',
-            cpf: '12345678900',
-            examType: exam.examType,
-            accessionNumber: 'ACC001',
-            referringPhysician: exam.doctor,
-            modality: exam.examType.includes('Raio-X') ? 'CR' :
-              exam.examType.includes('Tomografia') ? 'CT' : 'MR',
-            scheduledDate: exam.date
-          };
+      // Garantir que transitions é sempre um array
+      const updatedTransitions = Array.isArray(exam.transitions)
+        ? [...exam.transitions]
+        : [];
 
-          //await pacsService.sendToWorklist(pacsData);
-        } catch (error) {
-          console.error('Error sending to PACS:', error);
-          toast.error('Erro ao enviar para o PACS');
-          return;
-        }
-      }
-
-      // Add transition record
+      // Adicionar a nova transição
       const transition: WorkflowTransition = {
         from: fromStage,
         to: toStage,
         timestamp: new Date().toISOString(),
-        userId: 'user1', // In a real app, this would be the logged-in user's ID
-        reason
+        userId: exam.patientId,
+        reason,
       };
 
-      // Update exam status and add transition
+      updatedTransitions.push(transition);
+
+      // Salvar o estado original para possível rollback
+      const originalStatus = exam.status;
+      const originalTransitions = [...updatedTransitions];
+
+      // Atualizar o status e transições localmente
       set((state) => ({
         serviceRequests: state.serviceRequests.map((e) =>
-          e.id === examId ? {
-            ...e,
-            status: toStage as ServiceStatus,
-            transitions: [...e.transitions, transition]
-          } : e
-        )
+          e.id === examId
+            ? {
+                ...e,
+                status: toStage as ServiceStatus,
+                transitions: updatedTransitions,
+              }
+            : e
+        ),
       }));
 
-      toast.success(`Exame movido para ${toStage}`);
+      // Realizar requisição para a API se o destino for STARTED
+      if (toStage === "STARTED") {
+        try {
+          const response = await api.put(
+            `service-requests/${exam.id}/status/forward/started`
+          );
 
+          if (!response) {
+            const errorMessage = await response.text();
+            throw new Error(`Erro da API: ${errorMessage}`);
+          }
+
+          toast.success(`Exame movido para ${toStage} e atualizado na API`);
+        } catch (apiError) {
+          console.error("Erro ao atualizar o status na API:", apiError);
+
+          // Reverter o status e as transições no caso de falha
+          set((state) => ({
+            serviceRequests: state.serviceRequests.map((e) =>
+              e.id === examId
+                ? {
+                    ...e,
+                    status: originalStatus,
+                    transitions: originalTransitions,
+                  }
+                : e
+            ),
+          }));
+
+          toast.error(
+            "Falha ao atualizar status para STARTED na API. O exame foi revertido."
+          );
+        }
+      } else {
+        toast.success(`Exame movido para ${toStage}`);
+      }
     } catch (error) {
-      console.error('Error moving exam:', error);
-      toast.error('Erro ao mover exame');
+      console.error("Erro ao mover exame:", error);
+      toast.error("Erro ao mover exame");
     }
   },
 
