@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTheme } from '@mui/system';
 import {
   Dialog,
   DialogTitle,
@@ -124,6 +125,8 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
       }
     }
   }
+
+  const theme = useTheme();
 
   return (
     <Dialog open onClose={onCancel} maxWidth='md' fullWidth>
@@ -354,11 +357,19 @@ export function UserForm({ user, onSave, onCancel, roles }: UserFormProps) {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel} disabled={isSubmitting}>
-            Cancelar
+          <Button
+            onClick={onCancel}
+            disabled={isSubmitting}
+            sx={(theme) => ({
+              backgroundColor: theme.palette.mode === 'light' ? "#fff" : "#0b0e14",
+              border: "1px solid #e5e7eb"
+            })}
+            className="text-kai-primary transition-colors hover:bg-kai-primary/10"
+          >
+            <span className="text-kai-primary">Cancelar</span>
           </Button>
-          <Button type='submit' variant='contained' color='primary' disabled={isSubmitting}>
-            {isSubmitting ? 'Salvando...' : 'Salvar'}
+          <Button type='submit' className="bg-kai-primary hover:bg-kai-primary/70" disabled={isSubmitting}>
+            <span style={{ color: theme.palette.mode === 'light' ? '#fff' : '#000' }}>{isSubmitting ? 'Salvando...' : 'Salvar'}</span>
           </Button>
         </DialogActions>
       </form>

@@ -4,8 +4,11 @@ import { Avatar, Box, Button, Grid2 as Grid, Stack } from "@mui/material"
 import { KeyboardArrowLeft } from "@mui/icons-material"
 import Link from "next/link";
 import Image from "next/image";
+import { useTheme } from "@mui/material";
 
 export default function EstudoResumoPage() {
+    const theme = useTheme();
+
     return (
         <Box
             sx={{
@@ -22,14 +25,11 @@ export default function EstudoResumoPage() {
             >
                 <Link href={`/`}>
                     <Button
-                        sx={(theme) => ({
-                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14",
-                            border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d",
-                        })}
+                        className="bg-kai-primary hover:bg-kai-primary/70"
                     >
                         <KeyboardArrowLeft
                             sx={(theme) => ({
-                                color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
+                                color: theme.palette.mode === 'light' ? '#fff' : '#000'
                             })}
                         />
                     </Button>
@@ -73,7 +73,7 @@ export default function EstudoResumoPage() {
                                 <Box width={'80%'}>
                                     <Box
                                         sx={(theme) => ({
-                                            backgroundColor: "transparent",
+                                            backgroundColor: theme.palette.mode === 'light' ? "#fff" : "transparent",
                                             border: theme.palette.mode === 'light' ? "none" : "1px solid #333b4d",
                                             padding: "2em",
                                             display: "flex",
@@ -195,13 +195,14 @@ export default function EstudoResumoPage() {
                                                 <Link href="/dashboard/estudos/1/achados">
                                                     <Button
                                                         sx={(theme) => ({
-                                                            backgroundColor: theme.palette.mode === 'light' ? "#f9fafb" : "#0b0e14",
-                                                            border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d",
+                                                            backgroundColor: theme.palette.mode === 'light' ? "#fff" : "#0b0e14",
+                                                            border: "1px solid #e5e7eb",
                                                             fontWeight: "lighter",
                                                             fontSize: "14px",
                                                             width: '150px',
                                                             alignSelf: 'end',
                                                         })}
+                                                        className="text-kai-primary transition-colors hover:bg-kai-primary/10"
                                                     >
 
                                                         Ver detalhes
@@ -220,7 +221,7 @@ export default function EstudoResumoPage() {
                     <Grid size={4}>
                         <Box sx={(theme) => ({
                             width: '100%',
-                            backgroundColor: 'transparent',
+                            backgroundColor: theme.palette.mode === 'light' ? "#fff" : "transparent",
                             border: theme.palette.mode === 'light' ? "1px solid #dadee7" : "1px solid #333b4d",
                             borderRadius: '20px',
                             padding: 3
@@ -296,12 +297,11 @@ export default function EstudoResumoPage() {
                                 sx={(theme) => ({
                                     width: "100%",
                                     fontSize: "12px",
-                                    backgroundColor: "transparent",
-                                    border: theme.palette.mode === 'light' ? "1px solid grey" : "1px solid #333b4d",
                                     color: theme.palette.mode === 'light' ? "#0b0e14" : "#fff"
                                 })}
+                                className="bg-kai-primary hover:bg-kai-primary/70"
                             >
-                                Assinar e salvar laudo
+                                <span style={{ color: theme.palette.mode === 'light' ? "#fff" : "#000" }}>Assinar e salvar laudo</span>
                             </Button>
                         </Box>
                     </Grid>

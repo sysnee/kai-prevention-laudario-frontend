@@ -156,10 +156,10 @@ export function WorkflowCardModal({ exam, onClose }: WorkflowCardModalProps) {
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-2 text-kai-primary hover:bg-kai-primary/10 rounded-full transition-colors"
               title="Fechar"
             >
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>

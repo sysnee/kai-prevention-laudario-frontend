@@ -188,11 +188,16 @@ export default function Clients() {
             setFormMode('create')
             setShowForm(true)
           }}
-          className={`flex items-center px-4 py-2 rounded-lg
-            ${theme.palette.mode === 'light' ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gray-600 hover:bg-gray-700'}
-          `}>
-          <Plus className='w-5 h-5 mr-2' />
-          Novo Cliente
+          className="flex items-center px-4 py-2 rounded-lg bg-kai-primary hover:bg-kai-primary/70">
+          <Plus className='w-5 h-5 mr-2' style={{
+            color: theme.palette.mode === 'light' ? '#fff' : '#000'
+          }} />
+          <span
+            style={{
+              color: theme.palette.mode === 'light' ? '#fff' : '#000'
+            }}
+          >Novo Cliente
+          </span>
         </button>
       </div>
 

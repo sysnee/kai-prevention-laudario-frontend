@@ -4,6 +4,7 @@ import { QuestionnaireAnswersModal } from './QuestionnaireAnswersModal';
 import toast from 'react-hot-toast';
 import { useTheme } from '@mui/material';
 import BirthdateInput from './BirthdateInput';
+import { Button, Typography } from '@mui/material';
 
 interface ClientFormProps {
   client?: any;
@@ -251,7 +252,7 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
           </h2>
           <button
             onClick={onCancel}
-            className="p-2 hover:bg-gray-400 rounded-full"
+            className="p-2 text-kai-primary hover:bg-kai-primary/10 rounded-full transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -536,31 +537,29 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
             }}
           >
             <div className="flex justify-end space-x-3">
-              <button
-                type="button"
+              <Button
                 onClick={onCancel}
-                className={`px-4 py-2 text-sm font-medium rounded-md
-                  ${theme.palette.mode === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-300'}
-                `}
-                style={{
-                  border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
-                }}
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.mode === 'light' ? "#fff" : "#0b0e14",
+                  border: "1px solid #e5e7eb"
+                })}
+                className="text-kai-primary transition-colors hover:bg-kai-primary/10"
               >
-                {readOnly ? 'Fechar' : 'Cancelar'}
-              </button>
+                <Typography>
+                  {readOnly ? 'Fechar' : 'Cancelar'}
+                </Typography>
+              </Button>
               {!readOnly && (
-                <button
-                  type='submit'
-                  className={`px-4 py-2 text-sm font-medium rounded-md flex items-center
-                    ${theme.palette.mode === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-300'}
-                  `}
-                  style={{
-                    border: theme.palette.mode === 'light' ? "1px solid rgba(229,231,235,255)" : "1px solid hsla(220, 20%, 25%, 0.6)",
-                  }}
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  Salvar
-                </button>
+                <Button className="bg-kai-primary hover:bg-kai-primary/70">
+                  <Save className="w-4 h-4 mr-2" style={{
+                    color: theme.palette.mode === 'light' ? '#fff' : '#000'
+                  }} />
+                  <Typography sx={(theme) => ({
+                    color: theme.palette.mode === 'light' ? '#fff' : '#000'
+                  })}>
+                    Salvar
+                  </Typography>
+                </Button>
               )}
             </div>
           </div>

@@ -127,10 +127,10 @@ export default function AchadoCard({ achado, onEdit }: { achado: Achado, onEdit:
                 <Button
                     onClick={onEdit}
                     sx={(theme) => ({
-                        color: theme.palette.text.primary,
-                        fontSize: "12px",
-                        border: "1px solid #333b4d"
+                        backgroundColor: theme.palette.mode === 'light' ? "#fff" : "#0b0e14",
+                        border: "1px solid #e5e7eb"
                     })}
+                    className="text-kai-primary transition-colors hover:bg-kai-primary/10"
                 >
                     <EditIcon sx={{ fontSize: "16px", marginRight: ".2em" }} />
                     Editar achado

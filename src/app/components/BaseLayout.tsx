@@ -46,7 +46,8 @@ function BaseLayout({ children, session }: { children: ReactNode; session?: Sess
                   position: 'relative',
                   boxSizing: 'border-box',
                   p: 2,
-                  marginRight: 5
+                  marginRight: 5,
+                  backgroundColor: 'background.paper'
                 }}>
                 <AppNavbar />
                 <Header />
