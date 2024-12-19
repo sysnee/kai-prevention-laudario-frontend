@@ -17,15 +17,15 @@ export type ServiceStatus =
   | 'ON_HOLD'
   | 'COMPLETED'
   | 'TRANSCRIPTION'
+  | 'IN_REVISION'
   | 'SIGNED'
   | 'CANCELED'
-  | 'PENDING_APPROVAL';
 
 export enum ExamStatusEnum {
   PLANNED = "Planejado",
   WAITING = "Aguardando",
   STARTED = "Iniciado",
-  ONHOLD = "Pausado",
+  ON_HOLD = "Pausado",
   COMPLETED = "Concluído",
   TRANSCRIPTION = "Transcrição",
   REVISION = "Revisão",

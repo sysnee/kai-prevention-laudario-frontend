@@ -55,7 +55,7 @@ export function ActionButtons({
         </button>
       )}
 
-      {status === 'ONHOLD' ? (
+      {status === 'ON_HOLD' ? (
         <div className="flex-1">
           {showResumeInput ? (
             <div className="flex space-x-2">

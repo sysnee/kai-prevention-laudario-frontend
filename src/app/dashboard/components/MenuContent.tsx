@@ -19,11 +19,11 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 
 const mainListItems = [
-  {
-    text: 'Início',
-    icon: <HomeRoundedIcon />,
-    path: '/'
-  },
+  // {
+  //   text: 'Início',
+  //   icon: <HomeRoundedIcon />,
+  //   path: '/'
+  // },
   {
     text: 'Agendamento',
     icon: <CalendarIcon />,

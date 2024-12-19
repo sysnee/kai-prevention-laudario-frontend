@@ -1,4 +1,4 @@
-import { Calendar, ClipboardList, Timer, Users, Clock } from 'lucide-react'
+import { Calendar, ClipboardList, Timer, Users } from 'lucide-react'
 import { useTheme } from '@mui/material'
 import { Skeleton } from '@mui/material'
 

@@ -18,8 +18,7 @@ const getStats = (date: Date) => ({
   occupancyRate: 87,
 });
 
-function DashboardSkeleton() {
-  const theme = useTheme();
+function DashboardSkeleton({ theme }: { theme: any }) {
   const CardSkeleton = () => (
     <div
       className="rounded-xl border border-gray-200 p-6"
@@ -57,12 +56,12 @@ function DashboardSkeleton() {
 }
 
 export function AppointmentDashboard({ date, loading }: AppointmentDashboardProps) {
-  if (loading) {
-    return <DashboardSkeleton />;
-  }
-
   const theme = useTheme();
   const stats = getStats(date);
+
+  if (loading) {
+    return <DashboardSkeleton theme={theme} />;
+  }
 
   return (
     <div className="grid bg-transparent grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
