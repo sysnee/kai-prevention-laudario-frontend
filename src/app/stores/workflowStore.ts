@@ -101,12 +101,10 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
     }
 
     try {
-      // Garantir que transitions é sempre um array
       const updatedTransitions = Array.isArray(exam.transitions)
         ? [...exam.transitions]
         : [];
 
-      // Adicionar a nova transição
       const transition: WorkflowTransition = {
         from: fromStage,
         to: toStage,
@@ -117,7 +115,6 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
 
       updatedTransitions.push(transition);
 
-      // Salvar o estado original para possível rollback
       const originalStatus = exam.status;
       const originalTransitions = [...updatedTransitions];
 
@@ -134,12 +131,14 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
         ),
       }));
 
-      // Realizar requisição para a API se o destino for STARTED
-      if (toStage === "STARTED") {
+      // Realizar requisição para a API se o destino for STARTED ou a transição for de PLANNED para WAITING
+      if (toStage === "STARTED" || (fromStage === "PLANNED" && toStage === "WAITING")) {
         try {
-          const response = await api.put(
-            `service-requests/${exam.id}/status/forward/started`
-          );
+          const endpoint = toStage === "STARTED"
+            ? `service-requests/${exam.id}/status/forward/started`
+            : `service-requests/${exam.id}/status/forward/waiting`;
+
+          const response = await api.put(endpoint);
 
           if (!response) {
             const errorMessage = await response.text();
@@ -164,7 +163,7 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
           }));
 
           toast.error(
-            "Falha ao atualizar status para STARTED na API. O exame foi revertido."
+            `Falha ao atualizar status para ${toStage} na API. O exame foi revertido.`
           );
         }
       } else {
