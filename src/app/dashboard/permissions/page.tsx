@@ -10,7 +10,7 @@ import RolesTable from './components/RolesTable'
 import RolePermissionForm from './components/forms/RolePermissionForm'
 import api from '../../../lib/api'
 import { ConfirmationModal } from '../../components/shared/ConfirmationModal'
-import { showToast } from '@/src/lib/toast'
+import { showToast } from '@/lib/toast'
 
 export default function PermissionsManagement() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')

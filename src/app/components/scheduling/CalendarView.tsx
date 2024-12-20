@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Clock, User, AlertCircle, CalendarX } from 'lucide-react';
-import api from '@/src/lib/api';
 import { CircularProgress } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import api from '@/lib/api';
 
 interface CalendarViewProps {
   date: Date;

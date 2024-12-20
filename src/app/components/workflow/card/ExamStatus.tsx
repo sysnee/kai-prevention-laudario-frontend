@@ -1,7 +1,7 @@
 import React from 'react';
 import { Check } from 'lucide-react';
 import { useTheme } from '@mui/material';
-import { ExamStatusEnum, ServiceStatus } from '@/src/app/types/pemissions/permissions';
+import { ExamStatusEnum, ServiceStatus } from '@/app/types/pemissions/permissions';
 
 interface ExamStatusProps {
   examId: string;

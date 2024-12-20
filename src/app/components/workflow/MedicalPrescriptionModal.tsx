@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Upload, Save } from 'lucide-react';
 import { useTheme } from '@mui/material/styles';
-import api from '@/src/lib/api';
+import api from '@/lib/api';
 
 interface MedicalPrescriptionModalProps {
   isOpen: boolean;

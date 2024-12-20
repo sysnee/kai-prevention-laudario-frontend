@@ -5,10 +5,10 @@ import { ExamSelector } from './ExamSelector';
 import { Calendar } from './Calendar';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { generateTimeSlots } from '@/src/app/utils/temp';
-import { createAppointment, ExamTypeEnum } from '@/src/lib/appoinment';
-import { TimeSlotPicker } from '@/src/app/components/scheduling/TimeSlotPicker';
-import { PatientForm } from '@/src/app/components/scheduling/PatientForm';
+import { generateTimeSlots } from '@/app/utils/temp';
+import { createAppointment, ExamTypeEnum } from '@/lib/appoinment';
+import { TimeSlotPicker } from '@/app/components/scheduling/TimeSlotPicker';
+import { PatientForm } from '@/app/components/scheduling/PatientForm';
 import { redirect } from 'next/navigation';
 import { useTheme } from '@mui/material';
 

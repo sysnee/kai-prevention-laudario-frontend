@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Search, Clock, AlertCircle, Info, AlertTriangleIcon } from 'lucide-react';
-import { examsList } from '@/src/app/data/exams';
-import { formatCurrency } from '@/src/app/utils/format';
+import { Search, AlertCircle, Info, AlertTriangleIcon } from 'lucide-react';
+import { examsList } from '@/app/data/exams';
 import { useTheme } from '@mui/material';
 
 interface ExamSelectorProps {

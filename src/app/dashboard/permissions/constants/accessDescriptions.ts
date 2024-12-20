@@ -1,4 +1,4 @@
-import { AccessLevel, Role, ServiceStatus } from "@/src/app/types/pemissions/permissions";
+import { AccessLevel, Role, ServiceStatus } from "@/app/types/pemissions/permissions";
 
 type AccessDescription = string | Partial<Record<Role, string>>;
 

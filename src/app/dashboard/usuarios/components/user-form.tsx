@@ -21,9 +21,9 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { OTHER_PROFESSIONAL_ROLES, PROFESSIONAL_TYPES, User } from '@/src/app/types/user'
-import { Role } from '@/src/app/types/permissions'
-import { maskCPF, maskPhone } from '@/src/app/utils/format'
+import { OTHER_PROFESSIONAL_ROLES, PROFESSIONAL_TYPES, User } from '@/app/types/user'
+import { Role } from '@/app/types/permissions'
+import { maskCPF, maskPhone } from '@/app/utils/format'
 
 interface UserFormProps {
   user: User | null

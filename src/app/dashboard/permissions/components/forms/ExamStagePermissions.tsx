@@ -1,6 +1,6 @@
 "use client";
 
-import { ExamStageAccess } from "@/src/app/types/pemissions/permissions";
+import { ExamStageAccess } from "@/app/types/pemissions/permissions";
 import { FormControl, InputLabel, Select, MenuItem, Box } from "@mui/material";
 
 interface ExamStagePermissionsProps {

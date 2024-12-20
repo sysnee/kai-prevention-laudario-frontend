@@ -6,9 +6,9 @@ import { Box, Button, Checkbox, FormControlLabel, Grid2 as Grid, Stack, Typograp
 import Link from "next/link";
 import { Check, KeyboardArrowLeft } from "@mui/icons-material";
 import AddIcon from '@mui/icons-material/Add';
-import AchadoCard from "@/src/app/components/AchadoCard";
-import AchadoForm from "@/src/app/components/AchadoForm";
-import { Achado } from "@/src/app/types/types";
+import AchadoCard from "@/app/components/AchadoCard";
+import AchadoForm from "@/app/components/AchadoForm";
+import { Achado } from "@/app/types/types";
 
 export default function AchadosPage() {
 

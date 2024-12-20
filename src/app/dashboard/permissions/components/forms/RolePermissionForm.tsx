@@ -24,11 +24,11 @@ import {
 } from '@mui/material'
 import { X } from 'lucide-react'
 import api from '../../../../../lib/api'
-import { Role } from '@/src/app/types/permissions'
-import { PermissionType } from '@/src/app/types/permissions'
-import { showToast } from '@/src/lib/toast'
-import { PERMISSION_TRANSLATIONS, RESOURCE_TRANSLATIONS } from '@/src/app/constants/translations'
-import { ResourceType } from '@/src/app/types/permissions'
+import { Role } from '@/app/types/permissions'
+import { PermissionType } from '@/app/types/permissions'
+import { showToast } from '@/lib/toast'
+import { PERMISSION_TRANSLATIONS, RESOURCE_TRANSLATIONS } from '@/app/constants/translations'
+import { ResourceType } from '@/app/types/permissions'
 
 interface RoleFormData {
   name: string
