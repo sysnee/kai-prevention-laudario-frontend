@@ -11,6 +11,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
+import 'dayjs/locale/pt-br';
+import { ptBR } from '@mui/x-date-pickers/locales';
+import { ptBR as ptBRCore } from '@mui/material/locale';
 
 export default function SchedulingList() {
     const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([dayjs(), dayjs()]);
@@ -53,7 +56,11 @@ export default function SchedulingList() {
             <div className="mt-8 mb-6">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <LocalizationProvider
+                            dateAdapter={AdapterDayjs}
+                            adapterLocale="pt-br"
+                            localeText={ptBR.components.MuiLocalizationProvider.defaultProps.localeText}
+                        >
                             <div className="flex gap-4">
                                 <DatePicker
                                     label="Data inicial"
@@ -62,6 +69,7 @@ export default function SchedulingList() {
                                         setDateRange([newValue, dateRange[1]]);
                                         setLoading(true);
                                     }}
+                                    format="DD/MM/YYYY"
                                     slotProps={{
                                         textField: { size: 'small' },
                                         inputAdornment: {
@@ -87,6 +95,7 @@ export default function SchedulingList() {
                                         setDateRange([dateRange[0], newValue]);
                                         setLoading(true);
                                     }}
+                                    format="DD/MM/YYYY"
                                     slotProps={{
                                         textField: { size: 'small' },
                                         inputAdornment: {
