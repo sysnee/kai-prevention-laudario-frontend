@@ -4,11 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter } from 'lucide-react';
 import { WorkflowMetrics } from '../../components/workflow/WorkflowMetrics';
 import { WorkflowBoard } from '../../components/workflow/WorkflowBoard';
-import WorkflowSkeleton from '@/src/app/components/workflow/WorkflowSkeleton';
-import api from '@/src/lib/api';
-import WorkflowMetricsSkeleton from '@/src/app/components/workflow/WorkflowMetricsSkeleton'
+import WorkflowSkeleton from '../../components/workflow/WorkflowSkeleton';
+import WorkflowMetricsSkeleton from '../../components/workflow/WorkflowMetricsSkeleton'
 import { useSearchParams } from 'next/navigation'
 import { useWorkflowStore } from '../../stores/workflowStore'
+import api from '@/lib/api';
 
 export default function Workflow() {
   const searchParams = useSearchParams()

@@ -1,19 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { X, Save, User, Send, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
+import { X, Save, User, Send, Clock, CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
 import { QuestionnaireAnswersModal } from './QuestionnaireAnswersModal';
 import toast from 'react-hot-toast';
 import { useTheme } from '@mui/material';
 import BirthdateInput from './BirthdateInput';
 import { Button, Typography } from '@mui/material';
+import { clientSchema, type ClientSchema } from '../../../lib/schemas/client'
+import { z } from 'zod'
+
+interface Client {
+  id?: string
+  name: string
+  birthdate: string
+  gender: 'male' | 'female' | 'other'
+  cpf: string
+  phone: string
+  email: string
+  zipcode: string
+  street: string
+  number: string
+  complement?: string
+  neighborhood: string
+  city: string
+  state: string
+  questionnaires?: Array<any>
+}
 
 interface ClientFormProps {
-  client?: any;
-  onCreate: (data: any) => void;
-  onEdit?: (data: any) => void;
-  onCancel?: () => void;
-  readOnly?: boolean;
-  cpfError?: string;
-  emailError?: string;
+  client?: Client
+  onCreate: (data: Client) => Promise<void>
+  onEdit?: (data: Client) => Promise<void>
+  onCancel?: () => void
+  readOnly?: boolean
+  cpfError?: string
+  emailError?: string
 }
 
 export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = false, cpfError, emailError }: ClientFormProps) {
@@ -21,6 +41,7 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
   const [isLoadingCep, setIsLoadingCep] = useState(false);
   const [cepError, setCepError] = useState('');
   const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<any>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formatCEP = (cep: string) => {
     return cep.replace(/\D/g, '').replace(/(\d{5})(\d{3})/, '$1-$2');
@@ -48,17 +69,11 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
   const cpfFormatted = client?.cpf ? formatCPF(client.cpf) : '';
   const zipcodeFormatted = client?.zipcode ? formatCEP(client.zipcode) : '';
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Client>({
     // Personal Information
     name: client?.name || '',
     birthdate: client?.birthdate || '',
-    gender: client?.gender
-      ? client.gender === 'male'
-        ? 'male'
-        : client.gender === 'female'
-          ? 'female'
-          : 'other'
-      : '',
+    gender: (client?.gender || 'other') as 'male' | 'female' | 'other',
     cpf: cpfFormatted,
 
     // Contact Information
@@ -142,36 +157,79 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
     return value.replace(/\D/g, '');
   };
 
-  const handleSubmitCreate = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!readOnly) {
+  const validateForm = () => {
+    try {
       const cleanedData = {
         ...formData,
         zipcode: removeFormatting(formData.zipcode),
         cpf: removeFormatting(formData.cpf),
         phone: removeFormatting(formData.phone),
-      };
+      }
 
-      onCreate(cleanedData);
+      clientSchema.parse(cleanedData)
+      return true
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        error.errors.forEach(err => {
+          toast.error(err.message)
+        })
+      }
+      return false
     }
-  };
+  }
 
-  const handleSubmitEdit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmitCreate = async (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('handleSubmitCreate', formData)
 
-    if (!readOnly) {
+    if (!validateForm()) return
+
+    setIsSubmitting(true)
+    try {
+      const cleanedData = {
+        ...formData,
+        zipcode: removeFormatting(formData.zipcode),
+        cpf: removeFormatting(formData.cpf),
+        phone: removeFormatting(formData.phone),
+      }
+
+      await onCreate(cleanedData)
+      toast.success('Cliente criado com sucesso!')
+      onCancel?.()
+    } catch (error) {
+      console.error('Erro ao criar cliente:', error)
+      toast.error('Erro ao criar cliente. Tente novamente.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleSubmitEdit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('handleSubmitEdit', formData)
+
+    if (!validateForm()) return
+
+    setIsSubmitting(true)
+    try {
       const cleanedData = {
         ...formData,
         id: client?.id,
         zipcode: removeFormatting(formData.zipcode),
         cpf: removeFormatting(formData.cpf),
         phone: removeFormatting(formData.phone),
-      };
+      }
 
-      onEdit(cleanedData);
+      await onEdit(cleanedData)
+      toast.success('Cliente atualizado com sucesso!')
+      onCancel?.()
+    } catch (error) {
+      console.error('Erro ao atualizar cliente:', error)
+      toast.error('Erro ao atualizar cliente. Tente novamente.')
+    } finally {
+      setIsSubmitting(false)
     }
-  };
+  }
 
   const renderQuestionnaireHistory = () => {
     if (!client?.questionnaires?.length) return null;
@@ -550,15 +608,22 @@ export function ClientForm({ client, onCreate, onEdit, onCancel, readOnly = fals
                 </Typography>
               </Button>
               {!readOnly && (
-                <Button className="bg-kai-primary hover:bg-kai-primary/70">
-                  <Save className="w-4 h-4 mr-2" style={{
-                    color: theme.palette.mode === 'light' ? '#fff' : '#000'
-                  }} />
-                  <Typography sx={(theme) => ({
-                    color: theme.palette.mode === 'light' ? '#fff' : '#000'
-                  })}>
-                    Salvar
-                  </Typography>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-kai-primary hover:bg-kai-primary/70"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center">
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Salvando...
+                    </span>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Salvar
+                    </>
+                  )}
                 </Button>
               )}
             </div>

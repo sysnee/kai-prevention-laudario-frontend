@@ -4,9 +4,9 @@ import React, { useState } from 'react'
 import { CheckIcon, Plus, Search, Users } from 'lucide-react'
 import { ClientForm } from '../../components/clients/ClientForm'
 import ClientsGrid from '../../components/clients/ClientsGrid'
-import { Alert, AlertColor, CircularProgress, useTheme, Box, Skeleton } from '@mui/material'
-import api from '@/src/lib/api'
+import { Alert, AlertColor, useTheme, Box, Skeleton } from '@mui/material'
 import { ConfirmationModal } from '../../components/shared/ConfirmationModal'
+import api from '@/lib/api'
 
 export default function Clients() {
   const [showForm, setShowForm] = useState(false)
@@ -88,6 +88,7 @@ export default function Clients() {
   }
 
   const handleCreateClient = async (data: any) => {
+    console.log('handleCreateClient', data)
     try {
       setErrorCPF('')
       setErrorEmail('')
@@ -95,11 +96,10 @@ export default function Clients() {
 
       if (response.status === 200 || response.status === 201) {
         showAlert('Cliente cadastrado com sucesso.', 'success')
-        setShowForm(false)
         setSelectedClient(null)
-        setFormMode('create')
         setErrorCPF('')
         setErrorEmail('')
+        handleClose()
       }
     } catch (error: unknown | any | Error) {
       console.error('Erro ao enviar a requisição:', error)
@@ -122,13 +122,12 @@ export default function Clients() {
       setErrorCPF('')
       setErrorEmail('')
       const { id, ...dataWithoutId } = data
-      const response = await api.post(`clients/${data.id}`, dataWithoutId)
+      const response = await api.put(`clients/${data.id}`, dataWithoutId)
 
       if (response.status === 200 || response.status === 201) {
         showAlert('Cliente atualizado com sucesso.', 'success')
-        setShowForm(false)
+        handleClose()
         setSelectedClient(null)
-        setFormMode('create')
         setErrorCPF('')
         setErrorEmail('')
       }
@@ -255,7 +254,7 @@ export default function Clients() {
           onCreate={handleCreateClient}
           onEdit={handleEditClient}
           onCancel={handleClose}
-          readOnly={formMode === 'view'}
+          readOnly={false}
           cpfError={errorCPF}
           emailError={errorEmail}
         />

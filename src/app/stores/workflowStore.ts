@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 //import { pacsService } from '../services/pacsService';
 import { WorkflowNote, WorkflowTransition } from '../types/workflow/workflow';
 import { ServiceStatus } from '../types/pemissions/permissions';
-import api from '@/src/lib/api';
+import api from '@/lib/api';
 
 interface Appointment {
   id: string;

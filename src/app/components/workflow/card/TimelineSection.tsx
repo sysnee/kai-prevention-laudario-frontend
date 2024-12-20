@@ -2,7 +2,7 @@ import React from 'react';
 import { Clock } from 'lucide-react';
 import { useTheme } from '@mui/material';
 import { WORKFLOW_STAGES } from '../WorkflowBoard';
-import { stages } from '@/src/app/constants';
+import { stages } from '@/app/constants';
 
 interface TimelineSectionProps {
   currentStage: string;

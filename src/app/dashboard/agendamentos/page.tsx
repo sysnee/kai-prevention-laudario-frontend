@@ -147,7 +147,10 @@ export default function SchedulingList() {
                 />
             ) : (
                 <AppointmentList
-                    date={dateRange[0]?.toDate() || new Date()}
+                    dateRange={[
+                        dateRange[0]?.toDate() || null,
+                        dateRange[1]?.toDate() || null
+                    ]}
                 />
             )}
         </div>

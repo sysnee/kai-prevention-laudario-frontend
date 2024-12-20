@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Clock, User, Edit2, Trash2, CalendarX, Eye } from 'lucide-react';
 import { Box, Skeleton } from '@mui/material';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import api from '@/src/lib/api';
 import Link from 'next/link';
 import { ServiceRequest, useWorkflowStore } from '../../stores/workflowStore'
 import { useTheme } from '@mui/material';
 import { useRouter } from 'next/navigation'
+import api from '@/lib/api';
 
 // Interface do componente
 interface AppointmentListProps {
-  date: Date;
+  dateRange: [Date | null, Date | null];
 }
 
 // Interface para os dados do agendamento
@@ -26,7 +26,7 @@ interface Appointment {
   code: string;
 }
 
-export function AppointmentList({ date }: AppointmentListProps) {
+export function AppointmentList({ dateRange }: AppointmentListProps) {
   // Estado para armazenar os agendamentos e o status de carregamento
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,28 +66,75 @@ export function AppointmentList({ date }: AppointmentListProps) {
 
   // Função de busca de agendamentos na API
   const fetchAppointments = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const { data } = await api.get("service-requests");
-      setAppointments(data);
+      // Formatar datas para a API
+      const startDate = dateRange[0] ? formatDateForApi(dateRange[0]) : ''
+      const endDate = dateRange[1] ? formatDateForApi(dateRange[1]) : ''
+
+      const { data } = await api.get("service-requests", {
+        params: {
+          startDate,
+          endDate
+        }
+      })
+      setAppointments(data)
     } catch (err) {
-      console.error("Erro ao buscar os dados:", err);
+      console.error("Erro ao buscar os dados:", err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  // Usando useEffect para rodar a função de busca
+  // Função auxiliar para formatar data para a API
+  const formatDateForApi = (date: Date): string => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
+  // Atualizar o useEffect para depender das datas
   useEffect(() => {
-    fetchAppointments();
-  }, [date]);
+    if (dateRange[0] && dateRange[1]) {
+      fetchAppointments()
+    }
+  }, [dateRange[0], dateRange[1]])
 
-  const formattedDate = formatDate(date);
+  const formattedDate = formatDate(dateRange[0] || new Date());
 
-  // Filtrando os agendamentos pela data
-  const filteredAppointments = appointments?.filter(
-    (appointment) => appointment.dateTime.startsWith(formattedDate)
-  ) || [];
+  // Atualizar a função de filtragem para lidar corretamente com o formato de data da API
+  const filterAppointmentsByDateRange = (appointments: Appointment[]) => {
+    if (!dateRange[0] || !dateRange[1]) return appointments
+
+    const startDate = new Date(dateRange[0])
+    const endDate = new Date(dateRange[1])
+
+    // Zerar as horas para comparação apenas das datas
+    startDate.setHours(0, 0, 0, 0)
+    endDate.setHours(23, 59, 59, 999)
+
+    return appointments.filter(appointment => {
+      // Converter a string de data do appointment para objeto Date
+      // Assumindo que appointment.dateTime está no formato "DD/MM/YYYY, HH:mm"
+      const [datePart, timePart] = appointment.dateTime.split(', ')
+      const [day, month, year] = datePart.split('/')
+      const [hours, minutes] = timePart.split(':')
+
+      const appointmentDate = new Date(
+        parseInt(year),
+        parseInt(month) - 1, // Mês em JS começa em 0
+        parseInt(day),
+        parseInt(hours),
+        parseInt(minutes)
+      )
+
+      return appointmentDate >= startDate && appointmentDate <= endDate
+    })
+  }
+
+  // Substituir o filtro existente pelo novo
+  const filteredAppointments = filterAppointmentsByDateRange(appointments)
 
   // Caso os dados estejam carregando, mostra o esqueleto
   if (loading) {
