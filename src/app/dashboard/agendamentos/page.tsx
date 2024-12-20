@@ -152,7 +152,10 @@ export default function SchedulingList() {
 
             {view === 'calendar' ? (
                 <CalendarView
-                    date={dateRange[0]?.toDate() || new Date()}
+                    dateRange={[
+                        dateRange[0]?.toDate() || null,
+                        dateRange[1]?.toDate() || null
+                    ]}
                 />
             ) : (
                 <AppointmentList
